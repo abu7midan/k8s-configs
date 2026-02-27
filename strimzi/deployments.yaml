@@ -1,0 +1,161 @@
+apiVersion: v1
+items:
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      annotations:
+        argocd.argoproj.io/tracking-id: strimzi:apps/Deployment:strimzi/strimzi-cluster-operator
+        deployment.kubernetes.io/revision: "5"
+        kubectl.kubernetes.io/last-applied-configuration: |
+          {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{"argocd.argoproj.io/tracking-id":"strimzi:apps/Deployment:strimzi/strimzi-cluster-operator","deployment.kubernetes.io/revision":"5"},"creationTimestamp":"2026-02-12T13:59:22Z","generation":9,"labels":{"app":"strimzi"},"name":"strimzi-cluster-operator","namespace":"strimzi","resourceVersion":"5829804","uid":"c5c46119-cde9-4a48-9ebb-34a7aa36aefc"},"spec":{"progressDeadlineSeconds":600,"replicas":1,"revisionHistoryLimit":10,"selector":{"matchLabels":{"name":"strimzi-cluster-operator","strimzi.io/kind":"cluster-operator"}},"strategy":{"rollingUpdate":{"maxSurge":"25%","maxUnavailable":"25%"},"type":"RollingUpdate"},"template":{"metadata":{"annotations":{"kubectl.kubernetes.io/restartedAt":"2026-02-12T15:19:35+01:00"},"labels":{"name":"strimzi-cluster-operator","strimzi.io/kind":"cluster-operator"}},"spec":{"containers":[{"args":["/opt/strimzi/bin/cluster_operator_run.sh"],"env":[{"name":"STRIMZI_NAMESPACE","value":"kafka"},{"name":"STRIMZI_FULL_RECONCILIATION_INTERVAL_MS","value":"120000"},{"name":"STRIMZI_OPERATION_TIMEOUT_MS","value":"300000"},{"name":"STRIMZI_DEFAULT_KAFKA_EXPORTER_IMAGE","value":"quay.io/strimzi/kafka:0.50.0-kafka-4.1.1"},{"name":"STRIMZI_DEFAULT_CRUISE_CONTROL_IMAGE","value":"quay.io/strimzi/kafka:0.50.0-kafka-4.1.1"},{"name":"STRIMZI_KAFKA_IMAGES","value":"4.0.0=quay.io/strimzi/kafka:0.50.0-kafka-4.0.0\n4.0.1=quay.io/strimzi/kafka:0.50.0-kafka-4.0.1\n4.1.0=quay.io/strimzi/kafka:0.50.0-kafka-4.1.0\n4.1.1=quay.io/strimzi/kafka:0.50.0-kafka-4.1.1\n"},{"name":"STRIMZI_KAFKA_CONNECT_IMAGES","value":"4.0.0=quay.io/strimzi/kafka:0.50.0-kafka-4.0.0\n4.0.1=quay.io/strimzi/kafka:0.50.0-kafka-4.0.1\n4.1.0=quay.io/strimzi/kafka:0.50.0-kafka-4.1.0\n4.1.1=quay.io/strimzi/kafka:0.50.0-kafka-4.1.1\n"},{"name":"STRIMZI_KAFKA_MIRROR_MAKER_2_IMAGES","value":"4.0.0=quay.io/strimzi/kafka:0.50.0-kafka-4.0.0\n4.0.1=quay.io/strimzi/kafka:0.50.0-kafka-4.0.1\n4.1.0=quay.io/strimzi/kafka:0.50.0-kafka-4.1.0\n4.1.1=quay.io/strimzi/kafka:0.50.0-kafka-4.1.1\n"},{"name":"STRIMZI_DEFAULT_TOPIC_OPERATOR_IMAGE","value":"quay.io/strimzi/operator:0.50.0"},{"name":"STRIMZI_DEFAULT_USER_OPERATOR_IMAGE","value":"quay.io/strimzi/operator:0.50.0"},{"name":"STRIMZI_DEFAULT_KAFKA_INIT_IMAGE","value":"quay.io/strimzi/operator:0.50.0"},{"name":"STRIMZI_DEFAULT_KAFKA_BRIDGE_IMAGE","value":"quay.io/strimzi/kafka-bridge:0.33.1"},{"name":"STRIMZI_DEFAULT_KANIKO_EXECUTOR_IMAGE","value":"quay.io/strimzi/kaniko-executor:0.50.0"},{"name":"STRIMZI_DEFAULT_BUILDAH_IMAGE","value":"quay.io/strimzi/buildah:0.50.0"},{"name":"STRIMZI_DEFAULT_MAVEN_BUILDER","value":"quay.io/strimzi/maven-builder:0.50.0"},{"name":"STRIMZI_OPERATOR_NAMESPACE","valueFrom":{"fieldRef":{"apiVersion":"v1","fieldPath":"metadata.namespace"}}},{"name":"STRIMZI_FEATURE_GATES"},{"name":"STRIMZI_LEADER_ELECTION_ENABLED","value":"true"},{"name":"STRIMZI_LEADER_ELECTION_LEASE_NAME","value":"strimzi-cluster-operator"},{"name":"STRIMZI_LEADER_ELECTION_LEASE_NAMESPACE","valueFrom":{"fieldRef":{"apiVersion":"v1","fieldPath":"metadata.namespace"}}},{"name":"STRIMZI_LEADER_ELECTION_IDENTITY","valueFrom":{"fieldRef":{"apiVersion":"v1","fieldPath":"metadata.name"}}}],"image":"quay.io/strimzi/operator:0.50.0","imagePullPolicy":"IfNotPresent","livenessProbe":{"failureThreshold":3,"httpGet":{"path":"/healthy","port":"http","scheme":"HTTP"},"initialDelaySeconds":10,"periodSeconds":30,"successThreshold":1,"timeoutSeconds":1},"name":"strimzi-cluster-operator","ports":[{"containerPort":8080,"name":"http","protocol":"TCP"}],"readinessProbe":{"failureThreshold":3,"httpGet":{"path":"/ready","port":"http","scheme":"HTTP"},"initialDelaySeconds":10,"periodSeconds":30,"successThreshold":1,"timeoutSeconds":1},"resources":{"limits":{"cpu":"1","memory":"384Mi"},"requests":{"cpu":"200m","memory":"384Mi"}},"terminationMessagePath":"/dev/termination-log","terminationMessagePolicy":"File","volumeMounts":[{"mountPath":"/tmp","name":"strimzi-tmp"},{"mountPath":"/opt/strimzi/custom-config/","name":"co-config-volume"}]}],"dnsPolicy":"ClusterFirst","restartPolicy":"Always","schedulerName":"default-scheduler","securityContext":{},"serviceAccount":"strimzi-cluster-operator","serviceAccountName":"strimzi-cluster-operator","terminationGracePeriodSeconds":30,"volumes":[{"emptyDir":{"medium":"Memory","sizeLimit":"1Mi"},"name":"strimzi-tmp"},{"configMap":{"defaultMode":420,"name":"strimzi-cluster-operator"},"name":"co-config-volume"}]}}},"status":{"availableReplicas":1,"conditions":[{"lastTransitionTime":"2026-02-12T13:59:22Z","lastUpdateTime":"2026-02-12T14:20:07Z","message":"ReplicaSet \"strimzi-cluster-operator-7987cfb695\" has successfully progressed.","reason":"NewReplicaSetAvailable","status":"True","type":"Progressing"},{"lastTransitionTime":"2026-02-26T03:30:42Z","lastUpdateTime":"2026-02-26T03:30:42Z","message":"Deployment has minimum availability.","reason":"MinimumReplicasAvailable","status":"True","type":"Available"}],"observedGeneration":9,"readyReplicas":1,"replicas":1,"updatedReplicas":1}}
+      labels:
+        app: strimzi
+      name: strimzi-cluster-operator
+      namespace: strimzi
+    spec:
+      progressDeadlineSeconds: 600
+      replicas: 1
+      revisionHistoryLimit: 10
+      selector:
+        matchLabels:
+          name: strimzi-cluster-operator
+          strimzi.io/kind: cluster-operator
+      strategy:
+        rollingUpdate:
+          maxSurge: 25%
+          maxUnavailable: 25%
+        type: RollingUpdate
+      template:
+        metadata:
+          annotations:
+            kubectl.kubernetes.io/restartedAt: "2026-02-12T15:19:35+01:00"
+          labels:
+            name: strimzi-cluster-operator
+            strimzi.io/kind: cluster-operator
+        spec:
+          containers:
+            - args:
+                - /opt/strimzi/bin/cluster_operator_run.sh
+              env:
+                - name: STRIMZI_NAMESPACE
+                  value: kafka
+                - name: STRIMZI_FULL_RECONCILIATION_INTERVAL_MS
+                  value: "120000"
+                - name: STRIMZI_OPERATION_TIMEOUT_MS
+                  value: "300000"
+                - name: STRIMZI_DEFAULT_KAFKA_EXPORTER_IMAGE
+                  value: quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+                - name: STRIMZI_DEFAULT_CRUISE_CONTROL_IMAGE
+                  value: quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+                - name: STRIMZI_KAFKA_IMAGES
+                  value: |
+                    4.0.0=quay.io/strimzi/kafka:0.50.0-kafka-4.0.0
+                    4.0.1=quay.io/strimzi/kafka:0.50.0-kafka-4.0.1
+                    4.1.0=quay.io/strimzi/kafka:0.50.0-kafka-4.1.0
+                    4.1.1=quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+                - name: STRIMZI_KAFKA_CONNECT_IMAGES
+                  value: |
+                    4.0.0=quay.io/strimzi/kafka:0.50.0-kafka-4.0.0
+                    4.0.1=quay.io/strimzi/kafka:0.50.0-kafka-4.0.1
+                    4.1.0=quay.io/strimzi/kafka:0.50.0-kafka-4.1.0
+                    4.1.1=quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+                - name: STRIMZI_KAFKA_MIRROR_MAKER_2_IMAGES
+                  value: |
+                    4.0.0=quay.io/strimzi/kafka:0.50.0-kafka-4.0.0
+                    4.0.1=quay.io/strimzi/kafka:0.50.0-kafka-4.0.1
+                    4.1.0=quay.io/strimzi/kafka:0.50.0-kafka-4.1.0
+                    4.1.1=quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+                - name: STRIMZI_DEFAULT_TOPIC_OPERATOR_IMAGE
+                  value: quay.io/strimzi/operator:0.50.0
+                - name: STRIMZI_DEFAULT_USER_OPERATOR_IMAGE
+                  value: quay.io/strimzi/operator:0.50.0
+                - name: STRIMZI_DEFAULT_KAFKA_INIT_IMAGE
+                  value: quay.io/strimzi/operator:0.50.0
+                - name: STRIMZI_DEFAULT_KAFKA_BRIDGE_IMAGE
+                  value: quay.io/strimzi/kafka-bridge:0.33.1
+                - name: STRIMZI_DEFAULT_KANIKO_EXECUTOR_IMAGE
+                  value: quay.io/strimzi/kaniko-executor:0.50.0
+                - name: STRIMZI_DEFAULT_BUILDAH_IMAGE
+                  value: quay.io/strimzi/buildah:0.50.0
+                - name: STRIMZI_DEFAULT_MAVEN_BUILDER
+                  value: quay.io/strimzi/maven-builder:0.50.0
+                - name: STRIMZI_OPERATOR_NAMESPACE
+                  valueFrom:
+                    fieldRef:
+                      apiVersion: v1
+                      fieldPath: metadata.namespace
+                - name: STRIMZI_FEATURE_GATES
+                - name: STRIMZI_LEADER_ELECTION_ENABLED
+                  value: "true"
+                - name: STRIMZI_LEADER_ELECTION_LEASE_NAME
+                  value: strimzi-cluster-operator
+                - name: STRIMZI_LEADER_ELECTION_LEASE_NAMESPACE
+                  valueFrom:
+                    fieldRef:
+                      apiVersion: v1
+                      fieldPath: metadata.namespace
+                - name: STRIMZI_LEADER_ELECTION_IDENTITY
+                  valueFrom:
+                    fieldRef:
+                      apiVersion: v1
+                      fieldPath: metadata.name
+              image: quay.io/strimzi/operator:0.50.0
+              imagePullPolicy: IfNotPresent
+              livenessProbe:
+                failureThreshold: 3
+                httpGet:
+                  path: /healthy
+                  port: http
+                  scheme: HTTP
+                initialDelaySeconds: 10
+                periodSeconds: 30
+                successThreshold: 1
+                timeoutSeconds: 1
+              name: strimzi-cluster-operator
+              ports:
+                - containerPort: 8080
+                  name: http
+                  protocol: TCP
+              readinessProbe:
+                failureThreshold: 3
+                httpGet:
+                  path: /ready
+                  port: http
+                  scheme: HTTP
+                initialDelaySeconds: 10
+                periodSeconds: 30
+                successThreshold: 1
+                timeoutSeconds: 1
+              resources:
+                limits:
+                  cpu: "1"
+                  memory: 384Mi
+                requests:
+                  cpu: 200m
+                  memory: 384Mi
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+              volumeMounts:
+                - mountPath: /tmp
+                  name: strimzi-tmp
+                - mountPath: /opt/strimzi/custom-config/
+                  name: co-config-volume
+          dnsPolicy: ClusterFirst
+          restartPolicy: Always
+          schedulerName: default-scheduler
+          securityContext: {}
+          serviceAccount: strimzi-cluster-operator
+          serviceAccountName: strimzi-cluster-operator
+          terminationGracePeriodSeconds: 30
+          volumes:
+            - emptyDir:
+                medium: Memory
+                sizeLimit: 1Mi
+              name: strimzi-tmp
+            - configMap:
+                defaultMode: 420
+                name: strimzi-cluster-operator
+              name: co-config-volume
+kind: List
+metadata:
+  resourceVersion: ""

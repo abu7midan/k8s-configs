@@ -1,0 +1,303 @@
+apiVersion: v1
+items:
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        field.cattle.io/publicEndpoints: '[{"port":32615,"protocol":"TCP","serviceName":"kafka:my-kafka-brokers-0","allNodes":true}]'
+      labels:
+        app.kubernetes.io/instance: my-kafka
+        app.kubernetes.io/managed-by: strimzi-cluster-operator
+        app.kubernetes.io/name: kafka
+        app.kubernetes.io/part-of: strimzi-my-kafka
+        strimzi.io/cluster: my-kafka
+        strimzi.io/component-type: kafka
+        strimzi.io/kind: Kafka
+        strimzi.io/name: my-kafka-kafka
+        strimzi.io/pool-name: brokers
+      name: my-kafka-brokers-0
+      namespace: kafka
+      ownerReferences:
+        - apiVersion: kafka.strimzi.io/v1beta2
+          blockOwnerDeletion: true
+          controller: false
+          kind: KafkaNodePool
+          name: brokers
+          uid: 88381bb1-0e01-4e9a-a44c-5ffedb62239e
+    spec:
+      clusterIP: 10.106.241.8
+      clusterIPs:
+        - 10.106.241.8
+      externalTrafficPolicy: Cluster
+      internalTrafficPolicy: Cluster
+      ipFamilies:
+        - IPv4
+      ipFamilyPolicy: SingleStack
+      ports:
+        - name: tcp-external
+          nodePort: 32615
+          port: 9094
+          protocol: TCP
+          targetPort: tcp-external
+      selector:
+        strimzi.io/cluster: my-kafka
+        strimzi.io/kind: Kafka
+        strimzi.io/name: my-kafka-kafka
+        strimzi.io/pod-name: my-kafka-brokers-0
+        strimzi.io/pool-name: brokers
+      sessionAffinity: None
+      type: NodePort
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        field.cattle.io/publicEndpoints: '[{"port":30539,"protocol":"TCP","serviceName":"kafka:my-kafka-brokers-1","allNodes":true}]'
+      labels:
+        app.kubernetes.io/instance: my-kafka
+        app.kubernetes.io/managed-by: strimzi-cluster-operator
+        app.kubernetes.io/name: kafka
+        app.kubernetes.io/part-of: strimzi-my-kafka
+        strimzi.io/cluster: my-kafka
+        strimzi.io/component-type: kafka
+        strimzi.io/kind: Kafka
+        strimzi.io/name: my-kafka-kafka
+        strimzi.io/pool-name: brokers
+      name: my-kafka-brokers-1
+      namespace: kafka
+      ownerReferences:
+        - apiVersion: kafka.strimzi.io/v1beta2
+          blockOwnerDeletion: true
+          controller: false
+          kind: KafkaNodePool
+          name: brokers
+          uid: 88381bb1-0e01-4e9a-a44c-5ffedb62239e
+    spec:
+      clusterIP: 10.103.33.91
+      clusterIPs:
+        - 10.103.33.91
+      externalTrafficPolicy: Cluster
+      internalTrafficPolicy: Cluster
+      ipFamilies:
+        - IPv4
+      ipFamilyPolicy: SingleStack
+      ports:
+        - name: tcp-external
+          nodePort: 30539
+          port: 9094
+          protocol: TCP
+          targetPort: tcp-external
+      selector:
+        strimzi.io/cluster: my-kafka
+        strimzi.io/kind: Kafka
+        strimzi.io/name: my-kafka-kafka
+        strimzi.io/pod-name: my-kafka-brokers-1
+        strimzi.io/pool-name: brokers
+      sessionAffinity: None
+      type: NodePort
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        field.cattle.io/publicEndpoints: '[{"port":31726,"protocol":"TCP","serviceName":"kafka:my-kafka-brokers-2","allNodes":true}]'
+      labels:
+        app.kubernetes.io/instance: my-kafka
+        app.kubernetes.io/managed-by: strimzi-cluster-operator
+        app.kubernetes.io/name: kafka
+        app.kubernetes.io/part-of: strimzi-my-kafka
+        strimzi.io/cluster: my-kafka
+        strimzi.io/component-type: kafka
+        strimzi.io/kind: Kafka
+        strimzi.io/name: my-kafka-kafka
+        strimzi.io/pool-name: brokers
+      name: my-kafka-brokers-2
+      namespace: kafka
+      ownerReferences:
+        - apiVersion: kafka.strimzi.io/v1beta2
+          blockOwnerDeletion: true
+          controller: false
+          kind: KafkaNodePool
+          name: brokers
+          uid: 88381bb1-0e01-4e9a-a44c-5ffedb62239e
+    spec:
+      clusterIP: 10.107.65.129
+      clusterIPs:
+        - 10.107.65.129
+      externalTrafficPolicy: Cluster
+      internalTrafficPolicy: Cluster
+      ipFamilies:
+        - IPv4
+      ipFamilyPolicy: SingleStack
+      ports:
+        - name: tcp-external
+          nodePort: 31726
+          port: 9094
+          protocol: TCP
+          targetPort: tcp-external
+      selector:
+        strimzi.io/cluster: my-kafka
+        strimzi.io/kind: Kafka
+        strimzi.io/name: my-kafka-kafka
+        strimzi.io/pod-name: my-kafka-brokers-2
+        strimzi.io/pool-name: brokers
+      sessionAffinity: None
+      type: NodePort
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        strimzi.io/discovery: |-
+          [ {
+            "port" : 9092,
+            "tls" : false,
+            "protocol" : "kafka",
+            "auth" : "none"
+          }, {
+            "port" : 9094,
+            "tls" : false,
+            "protocol" : "kafka",
+            "auth" : "none"
+          } ]
+      labels:
+        app.kubernetes.io/instance: my-kafka
+        app.kubernetes.io/managed-by: strimzi-cluster-operator
+        app.kubernetes.io/name: kafka
+        app.kubernetes.io/part-of: strimzi-my-kafka
+        strimzi.io/cluster: my-kafka
+        strimzi.io/component-type: kafka
+        strimzi.io/discovery: "true"
+        strimzi.io/kind: Kafka
+        strimzi.io/name: my-kafka-kafka
+      name: my-kafka-kafka-bootstrap
+      namespace: kafka
+      ownerReferences:
+        - apiVersion: kafka.strimzi.io/v1beta2
+          blockOwnerDeletion: true
+          controller: false
+          kind: Kafka
+          name: my-kafka
+          uid: 2f4ace1b-eded-4ed3-8750-f4a99bb1cbad
+    spec:
+      clusterIP: 10.97.37.110
+      clusterIPs:
+        - 10.97.37.110
+      internalTrafficPolicy: Cluster
+      ipFamilies:
+        - IPv4
+      ipFamilyPolicy: SingleStack
+      ports:
+        - name: tcp-replication
+          port: 9091
+          protocol: TCP
+          targetPort: tcp-replication
+        - name: tcp-clients
+          port: 9092
+          protocol: TCP
+          targetPort: tcp-clients
+      selector:
+        strimzi.io/broker-role: "true"
+        strimzi.io/cluster: my-kafka
+        strimzi.io/kind: Kafka
+        strimzi.io/name: my-kafka-kafka
+      sessionAffinity: None
+      type: ClusterIP
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      labels:
+        app.kubernetes.io/instance: my-kafka
+        app.kubernetes.io/managed-by: strimzi-cluster-operator
+        app.kubernetes.io/name: kafka
+        app.kubernetes.io/part-of: strimzi-my-kafka
+        strimzi.io/cluster: my-kafka
+        strimzi.io/component-type: kafka
+        strimzi.io/kind: Kafka
+        strimzi.io/name: my-kafka-kafka
+      name: my-kafka-kafka-brokers
+      namespace: kafka
+      ownerReferences:
+        - apiVersion: kafka.strimzi.io/v1beta2
+          blockOwnerDeletion: true
+          controller: false
+          kind: Kafka
+          name: my-kafka
+          uid: 2f4ace1b-eded-4ed3-8750-f4a99bb1cbad
+    spec:
+      clusterIP: None
+      clusterIPs:
+        - None
+      internalTrafficPolicy: Cluster
+      ipFamilies:
+        - IPv4
+      ipFamilyPolicy: SingleStack
+      ports:
+        - name: tcp-ctrlplane
+          port: 9090
+          protocol: TCP
+          targetPort: tcp-ctrlplane
+        - name: tcp-replication
+          port: 9091
+          protocol: TCP
+          targetPort: tcp-replication
+        - name: tcp-kafkaagent
+          port: 8443
+          protocol: TCP
+          targetPort: tcp-kafkaagent
+        - name: tcp-clients
+          port: 9092
+          protocol: TCP
+          targetPort: tcp-clients
+      publishNotReadyAddresses: true
+      selector:
+        strimzi.io/cluster: my-kafka
+        strimzi.io/kind: Kafka
+        strimzi.io/name: my-kafka-kafka
+      sessionAffinity: None
+      type: ClusterIP
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        field.cattle.io/publicEndpoints: '[{"port":30234,"protocol":"TCP","serviceName":"kafka:my-kafka-kafka-external-bootstrap","allNodes":true}]'
+      labels:
+        app.kubernetes.io/instance: my-kafka
+        app.kubernetes.io/managed-by: strimzi-cluster-operator
+        app.kubernetes.io/name: kafka
+        app.kubernetes.io/part-of: strimzi-my-kafka
+        strimzi.io/cluster: my-kafka
+        strimzi.io/component-type: kafka
+        strimzi.io/kind: Kafka
+        strimzi.io/name: my-kafka-kafka
+      name: my-kafka-kafka-external-bootstrap
+      namespace: kafka
+      ownerReferences:
+        - apiVersion: kafka.strimzi.io/v1beta2
+          blockOwnerDeletion: true
+          controller: false
+          kind: Kafka
+          name: my-kafka
+          uid: 2f4ace1b-eded-4ed3-8750-f4a99bb1cbad
+    spec:
+      clusterIP: 10.110.21.151
+      clusterIPs:
+        - 10.110.21.151
+      externalTrafficPolicy: Cluster
+      internalTrafficPolicy: Cluster
+      ipFamilies:
+        - IPv4
+      ipFamilyPolicy: SingleStack
+      ports:
+        - name: tcp-external
+          nodePort: 30234
+          port: 9094
+          protocol: TCP
+          targetPort: tcp-external
+      selector:
+        strimzi.io/broker-role: "true"
+        strimzi.io/cluster: my-kafka
+        strimzi.io/kind: Kafka
+        strimzi.io/name: my-kafka-kafka
+      sessionAffinity: None
+      type: NodePort
+kind: List
+metadata:
+  resourceVersion: ""
