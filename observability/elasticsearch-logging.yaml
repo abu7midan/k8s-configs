@@ -1,0 +1,95 @@
+apiVersion: elasticsearch.k8s.elastic.co/v1
+kind: Elasticsearch
+metadata:
+  annotations:
+    eck.k8s.elastic.co/orchestration-hints: '{"no_transient_settings":true,"service_accounts":true,"desired_nodes":{"version":5,"hash":"4005767972"}}'
+    elasticsearch.k8s.elastic.co/cluster-uuid: hTR51P8gTjmrSSmZhfBzYg
+    elasticsearch.k8s.elastic.co/force-reconcile: "true"
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"elasticsearch.k8s.elastic.co/v1","kind":"Elasticsearch","metadata":{"annotations":{},"name":"logging","namespace":"observability"},"spec":{"http":{"tls":{"certificate":{}}},"monitoring":{"logs":{},"metrics":{}},"nodeSets":[{"config":{"node.store.allow_mmap":false},"count":3,"name":"default","podTemplate":{"spec":{"containers":[{"name":"elasticsearch","resources":{"limits":{"cpu":"1500m","memory":"3Gi"},"requests":{"cpu":"500m","memory":"3Gi"}}}]}},"volumeClaimTemplates":[{"metadata":{"name":"elasticsearch-data"},"spec":{"accessModes":["ReadWriteOnce"],"resources":{"requests":{"storage":"30Gi"}}}}]}],"version":"9.3.0"}}
+  creationTimestamp: "2026-02-13T19:05:28Z"
+  generation: 10
+  name: logging
+  namespace: observability
+  resourceVersion: "6087974"
+  uid: 1c4aeb4c-afb2-4714-b3b0-d1d756f53bdc
+spec:
+  auth: {}
+  http:
+    service:
+      metadata: {}
+      spec: {}
+    tls:
+      certificate: {}
+  monitoring:
+    logs: {}
+    metrics: {}
+  nodeSets:
+    - config:
+        node.store.allow_mmap: false
+      count: 1
+      name: default
+      podTemplate:
+        metadata: {}
+        spec:
+          containers:
+            - name: elasticsearch
+              resources:
+                limits:
+                  cpu: 1500m
+                  memory: 3Gi
+                requests:
+                  cpu: 500m
+                  memory: 3Gi
+      volumeClaimTemplates:
+        - metadata:
+            name: elasticsearch-data
+          spec:
+            accessModes:
+              - ReadWriteOnce
+            resources:
+              requests:
+                storage: 30Gi
+  remoteClusterServer:
+    service:
+      metadata: {}
+      spec: {}
+  transport:
+    service:
+      metadata: {}
+      spec: {}
+    tls:
+      certificate: {}
+      certificateAuthorities: {}
+  updateStrategy:
+    changeBudget: {}
+  version: 9.3.0
+status:
+  availableNodes: 1
+  conditions:
+    - lastTransitionTime: "2026-02-25T23:55:19Z"
+      status: "True"
+      type: ReconciliationComplete
+    - lastTransitionTime: "2026-02-13T19:05:30Z"
+      message: All nodes are running version 9.3.0
+      status: "True"
+      type: RunningDesiredVersion
+    - lastTransitionTime: "2026-02-25T23:55:19Z"
+      message: Service observability/logging-es-internal-http has endpoints
+      status: "True"
+      type: ElasticsearchIsReachable
+    - lastTransitionTime: "2026-02-25T23:43:12Z"
+      message: Successfully calculated compute and storage resources from Elasticsearch resource generation 10
+      status: "True"
+      type: ResourcesAwareManagement
+  health: yellow
+  inProgressOperations:
+    downscale:
+      lastUpdatedTime: "2026-02-25T23:48:35Z"
+    upgrade:
+      lastUpdatedTime: "2026-02-21T01:07:01Z"
+    upscale:
+      lastUpdatedTime: "2026-02-20T23:46:40Z"
+  observedGeneration: 10
+  phase: Ready
+  version: 9.3.0

@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    argocd.argoproj.io/tracking-id: observability:/Service:observability/kibana-kb-http
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{"argocd.argoproj.io/tracking-id":"observability:/Service:observability/kibana-kb-http"},"creationTimestamp":"2026-02-13T19:07:46Z","labels":{"common.k8s.elastic.co/type":"kibana","kibana.k8s.elastic.co/name":"kibana"},"name":"kibana-kb-http","namespace":"observability","ownerReferences":[{"apiVersion":"kibana.k8s.elastic.co/v1","blockOwnerDeletion":true,"controller":true,"kind":"Kibana","name":"kibana","uid":"d9c229d7-eed3-45bb-af4d-4743c08948ed"}],"resourceVersion":"4217634","uid":"e689d4f3-67d0-42e6-9ed1-b145b9536097"},"spec":{"clusterIP":"10.105.77.239","clusterIPs":["10.105.77.239"],"internalTrafficPolicy":"Cluster","ipFamilies":["IPv4"],"ipFamilyPolicy":"SingleStack","ports":[{"name":"https","port":5601,"protocol":"TCP","targetPort":5601}],"selector":{"common.k8s.elastic.co/type":"kibana","kibana.k8s.elastic.co/name":"kibana"},"sessionAffinity":"None","type":"ClusterIP"},"status":{"loadBalancer":{}}}
+  creationTimestamp: "2026-02-13T19:07:46Z"
+  labels:
+    common.k8s.elastic.co/type: kibana
+    kibana.k8s.elastic.co/name: kibana
+  name: kibana-kb-http
+  namespace: observability
+  ownerReferences:
+    - apiVersion: kibana.k8s.elastic.co/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Kibana
+      name: kibana
+      uid: d9c229d7-eed3-45bb-af4d-4743c08948ed
+  resourceVersion: "6188194"
+  uid: e689d4f3-67d0-42e6-9ed1-b145b9536097
+spec:
+  clusterIP: 10.105.77.239
+  clusterIPs:
+    - 10.105.77.239
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+    - name: https
+      port: 5601
+      protocol: TCP
+      targetPort: 5601
+  selector:
+    common.k8s.elastic.co/type: kibana
+    kibana.k8s.elastic.co/name: kibana
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}

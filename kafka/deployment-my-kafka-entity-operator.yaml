@@ -1,0 +1,233 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+  creationTimestamp: "2026-02-12T14:33:58Z"
+  generation: 5
+  labels:
+    app.kubernetes.io/instance: my-kafka
+    app.kubernetes.io/managed-by: strimzi-cluster-operator
+    app.kubernetes.io/name: entity-operator
+    app.kubernetes.io/part-of: strimzi-my-kafka
+    strimzi.io/cluster: my-kafka
+    strimzi.io/component-type: entity-operator
+    strimzi.io/kind: Kafka
+    strimzi.io/name: my-kafka-entity-operator
+  name: my-kafka-entity-operator
+  namespace: kafka
+  ownerReferences:
+    - apiVersion: kafka.strimzi.io/v1beta2
+      blockOwnerDeletion: true
+      controller: false
+      kind: Kafka
+      name: my-kafka
+      uid: 2f4ace1b-eded-4ed3-8750-f4a99bb1cbad
+  resourceVersion: "6185712"
+  uid: fdaf5c27-5f98-4a44-b7fe-8d4d8477fcbc
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      strimzi.io/cluster: my-kafka
+      strimzi.io/kind: Kafka
+      strimzi.io/name: my-kafka-entity-operator
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        strimzi.io/cluster-ca-cert-generation: "0"
+        strimzi.io/cluster-ca-key-generation: "0"
+        strimzi.io/server-cert-hash: dfe09bd3ab9ac148
+      labels:
+        app.kubernetes.io/instance: my-kafka
+        app.kubernetes.io/managed-by: strimzi-cluster-operator
+        app.kubernetes.io/name: entity-operator
+        app.kubernetes.io/part-of: strimzi-my-kafka
+        strimzi.io/cluster: my-kafka
+        strimzi.io/component-type: entity-operator
+        strimzi.io/kind: Kafka
+        strimzi.io/name: my-kafka-entity-operator
+    spec:
+      containers:
+        - args:
+            - /opt/strimzi/bin/topic_operator_run.sh
+          env:
+            - name: STRIMZI_RESOURCE_LABELS
+              value: strimzi.io/cluster=my-kafka
+            - name: STRIMZI_KAFKA_BOOTSTRAP_SERVERS
+              value: my-kafka-kafka-bootstrap:9091
+            - name: STRIMZI_NAMESPACE
+              value: kafka
+            - name: STRIMZI_SECURITY_PROTOCOL
+              value: SSL
+            - name: STRIMZI_TLS_ENABLED
+              value: "true"
+            - name: STRIMZI_GC_LOG_ENABLED
+              value: "false"
+          image: quay.io/strimzi/operator:0.50.0
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthy
+              port: healthcheck
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: topic-operator
+          ports:
+            - containerPort: 8080
+              name: healthcheck
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /ready
+              port: healthcheck
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          resources: {}
+          startupProbe:
+            failureThreshold: 12
+            httpGet:
+              path: /healthy
+              port: healthcheck
+              scheme: HTTP
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+            - mountPath: /tmp
+              name: strimzi-to-tmp
+            - mountPath: /opt/topic-operator/custom-config/
+              name: entity-topic-operator-metrics-and-logging
+            - mountPath: /etc/eto-certs/
+              name: eto-certs
+            - mountPath: /etc/cluster-ca-certs/
+              name: cluster-ca-certs
+        - args:
+            - /opt/strimzi/bin/user_operator_run.sh
+          env:
+            - name: STRIMZI_KAFKA_BOOTSTRAP_SERVERS
+              value: my-kafka-kafka-bootstrap:9091
+            - name: STRIMZI_NAMESPACE
+              value: kafka
+            - name: STRIMZI_LABELS
+              value: strimzi.io/cluster=my-kafka
+            - name: STRIMZI_CA_KEY_NAME
+              value: my-kafka-clients-ca
+            - name: STRIMZI_CA_CERT_NAME
+              value: my-kafka-clients-ca-cert
+            - name: STRIMZI_CA_NAMESPACE
+              value: kafka
+            - name: STRIMZI_CA_VALIDITY
+              value: "365"
+            - name: STRIMZI_CA_RENEWAL
+              value: "30"
+            - name: STRIMZI_CLUSTER_CA_CERT_SECRET_NAME
+              value: my-kafka-cluster-ca-cert
+            - name: STRIMZI_EO_KEY_SECRET_NAME
+              value: my-kafka-entity-user-operator-certs
+            - name: STRIMZI_GC_LOG_ENABLED
+              value: "false"
+            - name: STRIMZI_SECRET_PREFIX
+            - name: STRIMZI_ACLS_ADMIN_API_SUPPORTED
+              value: "false"
+          image: quay.io/strimzi/operator:0.50.0
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthy
+              port: healthcheck
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: user-operator
+          ports:
+            - containerPort: 8081
+              name: healthcheck
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /ready
+              port: healthcheck
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+            - mountPath: /tmp
+              name: strimzi-uo-tmp
+            - mountPath: /opt/user-operator/custom-config/
+              name: entity-user-operator-metrics-and-logging
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: my-kafka-entity-operator
+      serviceAccountName: my-kafka-entity-operator
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - emptyDir:
+            medium: Memory
+            sizeLimit: 5Mi
+          name: strimzi-to-tmp
+        - configMap:
+            defaultMode: 420
+            name: my-kafka-entity-topic-operator-config
+          name: entity-topic-operator-metrics-and-logging
+        - name: cluster-ca-certs
+          secret:
+            defaultMode: 292
+            secretName: my-kafka-cluster-ca-cert
+        - name: eto-certs
+          secret:
+            defaultMode: 292
+            secretName: my-kafka-entity-topic-operator-certs
+        - configMap:
+            defaultMode: 420
+            name: my-kafka-entity-user-operator-config
+          name: entity-user-operator-metrics-and-logging
+        - emptyDir:
+            medium: Memory
+            sizeLimit: 5Mi
+          name: strimzi-uo-tmp
+status:
+  availableReplicas: 1
+  conditions:
+    - lastTransitionTime: "2026-02-12T14:33:58Z"
+      lastUpdateTime: "2026-02-12T14:34:18Z"
+      message: ReplicaSet "my-kafka-entity-operator-7955df6684" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: "2026-02-23T14:43:55Z"
+      lastUpdateTime: "2026-02-23T14:43:55Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+  observedGeneration: 5
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1

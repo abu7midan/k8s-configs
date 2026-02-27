@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    argocd.argoproj.io/tracking-id: portfolio:apps/Deployment:abu7midan-website/portfolio
+    deployment.kubernetes.io/revision: "2"
+    field.cattle.io/publicEndpoints: '[{"port":31722,"protocol":"TCP","serviceName":"abu7midan-website:portfolio-service","allNodes":true},{"port":30154,"protocol":"TCP","serviceName":"abu7midan-website:portfolio","allNodes":true}]'
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{"argocd.argoproj.io/tracking-id":"portfolio:apps/Deployment:abu7midan-website/portfolio","deployment.kubernetes.io/revision":"2","field.cattle.io/publicEndpoints":"[{\"port\":31722,\"protocol\":\"TCP\",\"serviceName\":\"abu7midan-website:portfolio-service\",\"allNodes\":true},{\"port\":30154,\"protocol\":\"TCP\",\"serviceName\":\"abu7midan-website:portfolio\",\"allNodes\":true}]"},"creationTimestamp":"2026-02-26T01:27:43Z","generation":4,"labels":{"app":"portfolio"},"name":"portfolio","namespace":"abu7midan-website","resourceVersion":"5826153","uid":"8670016f-2716-403b-8019-3993179da863"},"spec":{"progressDeadlineSeconds":600,"replicas":2,"revisionHistoryLimit":10,"selector":{"matchLabels":{"app":"portfolio"}},"strategy":{"rollingUpdate":{"maxSurge":"25%","maxUnavailable":"25%"},"type":"RollingUpdate"},"template":{"metadata":{"labels":{"app":"portfolio"}},"spec":{"containers":[{"image":"nginx:alpine","imagePullPolicy":"IfNotPresent","name":"portfolio","ports":[{"containerPort":80,"protocol":"TCP"}],"resources":{"limits":{"cpu":"200m","memory":"128Mi"},"requests":{"cpu":"50m","memory":"64Mi"}},"terminationMessagePath":"/dev/termination-log","terminationMessagePolicy":"File","volumeMounts":[{"mountPath":"/usr/share/nginx/html","name":"html-content"}]}],"dnsPolicy":"ClusterFirst","restartPolicy":"Always","schedulerName":"default-scheduler","securityContext":{},"terminationGracePeriodSeconds":30,"volumes":[{"configMap":{"defaultMode":420,"name":"portfolio-html"},"name":"html-content"}]}}},"status":{"availableReplicas":2,"conditions":[{"lastTransitionTime":"2026-02-26T01:27:43Z","lastUpdateTime":"2026-02-26T01:35:03Z","message":"ReplicaSet \"portfolio-76c9f4b8b7\" has successfully progressed.","reason":"NewReplicaSetAvailable","status":"True","type":"Progressing"},{"lastTransitionTime":"2026-02-26T03:16:20Z","lastUpdateTime":"2026-02-26T03:16:20Z","message":"Deployment has minimum availability.","reason":"MinimumReplicasAvailable","status":"True","type":"Available"}],"observedGeneration":4,"readyReplicas":2,"replicas":2,"updatedReplicas":2}}
+  creationTimestamp: "2026-02-26T01:27:43Z"
+  generation: 5
+  labels:
+    app: portfolio
+  name: portfolio
+  namespace: abu7midan-website
+  resourceVersion: "6185697"
+  uid: 8670016f-2716-403b-8019-3993179da863
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 2
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: portfolio
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: portfolio
+    spec:
+      containers:
+        - image: nginx:alpine
+          imagePullPolicy: IfNotPresent
+          name: portfolio
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 200m
+              memory: 128Mi
+            requests:
+              cpu: 50m
+              memory: 64Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+            - mountPath: /usr/share/nginx/html
+              name: html-content
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - configMap:
+            defaultMode: 420
+            name: portfolio-html
+          name: html-content
+status:
+  availableReplicas: 2
+  conditions:
+    - lastTransitionTime: "2026-02-26T01:27:43Z"
+      lastUpdateTime: "2026-02-26T01:35:03Z"
+      message: ReplicaSet "portfolio-76c9f4b8b7" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: "2026-02-26T03:16:20Z"
+      lastUpdateTime: "2026-02-26T03:16:20Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+  observedGeneration: 5
+  readyReplicas: 2
+  replicas: 2
+  updatedReplicas: 2

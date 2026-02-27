@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    argocd.argoproj.io/tracking-id: observability:/Service:observability/logging-es-transport
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{"argocd.argoproj.io/tracking-id":"observability:/Service:observability/logging-es-transport"},"creationTimestamp":"2026-02-13T19:05:28Z","labels":{"common.k8s.elastic.co/type":"elasticsearch","elasticsearch.k8s.elastic.co/cluster-name":"logging"},"name":"logging-es-transport","namespace":"observability","ownerReferences":[{"apiVersion":"elasticsearch.k8s.elastic.co/v1","blockOwnerDeletion":true,"controller":true,"kind":"Elasticsearch","name":"logging","uid":"1c4aeb4c-afb2-4714-b3b0-d1d756f53bdc"}],"resourceVersion":"2112767","uid":"df55b5ee-3eb9-4952-afcf-8ad391607d81"},"spec":{"clusterIP":"None","clusterIPs":["None"],"internalTrafficPolicy":"Cluster","ipFamilies":["IPv4"],"ipFamilyPolicy":"SingleStack","ports":[{"name":"tls-transport","port":9300,"protocol":"TCP","targetPort":9300}],"publishNotReadyAddresses":true,"selector":{"common.k8s.elastic.co/type":"elasticsearch","elasticsearch.k8s.elastic.co/cluster-name":"logging"},"sessionAffinity":"None","type":"ClusterIP"},"status":{"loadBalancer":{}}}
+  creationTimestamp: "2026-02-13T19:05:28Z"
+  labels:
+    common.k8s.elastic.co/type: elasticsearch
+    elasticsearch.k8s.elastic.co/cluster-name: logging
+  name: logging-es-transport
+  namespace: observability
+  ownerReferences:
+    - apiVersion: elasticsearch.k8s.elastic.co/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Elasticsearch
+      name: logging
+      uid: 1c4aeb4c-afb2-4714-b3b0-d1d756f53bdc
+  resourceVersion: "6188196"
+  uid: df55b5ee-3eb9-4952-afcf-8ad391607d81
+spec:
+  clusterIP: None
+  clusterIPs:
+    - None
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+    - name: tls-transport
+      port: 9300
+      protocol: TCP
+      targetPort: 9300
+  publishNotReadyAddresses: true
+  selector:
+    common.k8s.elastic.co/type: elasticsearch
+    elasticsearch.k8s.elastic.co/cluster-name: logging
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}
