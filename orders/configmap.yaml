@@ -29,11 +29,11 @@ items:
         kube-apiserver when using internal endpoints such as the internal service
         IP or kubernetes.default.svc. No other usage is guaranteed across distributions
         of Kubernetes clusters.
-    creationTimestamp: "2026-02-13T13:06:17Z"
+    creationTimestamp: "2026-02-27T07:59:45Z"
     name: kube-root-ca.crt
     namespace: orders
-    resourceVersion: "2042337"
-    uid: 85ef7974-05d0-442a-8445-ffd64b9b6297
+    resourceVersion: "6189518"
+    uid: fd608217-ac44-4b3f-9d4d-504cd34bf12e
 kind: List
 metadata:
   resourceVersion: ""

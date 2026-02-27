@@ -1,0 +1,49 @@
+apiVersion: v1
+items:
+- apiVersion: kibana.k8s.elastic.co/v1
+  kind: Kibana
+  metadata:
+    annotations:
+      association.k8s.elastic.co/es-conf: '{"authSecretName":"kibana-kibana-user","authSecretKey":"token","isApiKey":false,"isServiceAccount":true,"caCertProvided":true,"caSecretName":"kibana-kb-es-ca","url":"https://logging-es-http.observability.svc:9200","version":"9.3.0"}'
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"kibana.k8s.elastic.co/v1","kind":"Kibana","metadata":{"annotations":{},"name":"kibana","namespace":"observability"},"spec":{"count":1,"elasticsearchRef":{"name":"logging"},"version":"9.3.0"}}
+    creationTimestamp: "2026-02-13T19:05:44Z"
+    generation: 3
+    name: kibana
+    namespace: observability
+    resourceVersion: "5771263"
+    uid: d9c229d7-eed3-45bb-af4d-4743c08948ed
+  spec:
+    config:
+      server.publicBaseUrl: https://kibana.abu7midan.com
+    count: 1
+    elasticsearchRef:
+      name: logging
+    enterpriseSearchRef: {}
+    http:
+      service:
+        metadata: {}
+        spec: {}
+      tls:
+        certificate: {}
+    monitoring:
+      logs: {}
+      metrics: {}
+    packageRegistryRef: {}
+    podTemplate:
+      metadata: {}
+      spec:
+        containers: null
+    version: 9.3.0
+  status:
+    associationStatus: Established
+    availableNodes: 1
+    count: 1
+    elasticsearchAssociationStatus: Established
+    health: green
+    observedGeneration: 3
+    selector: common.k8s.elastic.co/type=kibana,kibana.k8s.elastic.co/name=kibana
+    version: 9.3.0
+kind: List
+metadata:
+  resourceVersion: ""

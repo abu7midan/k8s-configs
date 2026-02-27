@@ -1,0 +1,610 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      cni.projectcalico.org/containerID: 5e7bbdb80c410a93b60c456a8786b54bb34e9e6a4c64ba13088abb00458a46ac
+      cni.projectcalico.org/podIP: 10.233.123.89/32
+      cni.projectcalico.org/podIPs: 10.233.123.89/32
+    creationTimestamp: "2026-02-21T00:50:13Z"
+    generateName: echo-6c7b66b4db-
+    generation: 1
+    labels:
+      app: echo
+      pod-template-hash: 6c7b66b4db
+    name: echo-6c7b66b4db-ql875
+    namespace: echo
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: echo-6c7b66b4db
+      uid: 2bf9eaae-6502-467b-9ea3-577ec44e6377
+    resourceVersion: "5829538"
+    uid: 402c9c80-165b-40b4-8636-cc14e80589e0
+  spec:
+    containers:
+    - image: ealen/echo-server:latest
+      imagePullPolicy: Always
+      name: echo
+      ports:
+      - containerPort: 80
+        protocol: TCP
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-cwvsp
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: k8s-master
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: kube-api-access-cwvsp
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-26T03:29:45Z"
+      observedGeneration: 1
+      status: "True"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-21T00:50:13Z"
+      observedGeneration: 1
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-26T03:29:45Z"
+      observedGeneration: 1
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-26T03:29:45Z"
+      observedGeneration: 1
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-21T00:50:13Z"
+      observedGeneration: 1
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: containerd://ebabb85fa95a8ade16370df00791541da692edeed9bd3df1b5af9a0c0409107b
+      image: docker.io/ealen/echo-server:latest
+      imageID: docker.io/ealen/echo-server@sha256:ec8a6e95890df937a1eb5fafca033a32172d4f43c1fea1f302931d5f230a137f
+      lastState:
+        terminated:
+          containerID: containerd://0b4f95d54957d931e071d49f0960a40269df58cdb4c70b72a6ccb6d5cd290214
+          exitCode: 255
+          finishedAt: "2026-02-26T03:29:18Z"
+          reason: Unknown
+          startedAt: "2026-02-21T00:51:21Z"
+      name: echo
+      ready: true
+      resources: {}
+      restartCount: 1
+      started: true
+      state:
+        running:
+          startedAt: "2026-02-26T03:29:45Z"
+      user:
+        linux:
+          gid: 0
+          supplementalGroups:
+          - 0
+          - 1
+          - 2
+          - 3
+          - 4
+          - 6
+          - 10
+          - 11
+          - 20
+          - 26
+          - 27
+          uid: 0
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-cwvsp
+        readOnly: true
+        recursiveReadOnly: Disabled
+    hostIP: 62.171.177.193
+    hostIPs:
+    - ip: 62.171.177.193
+    observedGeneration: 1
+    phase: Running
+    podIP: 10.233.123.89
+    podIPs:
+    - ip: 10.233.123.89
+    qosClass: BestEffort
+    startTime: "2026-02-21T00:50:13Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      cni.projectcalico.org/containerID: f9a9ff88c1c59f1888037dd30acb1bd4ba4bd112ec8c6dc9756a34f442205346
+      cni.projectcalico.org/podIP: 10.233.123.83/32
+      cni.projectcalico.org/podIPs: 10.233.123.83/32
+    creationTimestamp: "2026-02-21T00:50:13Z"
+    generateName: httpbin-7989846f69-
+    generation: 1
+    labels:
+      app: httpbin
+      pod-template-hash: 7989846f69
+    name: httpbin-7989846f69-n4vd9
+    namespace: echo
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: httpbin-7989846f69
+      uid: 06538580-3bec-448d-a86a-87b4d2e9e130
+    resourceVersion: "5829535"
+    uid: 8e6a3f73-556c-4f56-b29c-43d23304cbc5
+  spec:
+    containers:
+    - image: kennethreitz/httpbin
+      imagePullPolicy: Always
+      name: httpbin
+      ports:
+      - containerPort: 80
+        protocol: TCP
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-zbjtl
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: k8s-master
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: kube-api-access-zbjtl
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-26T03:29:45Z"
+      observedGeneration: 1
+      status: "True"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-21T00:50:14Z"
+      observedGeneration: 1
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-26T03:29:45Z"
+      observedGeneration: 1
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-26T03:29:45Z"
+      observedGeneration: 1
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-21T00:50:14Z"
+      observedGeneration: 1
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: containerd://dbf482b6e2460dc46b5c24cb08b0f8ae1f9d72033fa5cc33eb27bf809eb45770
+      image: docker.io/kennethreitz/httpbin:latest
+      imageID: docker.io/kennethreitz/httpbin@sha256:599fe5e5073102dbb0ee3dbb65f049dab44fa9fc251f6835c9990f8fb196a72b
+      lastState:
+        terminated:
+          containerID: containerd://a0cd396aaa7fadf116b385f6ecc8232a67ed58d8c37c47b29a234c1918ddc3da
+          exitCode: 255
+          finishedAt: "2026-02-26T03:29:18Z"
+          reason: Unknown
+          startedAt: "2026-02-21T00:51:44Z"
+      name: httpbin
+      ready: true
+      resources: {}
+      restartCount: 1
+      started: true
+      state:
+        running:
+          startedAt: "2026-02-26T03:29:44Z"
+      user:
+        linux:
+          gid: 0
+          supplementalGroups:
+          - 0
+          uid: 0
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-zbjtl
+        readOnly: true
+        recursiveReadOnly: Disabled
+    hostIP: 62.171.177.193
+    hostIPs:
+    - ip: 62.171.177.193
+    observedGeneration: 1
+    phase: Running
+    podIP: 10.233.123.83
+    podIPs:
+    - ip: 10.233.123.83
+    qosClass: BestEffort
+    startTime: "2026-02-21T00:50:14Z"
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      argocd.argoproj.io/tracking-id: echo:/Service:echo/echo
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{"argocd.argoproj.io/tracking-id":"echo:/Service:echo/echo"},"creationTimestamp":"2026-02-11T10:34:26Z","name":"echo","namespace":"echo","resourceVersion":"1565169","uid":"5fdb3edd-4a21-496d-b8fe-a64566ef10f3"},"spec":{"clusterIP":"10.109.86.105","clusterIPs":["10.109.86.105"],"internalTrafficPolicy":"Cluster","ipFamilies":["IPv4"],"ipFamilyPolicy":"SingleStack","ports":[{"port":80,"protocol":"TCP","targetPort":80}],"selector":{"app":"echo"},"sessionAffinity":"None","type":"ClusterIP"},"status":{"loadBalancer":{}}}
+    creationTimestamp: "2026-02-11T10:34:26Z"
+    name: echo
+    namespace: echo
+    resourceVersion: "6186586"
+    uid: 5fdb3edd-4a21-496d-b8fe-a64566ef10f3
+  spec:
+    clusterIP: 10.109.86.105
+    clusterIPs:
+    - 10.109.86.105
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 80
+    selector:
+      app: echo
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      argocd.argoproj.io/tracking-id: echo:/Service:echo/httpbin
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{"argocd.argoproj.io/tracking-id":"echo:/Service:echo/httpbin"},"creationTimestamp":"2026-02-09T12:10:06Z","name":"httpbin","namespace":"echo","resourceVersion":"1346798","uid":"601ed99b-e2b8-45bf-8e89-0c95f18d15b6"},"spec":{"clusterIP":"10.96.91.175","clusterIPs":["10.96.91.175"],"internalTrafficPolicy":"Cluster","ipFamilies":["IPv4"],"ipFamilyPolicy":"SingleStack","ports":[{"name":"http","port":80,"protocol":"TCP","targetPort":80}],"selector":{"app":"httpbin"},"sessionAffinity":"None","type":"ClusterIP"},"status":{"loadBalancer":{}}}
+    creationTimestamp: "2026-02-09T12:10:06Z"
+    name: httpbin
+    namespace: echo
+    resourceVersion: "6186576"
+    uid: 601ed99b-e2b8-45bf-8e89-0c95f18d15b6
+  spec:
+    clusterIP: 10.96.91.175
+    clusterIPs:
+    - 10.96.91.175
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 80
+    selector:
+      app: httpbin
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      argocd.argoproj.io/tracking-id: echo:apps/Deployment:echo/echo
+      deployment.kubernetes.io/revision: "1"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{"argocd.argoproj.io/tracking-id":"echo:apps/Deployment:echo/echo","deployment.kubernetes.io/revision":"1"},"creationTimestamp":"2026-02-11T10:34:26Z","generation":3,"name":"echo","namespace":"echo","resourceVersion":"4246767","uid":"f41b422b-ec47-4031-bf93-e36d3f6c414e"},"spec":{"progressDeadlineSeconds":600,"replicas":1,"revisionHistoryLimit":10,"selector":{"matchLabels":{"app":"echo"}},"strategy":{"rollingUpdate":{"maxSurge":"25%","maxUnavailable":"25%"},"type":"RollingUpdate"},"template":{"metadata":{"labels":{"app":"echo"}},"spec":{"containers":[{"image":"ealen/echo-server:latest","imagePullPolicy":"Always","name":"echo","ports":[{"containerPort":80,"protocol":"TCP"}],"resources":{},"terminationMessagePath":"/dev/termination-log","terminationMessagePolicy":"File"}],"dnsPolicy":"ClusterFirst","restartPolicy":"Always","schedulerName":"default-scheduler","securityContext":{},"terminationGracePeriodSeconds":30}}},"status":{"availableReplicas":1,"conditions":[{"lastTransitionTime":"2026-02-11T10:34:26Z","lastUpdateTime":"2026-02-11T10:34:35Z","message":"ReplicaSet \"echo-6c7b66b4db\" has successfully progressed.","reason":"NewReplicaSetAvailable","status":"True","type":"Progressing"},{"lastTransitionTime":"2026-02-21T00:51:22Z","lastUpdateTime":"2026-02-21T00:51:22Z","message":"Deployment has minimum availability.","reason":"MinimumReplicasAvailable","status":"True","type":"Available"}],"observedGeneration":3,"readyReplicas":1,"replicas":1,"updatedReplicas":1}}
+    creationTimestamp: "2026-02-11T10:34:26Z"
+    generation: 4
+    name: echo
+    namespace: echo
+    resourceVersion: "6186617"
+    uid: f41b422b-ec47-4031-bf93-e36d3f6c414e
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: echo
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        labels:
+          app: echo
+      spec:
+        containers:
+        - image: ealen/echo-server:latest
+          imagePullPolicy: Always
+          name: echo
+          ports:
+          - containerPort: 80
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2026-02-11T10:34:26Z"
+      lastUpdateTime: "2026-02-11T10:34:35Z"
+      message: ReplicaSet "echo-6c7b66b4db" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: "2026-02-21T00:51:22Z"
+      lastUpdateTime: "2026-02-21T00:51:22Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    observedGeneration: 4
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      argocd.argoproj.io/tracking-id: echo:apps/Deployment:echo/httpbin
+      deployment.kubernetes.io/revision: "1"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{"argocd.argoproj.io/tracking-id":"echo:apps/Deployment:echo/httpbin","deployment.kubernetes.io/revision":"1"},"creationTimestamp":"2026-02-09T12:10:06Z","generation":3,"name":"httpbin","namespace":"echo","resourceVersion":"4246954","uid":"19a642e7-396d-4ddc-a34a-0d8de6d0a214"},"spec":{"progressDeadlineSeconds":600,"replicas":1,"revisionHistoryLimit":10,"selector":{"matchLabels":{"app":"httpbin"}},"strategy":{"rollingUpdate":{"maxSurge":"25%","maxUnavailable":"25%"},"type":"RollingUpdate"},"template":{"metadata":{"labels":{"app":"httpbin"}},"spec":{"containers":[{"image":"kennethreitz/httpbin","imagePullPolicy":"Always","name":"httpbin","ports":[{"containerPort":80,"protocol":"TCP"}],"resources":{},"terminationMessagePath":"/dev/termination-log","terminationMessagePolicy":"File"}],"dnsPolicy":"ClusterFirst","restartPolicy":"Always","schedulerName":"default-scheduler","securityContext":{},"terminationGracePeriodSeconds":30}}},"status":{"availableReplicas":1,"conditions":[{"lastTransitionTime":"2026-02-09T12:10:06Z","lastUpdateTime":"2026-02-09T12:10:25Z","message":"ReplicaSet \"httpbin-7989846f69\" has successfully progressed.","reason":"NewReplicaSetAvailable","status":"True","type":"Progressing"},{"lastTransitionTime":"2026-02-21T00:51:44Z","lastUpdateTime":"2026-02-21T00:51:44Z","message":"Deployment has minimum availability.","reason":"MinimumReplicasAvailable","status":"True","type":"Available"}],"observedGeneration":3,"readyReplicas":1,"replicas":1,"updatedReplicas":1}}
+    creationTimestamp: "2026-02-09T12:10:06Z"
+    generation: 4
+    name: httpbin
+    namespace: echo
+    resourceVersion: "6186605"
+    uid: 19a642e7-396d-4ddc-a34a-0d8de6d0a214
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: httpbin
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        labels:
+          app: httpbin
+      spec:
+        containers:
+        - image: kennethreitz/httpbin
+          imagePullPolicy: Always
+          name: httpbin
+          ports:
+          - containerPort: 80
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2026-02-09T12:10:06Z"
+      lastUpdateTime: "2026-02-09T12:10:25Z"
+      message: ReplicaSet "httpbin-7989846f69" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: "2026-02-21T00:51:44Z"
+      lastUpdateTime: "2026-02-21T00:51:44Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    observedGeneration: 4
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      argocd.argoproj.io/tracking-id: echo:apps/Deployment:echo/echo
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "1"
+    creationTimestamp: "2026-02-11T10:34:26Z"
+    generation: 3
+    labels:
+      app: echo
+      pod-template-hash: 6c7b66b4db
+    name: echo-6c7b66b4db
+    namespace: echo
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: echo
+      uid: f41b422b-ec47-4031-bf93-e36d3f6c414e
+    resourceVersion: "6186614"
+    uid: 2bf9eaae-6502-467b-9ea3-577ec44e6377
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: echo
+        pod-template-hash: 6c7b66b4db
+    template:
+      metadata:
+        labels:
+          app: echo
+          pod-template-hash: 6c7b66b4db
+      spec:
+        containers:
+        - image: ealen/echo-server:latest
+          imagePullPolicy: Always
+          name: echo
+          ports:
+          - containerPort: 80
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    fullyLabeledReplicas: 1
+    observedGeneration: 3
+    readyReplicas: 1
+    replicas: 1
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      argocd.argoproj.io/tracking-id: echo:apps/Deployment:echo/httpbin
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "1"
+    creationTimestamp: "2026-02-09T12:10:06Z"
+    generation: 3
+    labels:
+      app: httpbin
+      pod-template-hash: 7989846f69
+    name: httpbin-7989846f69
+    namespace: echo
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: httpbin
+      uid: 19a642e7-396d-4ddc-a34a-0d8de6d0a214
+    resourceVersion: "6186604"
+    uid: 06538580-3bec-448d-a86a-87b4d2e9e130
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: httpbin
+        pod-template-hash: 7989846f69
+    template:
+      metadata:
+        labels:
+          app: httpbin
+          pod-template-hash: 7989846f69
+      spec:
+        containers:
+        - image: kennethreitz/httpbin
+          imagePullPolicy: Always
+          name: httpbin
+          ports:
+          - containerPort: 80
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    fullyLabeledReplicas: 1
+    observedGeneration: 3
+    readyReplicas: 1
+    replicas: 1
+kind: List
+metadata:
+  resourceVersion: ""

@@ -1,0 +1,1281 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      cni.projectcalico.org/containerID: 3ef798cc81746a50173c122f411adf334937ba6c55cdf783c40dae54de96201c
+      cni.projectcalico.org/podIP: 10.233.118.133/32
+      cni.projectcalico.org/podIPs: 10.233.118.133/32
+      kubectl.kubernetes.io/restartedAt: "2026-02-12T15:19:35+01:00"
+    creationTimestamp: "2026-02-24T15:46:17Z"
+    generateName: strimzi-cluster-operator-7987cfb695-
+    generation: 1
+    labels:
+      name: strimzi-cluster-operator
+      pod-template-hash: 7987cfb695
+      strimzi.io/kind: cluster-operator
+    name: strimzi-cluster-operator-7987cfb695-xwm69
+    namespace: strimzi
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: strimzi-cluster-operator-7987cfb695
+      uid: ed22b6e6-c28a-465a-8428-681585e61f78
+    resourceVersion: "5829802"
+    uid: 6b79c657-ca4f-4ff5-9c55-19a553c1ea3a
+  spec:
+    containers:
+    - args:
+      - /opt/strimzi/bin/cluster_operator_run.sh
+      env:
+      - name: STRIMZI_NAMESPACE
+        value: kafka
+      - name: STRIMZI_FULL_RECONCILIATION_INTERVAL_MS
+        value: "120000"
+      - name: STRIMZI_OPERATION_TIMEOUT_MS
+        value: "300000"
+      - name: STRIMZI_DEFAULT_KAFKA_EXPORTER_IMAGE
+        value: quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+      - name: STRIMZI_DEFAULT_CRUISE_CONTROL_IMAGE
+        value: quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+      - name: STRIMZI_KAFKA_IMAGES
+        value: |
+          4.0.0=quay.io/strimzi/kafka:0.50.0-kafka-4.0.0
+          4.0.1=quay.io/strimzi/kafka:0.50.0-kafka-4.0.1
+          4.1.0=quay.io/strimzi/kafka:0.50.0-kafka-4.1.0
+          4.1.1=quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+      - name: STRIMZI_KAFKA_CONNECT_IMAGES
+        value: |
+          4.0.0=quay.io/strimzi/kafka:0.50.0-kafka-4.0.0
+          4.0.1=quay.io/strimzi/kafka:0.50.0-kafka-4.0.1
+          4.1.0=quay.io/strimzi/kafka:0.50.0-kafka-4.1.0
+          4.1.1=quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+      - name: STRIMZI_KAFKA_MIRROR_MAKER_2_IMAGES
+        value: |
+          4.0.0=quay.io/strimzi/kafka:0.50.0-kafka-4.0.0
+          4.0.1=quay.io/strimzi/kafka:0.50.0-kafka-4.0.1
+          4.1.0=quay.io/strimzi/kafka:0.50.0-kafka-4.1.0
+          4.1.1=quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+      - name: STRIMZI_DEFAULT_TOPIC_OPERATOR_IMAGE
+        value: quay.io/strimzi/operator:0.50.0
+      - name: STRIMZI_DEFAULT_USER_OPERATOR_IMAGE
+        value: quay.io/strimzi/operator:0.50.0
+      - name: STRIMZI_DEFAULT_KAFKA_INIT_IMAGE
+        value: quay.io/strimzi/operator:0.50.0
+      - name: STRIMZI_DEFAULT_KAFKA_BRIDGE_IMAGE
+        value: quay.io/strimzi/kafka-bridge:0.33.1
+      - name: STRIMZI_DEFAULT_KANIKO_EXECUTOR_IMAGE
+        value: quay.io/strimzi/kaniko-executor:0.50.0
+      - name: STRIMZI_DEFAULT_BUILDAH_IMAGE
+        value: quay.io/strimzi/buildah:0.50.0
+      - name: STRIMZI_DEFAULT_MAVEN_BUILDER
+        value: quay.io/strimzi/maven-builder:0.50.0
+      - name: STRIMZI_OPERATOR_NAMESPACE
+        valueFrom:
+          fieldRef:
+            apiVersion: v1
+            fieldPath: metadata.namespace
+      - name: STRIMZI_FEATURE_GATES
+      - name: STRIMZI_LEADER_ELECTION_ENABLED
+        value: "true"
+      - name: STRIMZI_LEADER_ELECTION_LEASE_NAME
+        value: strimzi-cluster-operator
+      - name: STRIMZI_LEADER_ELECTION_LEASE_NAMESPACE
+        valueFrom:
+          fieldRef:
+            apiVersion: v1
+            fieldPath: metadata.namespace
+      - name: STRIMZI_LEADER_ELECTION_IDENTITY
+        valueFrom:
+          fieldRef:
+            apiVersion: v1
+            fieldPath: metadata.name
+      image: quay.io/strimzi/operator:0.50.0
+      imagePullPolicy: IfNotPresent
+      livenessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /healthy
+          port: http
+          scheme: HTTP
+        initialDelaySeconds: 10
+        periodSeconds: 30
+        successThreshold: 1
+        timeoutSeconds: 1
+      name: strimzi-cluster-operator
+      ports:
+      - containerPort: 8080
+        name: http
+        protocol: TCP
+      readinessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /ready
+          port: http
+          scheme: HTTP
+        initialDelaySeconds: 10
+        periodSeconds: 30
+        successThreshold: 1
+        timeoutSeconds: 1
+      resources:
+        limits:
+          cpu: "1"
+          memory: 384Mi
+        requests:
+          cpu: 200m
+          memory: 384Mi
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /tmp
+        name: strimzi-tmp
+      - mountPath: /opt/strimzi/custom-config/
+        name: co-config-volume
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-d95jh
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: k8s-worker2
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: strimzi-cluster-operator
+    serviceAccountName: strimzi-cluster-operator
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - emptyDir:
+        medium: Memory
+        sizeLimit: 1Mi
+      name: strimzi-tmp
+    - configMap:
+        defaultMode: 420
+        name: strimzi-cluster-operator
+      name: co-config-volume
+    - name: kube-api-access-d95jh
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-24T15:46:21Z"
+      observedGeneration: 1
+      status: "True"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-24T15:46:17Z"
+      observedGeneration: 1
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-26T03:30:42Z"
+      observedGeneration: 1
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-26T03:30:42Z"
+      observedGeneration: 1
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-24T15:46:17Z"
+      observedGeneration: 1
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - allocatedResources:
+        cpu: 200m
+        memory: 384Mi
+      containerID: containerd://39d865b44f1854b63a0f05658f671cfe36a7cc0806cd2f25855cf7fb6b106a41
+      image: quay.io/strimzi/operator:0.50.0
+      imageID: quay.io/strimzi/operator@sha256:97289bc755096a98f59d5858c06082d374b9605b846b0a10c0682f404a06f5bc
+      lastState:
+        terminated:
+          containerID: containerd://c82b6d75498870e1141719dc6285fb92984857e7122bda81c5ac14ebd2db84bf
+          exitCode: 1
+          finishedAt: "2026-02-26T03:29:36Z"
+          reason: Error
+          startedAt: "2026-02-24T15:46:20Z"
+      name: strimzi-cluster-operator
+      ready: true
+      resources:
+        limits:
+          cpu: "1"
+          memory: 384Mi
+        requests:
+          cpu: 200m
+          memory: 384Mi
+      restartCount: 1
+      started: true
+      state:
+        running:
+          startedAt: "2026-02-26T03:29:37Z"
+      user:
+        linux:
+          gid: 0
+          supplementalGroups:
+          - 0
+          uid: 1001
+      volumeMounts:
+      - mountPath: /tmp
+        name: strimzi-tmp
+      - mountPath: /opt/strimzi/custom-config/
+        name: co-config-volume
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-d95jh
+        readOnly: true
+        recursiveReadOnly: Disabled
+    hostIP: 95.111.234.12
+    hostIPs:
+    - ip: 95.111.234.12
+    observedGeneration: 1
+    phase: Running
+    podIP: 10.233.118.133
+    podIPs:
+    - ip: 10.233.118.133
+    qosClass: Burstable
+    startTime: "2026-02-24T15:46:17Z"
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      argocd.argoproj.io/tracking-id: strimzi:apps/Deployment:strimzi/strimzi-cluster-operator
+      deployment.kubernetes.io/revision: "5"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{"argocd.argoproj.io/tracking-id":"strimzi:apps/Deployment:strimzi/strimzi-cluster-operator","deployment.kubernetes.io/revision":"5"},"creationTimestamp":"2026-02-12T13:59:22Z","generation":9,"labels":{"app":"strimzi"},"name":"strimzi-cluster-operator","namespace":"strimzi","resourceVersion":"5829804","uid":"c5c46119-cde9-4a48-9ebb-34a7aa36aefc"},"spec":{"progressDeadlineSeconds":600,"replicas":1,"revisionHistoryLimit":10,"selector":{"matchLabels":{"name":"strimzi-cluster-operator","strimzi.io/kind":"cluster-operator"}},"strategy":{"rollingUpdate":{"maxSurge":"25%","maxUnavailable":"25%"},"type":"RollingUpdate"},"template":{"metadata":{"annotations":{"kubectl.kubernetes.io/restartedAt":"2026-02-12T15:19:35+01:00"},"labels":{"name":"strimzi-cluster-operator","strimzi.io/kind":"cluster-operator"}},"spec":{"containers":[{"args":["/opt/strimzi/bin/cluster_operator_run.sh"],"env":[{"name":"STRIMZI_NAMESPACE","value":"kafka"},{"name":"STRIMZI_FULL_RECONCILIATION_INTERVAL_MS","value":"120000"},{"name":"STRIMZI_OPERATION_TIMEOUT_MS","value":"300000"},{"name":"STRIMZI_DEFAULT_KAFKA_EXPORTER_IMAGE","value":"quay.io/strimzi/kafka:0.50.0-kafka-4.1.1"},{"name":"STRIMZI_DEFAULT_CRUISE_CONTROL_IMAGE","value":"quay.io/strimzi/kafka:0.50.0-kafka-4.1.1"},{"name":"STRIMZI_KAFKA_IMAGES","value":"4.0.0=quay.io/strimzi/kafka:0.50.0-kafka-4.0.0\n4.0.1=quay.io/strimzi/kafka:0.50.0-kafka-4.0.1\n4.1.0=quay.io/strimzi/kafka:0.50.0-kafka-4.1.0\n4.1.1=quay.io/strimzi/kafka:0.50.0-kafka-4.1.1\n"},{"name":"STRIMZI_KAFKA_CONNECT_IMAGES","value":"4.0.0=quay.io/strimzi/kafka:0.50.0-kafka-4.0.0\n4.0.1=quay.io/strimzi/kafka:0.50.0-kafka-4.0.1\n4.1.0=quay.io/strimzi/kafka:0.50.0-kafka-4.1.0\n4.1.1=quay.io/strimzi/kafka:0.50.0-kafka-4.1.1\n"},{"name":"STRIMZI_KAFKA_MIRROR_MAKER_2_IMAGES","value":"4.0.0=quay.io/strimzi/kafka:0.50.0-kafka-4.0.0\n4.0.1=quay.io/strimzi/kafka:0.50.0-kafka-4.0.1\n4.1.0=quay.io/strimzi/kafka:0.50.0-kafka-4.1.0\n4.1.1=quay.io/strimzi/kafka:0.50.0-kafka-4.1.1\n"},{"name":"STRIMZI_DEFAULT_TOPIC_OPERATOR_IMAGE","value":"quay.io/strimzi/operator:0.50.0"},{"name":"STRIMZI_DEFAULT_USER_OPERATOR_IMAGE","value":"quay.io/strimzi/operator:0.50.0"},{"name":"STRIMZI_DEFAULT_KAFKA_INIT_IMAGE","value":"quay.io/strimzi/operator:0.50.0"},{"name":"STRIMZI_DEFAULT_KAFKA_BRIDGE_IMAGE","value":"quay.io/strimzi/kafka-bridge:0.33.1"},{"name":"STRIMZI_DEFAULT_KANIKO_EXECUTOR_IMAGE","value":"quay.io/strimzi/kaniko-executor:0.50.0"},{"name":"STRIMZI_DEFAULT_BUILDAH_IMAGE","value":"quay.io/strimzi/buildah:0.50.0"},{"name":"STRIMZI_DEFAULT_MAVEN_BUILDER","value":"quay.io/strimzi/maven-builder:0.50.0"},{"name":"STRIMZI_OPERATOR_NAMESPACE","valueFrom":{"fieldRef":{"apiVersion":"v1","fieldPath":"metadata.namespace"}}},{"name":"STRIMZI_FEATURE_GATES"},{"name":"STRIMZI_LEADER_ELECTION_ENABLED","value":"true"},{"name":"STRIMZI_LEADER_ELECTION_LEASE_NAME","value":"strimzi-cluster-operator"},{"name":"STRIMZI_LEADER_ELECTION_LEASE_NAMESPACE","valueFrom":{"fieldRef":{"apiVersion":"v1","fieldPath":"metadata.namespace"}}},{"name":"STRIMZI_LEADER_ELECTION_IDENTITY","valueFrom":{"fieldRef":{"apiVersion":"v1","fieldPath":"metadata.name"}}}],"image":"quay.io/strimzi/operator:0.50.0","imagePullPolicy":"IfNotPresent","livenessProbe":{"failureThreshold":3,"httpGet":{"path":"/healthy","port":"http","scheme":"HTTP"},"initialDelaySeconds":10,"periodSeconds":30,"successThreshold":1,"timeoutSeconds":1},"name":"strimzi-cluster-operator","ports":[{"containerPort":8080,"name":"http","protocol":"TCP"}],"readinessProbe":{"failureThreshold":3,"httpGet":{"path":"/ready","port":"http","scheme":"HTTP"},"initialDelaySeconds":10,"periodSeconds":30,"successThreshold":1,"timeoutSeconds":1},"resources":{"limits":{"cpu":"1","memory":"384Mi"},"requests":{"cpu":"200m","memory":"384Mi"}},"terminationMessagePath":"/dev/termination-log","terminationMessagePolicy":"File","volumeMounts":[{"mountPath":"/tmp","name":"strimzi-tmp"},{"mountPath":"/opt/strimzi/custom-config/","name":"co-config-volume"}]}],"dnsPolicy":"ClusterFirst","restartPolicy":"Always","schedulerName":"default-scheduler","securityContext":{},"serviceAccount":"strimzi-cluster-operator","serviceAccountName":"strimzi-cluster-operator","terminationGracePeriodSeconds":30,"volumes":[{"emptyDir":{"medium":"Memory","sizeLimit":"1Mi"},"name":"strimzi-tmp"},{"configMap":{"defaultMode":420,"name":"strimzi-cluster-operator"},"name":"co-config-volume"}]}}},"status":{"availableReplicas":1,"conditions":[{"lastTransitionTime":"2026-02-12T13:59:22Z","lastUpdateTime":"2026-02-12T14:20:07Z","message":"ReplicaSet \"strimzi-cluster-operator-7987cfb695\" has successfully progressed.","reason":"NewReplicaSetAvailable","status":"True","type":"Progressing"},{"lastTransitionTime":"2026-02-26T03:30:42Z","lastUpdateTime":"2026-02-26T03:30:42Z","message":"Deployment has minimum availability.","reason":"MinimumReplicasAvailable","status":"True","type":"Available"}],"observedGeneration":9,"readyReplicas":1,"replicas":1,"updatedReplicas":1}}
+    creationTimestamp: "2026-02-12T13:59:22Z"
+    generation: 10
+    labels:
+      app: strimzi
+    name: strimzi-cluster-operator
+    namespace: strimzi
+    resourceVersion: "6186627"
+    uid: c5c46119-cde9-4a48-9ebb-34a7aa36aefc
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        name: strimzi-cluster-operator
+        strimzi.io/kind: cluster-operator
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-02-12T15:19:35+01:00"
+        labels:
+          name: strimzi-cluster-operator
+          strimzi.io/kind: cluster-operator
+      spec:
+        containers:
+        - args:
+          - /opt/strimzi/bin/cluster_operator_run.sh
+          env:
+          - name: STRIMZI_NAMESPACE
+            value: kafka
+          - name: STRIMZI_FULL_RECONCILIATION_INTERVAL_MS
+            value: "120000"
+          - name: STRIMZI_OPERATION_TIMEOUT_MS
+            value: "300000"
+          - name: STRIMZI_DEFAULT_KAFKA_EXPORTER_IMAGE
+            value: quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+          - name: STRIMZI_DEFAULT_CRUISE_CONTROL_IMAGE
+            value: quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+          - name: STRIMZI_KAFKA_IMAGES
+            value: |
+              4.0.0=quay.io/strimzi/kafka:0.50.0-kafka-4.0.0
+              4.0.1=quay.io/strimzi/kafka:0.50.0-kafka-4.0.1
+              4.1.0=quay.io/strimzi/kafka:0.50.0-kafka-4.1.0
+              4.1.1=quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+          - name: STRIMZI_KAFKA_CONNECT_IMAGES
+            value: |
+              4.0.0=quay.io/strimzi/kafka:0.50.0-kafka-4.0.0
+              4.0.1=quay.io/strimzi/kafka:0.50.0-kafka-4.0.1
+              4.1.0=quay.io/strimzi/kafka:0.50.0-kafka-4.1.0
+              4.1.1=quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+          - name: STRIMZI_KAFKA_MIRROR_MAKER_2_IMAGES
+            value: |
+              4.0.0=quay.io/strimzi/kafka:0.50.0-kafka-4.0.0
+              4.0.1=quay.io/strimzi/kafka:0.50.0-kafka-4.0.1
+              4.1.0=quay.io/strimzi/kafka:0.50.0-kafka-4.1.0
+              4.1.1=quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+          - name: STRIMZI_DEFAULT_TOPIC_OPERATOR_IMAGE
+            value: quay.io/strimzi/operator:0.50.0
+          - name: STRIMZI_DEFAULT_USER_OPERATOR_IMAGE
+            value: quay.io/strimzi/operator:0.50.0
+          - name: STRIMZI_DEFAULT_KAFKA_INIT_IMAGE
+            value: quay.io/strimzi/operator:0.50.0
+          - name: STRIMZI_DEFAULT_KAFKA_BRIDGE_IMAGE
+            value: quay.io/strimzi/kafka-bridge:0.33.1
+          - name: STRIMZI_DEFAULT_KANIKO_EXECUTOR_IMAGE
+            value: quay.io/strimzi/kaniko-executor:0.50.0
+          - name: STRIMZI_DEFAULT_BUILDAH_IMAGE
+            value: quay.io/strimzi/buildah:0.50.0
+          - name: STRIMZI_DEFAULT_MAVEN_BUILDER
+            value: quay.io/strimzi/maven-builder:0.50.0
+          - name: STRIMZI_OPERATOR_NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+          - name: STRIMZI_FEATURE_GATES
+          - name: STRIMZI_LEADER_ELECTION_ENABLED
+            value: "true"
+          - name: STRIMZI_LEADER_ELECTION_LEASE_NAME
+            value: strimzi-cluster-operator
+          - name: STRIMZI_LEADER_ELECTION_LEASE_NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+          - name: STRIMZI_LEADER_ELECTION_IDENTITY
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.name
+          image: quay.io/strimzi/operator:0.50.0
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthy
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: strimzi-cluster-operator
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /ready
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: "1"
+              memory: 384Mi
+            requests:
+              cpu: 200m
+              memory: 384Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /tmp
+            name: strimzi-tmp
+          - mountPath: /opt/strimzi/custom-config/
+            name: co-config-volume
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: strimzi-cluster-operator
+        serviceAccountName: strimzi-cluster-operator
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir:
+            medium: Memory
+            sizeLimit: 1Mi
+          name: strimzi-tmp
+        - configMap:
+            defaultMode: 420
+            name: strimzi-cluster-operator
+          name: co-config-volume
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2026-02-12T13:59:22Z"
+      lastUpdateTime: "2026-02-12T14:20:07Z"
+      message: ReplicaSet "strimzi-cluster-operator-7987cfb695" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: "2026-02-26T03:30:42Z"
+      lastUpdateTime: "2026-02-26T03:30:42Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    observedGeneration: 10
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "3"
+    creationTimestamp: "2026-02-12T14:08:08Z"
+    generation: 3
+    labels:
+      name: strimzi-cluster-operator
+      pod-template-hash: 6574d85cbf
+      strimzi.io/kind: cluster-operator
+    name: strimzi-cluster-operator-6574d85cbf
+    namespace: strimzi
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: strimzi-cluster-operator
+      uid: c5c46119-cde9-4a48-9ebb-34a7aa36aefc
+    resourceVersion: "1806663"
+    uid: e4e08ee8-0b15-4b67-905f-fe834f74806b
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        name: strimzi-cluster-operator
+        pod-template-hash: 6574d85cbf
+        strimzi.io/kind: cluster-operator
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-02-12T15:08:08+01:00"
+        labels:
+          name: strimzi-cluster-operator
+          pod-template-hash: 6574d85cbf
+          strimzi.io/kind: cluster-operator
+      spec:
+        containers:
+        - args:
+          - /opt/strimzi/bin/cluster_operator_run.sh
+          env:
+          - name: STRIMZI_NAMESPACE
+            value: kafka
+          - name: STRIMZI_FULL_RECONCILIATION_INTERVAL_MS
+            value: "120000"
+          - name: STRIMZI_OPERATION_TIMEOUT_MS
+            value: "300000"
+          - name: STRIMZI_DEFAULT_KAFKA_EXPORTER_IMAGE
+            value: quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+          - name: STRIMZI_DEFAULT_CRUISE_CONTROL_IMAGE
+            value: quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+          - name: STRIMZI_KAFKA_IMAGES
+            value: |
+              4.0.0=quay.io/strimzi/kafka:0.50.0-kafka-4.0.0
+              4.0.1=quay.io/strimzi/kafka:0.50.0-kafka-4.0.1
+              4.1.0=quay.io/strimzi/kafka:0.50.0-kafka-4.1.0
+              4.1.1=quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+          - name: STRIMZI_KAFKA_CONNECT_IMAGES
+            value: |
+              4.0.0=quay.io/strimzi/kafka:0.50.0-kafka-4.0.0
+              4.0.1=quay.io/strimzi/kafka:0.50.0-kafka-4.0.1
+              4.1.0=quay.io/strimzi/kafka:0.50.0-kafka-4.1.0
+              4.1.1=quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+          - name: STRIMZI_KAFKA_MIRROR_MAKER_2_IMAGES
+            value: |
+              4.0.0=quay.io/strimzi/kafka:0.50.0-kafka-4.0.0
+              4.0.1=quay.io/strimzi/kafka:0.50.0-kafka-4.0.1
+              4.1.0=quay.io/strimzi/kafka:0.50.0-kafka-4.1.0
+              4.1.1=quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+          - name: STRIMZI_DEFAULT_TOPIC_OPERATOR_IMAGE
+            value: quay.io/strimzi/operator:0.50.0
+          - name: STRIMZI_DEFAULT_USER_OPERATOR_IMAGE
+            value: quay.io/strimzi/operator:0.50.0
+          - name: STRIMZI_DEFAULT_KAFKA_INIT_IMAGE
+            value: quay.io/strimzi/operator:0.50.0
+          - name: STRIMZI_DEFAULT_KAFKA_BRIDGE_IMAGE
+            value: quay.io/strimzi/kafka-bridge:0.33.1
+          - name: STRIMZI_DEFAULT_KANIKO_EXECUTOR_IMAGE
+            value: quay.io/strimzi/kaniko-executor:0.50.0
+          - name: STRIMZI_DEFAULT_BUILDAH_IMAGE
+            value: quay.io/strimzi/buildah:0.50.0
+          - name: STRIMZI_DEFAULT_MAVEN_BUILDER
+            value: quay.io/strimzi/maven-builder:0.50.0
+          - name: STRIMZI_OPERATOR_NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+          - name: STRIMZI_FEATURE_GATES
+          - name: STRIMZI_LEADER_ELECTION_ENABLED
+            value: "true"
+          - name: STRIMZI_LEADER_ELECTION_LEASE_NAME
+            value: strimzi-cluster-operator
+          - name: STRIMZI_LEADER_ELECTION_LEASE_NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+          - name: STRIMZI_LEADER_ELECTION_IDENTITY
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.name
+          image: quay.io/strimzi/operator:0.50.0
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthy
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: strimzi-cluster-operator
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /ready
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: "1"
+              memory: 384Mi
+            requests:
+              cpu: 200m
+              memory: 384Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /tmp
+            name: strimzi-tmp
+          - mountPath: /opt/strimzi/custom-config/
+            name: co-config-volume
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: strimzi-cluster-operator
+        serviceAccountName: strimzi-cluster-operator
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir:
+            medium: Memory
+            sizeLimit: 1Mi
+          name: strimzi-tmp
+        - configMap:
+            defaultMode: 420
+            name: strimzi-cluster-operator
+          name: co-config-volume
+  status:
+    observedGeneration: 3
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "1"
+    creationTimestamp: "2026-02-12T13:59:22Z"
+    generation: 2
+    labels:
+      name: strimzi-cluster-operator
+      pod-template-hash: 6c5f6879dd
+      strimzi.io/kind: cluster-operator
+    name: strimzi-cluster-operator-6c5f6879dd
+    namespace: strimzi
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: strimzi-cluster-operator
+      uid: c5c46119-cde9-4a48-9ebb-34a7aa36aefc
+    resourceVersion: "1804952"
+    uid: c5e53afd-5ad7-4145-ad50-a68309e72937
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        name: strimzi-cluster-operator
+        pod-template-hash: 6c5f6879dd
+        strimzi.io/kind: cluster-operator
+    template:
+      metadata:
+        labels:
+          name: strimzi-cluster-operator
+          pod-template-hash: 6c5f6879dd
+          strimzi.io/kind: cluster-operator
+      spec:
+        containers:
+        - args:
+          - /opt/strimzi/bin/cluster_operator_run.sh
+          env:
+          - name: STRIMZI_NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+          - name: STRIMZI_FULL_RECONCILIATION_INTERVAL_MS
+            value: "120000"
+          - name: STRIMZI_OPERATION_TIMEOUT_MS
+            value: "300000"
+          - name: STRIMZI_DEFAULT_KAFKA_EXPORTER_IMAGE
+            value: quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+          - name: STRIMZI_DEFAULT_CRUISE_CONTROL_IMAGE
+            value: quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+          - name: STRIMZI_KAFKA_IMAGES
+            value: |
+              4.0.0=quay.io/strimzi/kafka:0.50.0-kafka-4.0.0
+              4.0.1=quay.io/strimzi/kafka:0.50.0-kafka-4.0.1
+              4.1.0=quay.io/strimzi/kafka:0.50.0-kafka-4.1.0
+              4.1.1=quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+          - name: STRIMZI_KAFKA_CONNECT_IMAGES
+            value: |
+              4.0.0=quay.io/strimzi/kafka:0.50.0-kafka-4.0.0
+              4.0.1=quay.io/strimzi/kafka:0.50.0-kafka-4.0.1
+              4.1.0=quay.io/strimzi/kafka:0.50.0-kafka-4.1.0
+              4.1.1=quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+          - name: STRIMZI_KAFKA_MIRROR_MAKER_2_IMAGES
+            value: |
+              4.0.0=quay.io/strimzi/kafka:0.50.0-kafka-4.0.0
+              4.0.1=quay.io/strimzi/kafka:0.50.0-kafka-4.0.1
+              4.1.0=quay.io/strimzi/kafka:0.50.0-kafka-4.1.0
+              4.1.1=quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+          - name: STRIMZI_DEFAULT_TOPIC_OPERATOR_IMAGE
+            value: quay.io/strimzi/operator:0.50.0
+          - name: STRIMZI_DEFAULT_USER_OPERATOR_IMAGE
+            value: quay.io/strimzi/operator:0.50.0
+          - name: STRIMZI_DEFAULT_KAFKA_INIT_IMAGE
+            value: quay.io/strimzi/operator:0.50.0
+          - name: STRIMZI_DEFAULT_KAFKA_BRIDGE_IMAGE
+            value: quay.io/strimzi/kafka-bridge:0.33.1
+          - name: STRIMZI_DEFAULT_KANIKO_EXECUTOR_IMAGE
+            value: quay.io/strimzi/kaniko-executor:0.50.0
+          - name: STRIMZI_DEFAULT_BUILDAH_IMAGE
+            value: quay.io/strimzi/buildah:0.50.0
+          - name: STRIMZI_DEFAULT_MAVEN_BUILDER
+            value: quay.io/strimzi/maven-builder:0.50.0
+          - name: STRIMZI_OPERATOR_NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+          - name: STRIMZI_FEATURE_GATES
+          - name: STRIMZI_LEADER_ELECTION_ENABLED
+            value: "true"
+          - name: STRIMZI_LEADER_ELECTION_LEASE_NAME
+            value: strimzi-cluster-operator
+          - name: STRIMZI_LEADER_ELECTION_LEASE_NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+          - name: STRIMZI_LEADER_ELECTION_IDENTITY
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.name
+          image: quay.io/strimzi/operator:0.50.0
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthy
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: strimzi-cluster-operator
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /ready
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: "1"
+              memory: 384Mi
+            requests:
+              cpu: 200m
+              memory: 384Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /tmp
+            name: strimzi-tmp
+          - mountPath: /opt/strimzi/custom-config/
+            name: co-config-volume
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: strimzi-cluster-operator
+        serviceAccountName: strimzi-cluster-operator
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir:
+            medium: Memory
+            sizeLimit: 1Mi
+          name: strimzi-tmp
+        - configMap:
+            defaultMode: 420
+            name: strimzi-cluster-operator
+          name: co-config-volume
+  status:
+    observedGeneration: 2
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "2"
+    creationTimestamp: "2026-02-12T14:08:08Z"
+    generation: 2
+    labels:
+      name: strimzi-cluster-operator
+      pod-template-hash: 6c88d55d77
+      strimzi.io/kind: cluster-operator
+    name: strimzi-cluster-operator-6c88d55d77
+    namespace: strimzi
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: strimzi-cluster-operator
+      uid: c5c46119-cde9-4a48-9ebb-34a7aa36aefc
+    resourceVersion: "1804837"
+    uid: d23fb829-4cbb-4cd9-8b6b-b36f40fea4f8
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        name: strimzi-cluster-operator
+        pod-template-hash: 6c88d55d77
+        strimzi.io/kind: cluster-operator
+    template:
+      metadata:
+        labels:
+          name: strimzi-cluster-operator
+          pod-template-hash: 6c88d55d77
+          strimzi.io/kind: cluster-operator
+      spec:
+        containers:
+        - args:
+          - /opt/strimzi/bin/cluster_operator_run.sh
+          env:
+          - name: STRIMZI_NAMESPACE
+            value: kafka
+          - name: STRIMZI_FULL_RECONCILIATION_INTERVAL_MS
+            value: "120000"
+          - name: STRIMZI_OPERATION_TIMEOUT_MS
+            value: "300000"
+          - name: STRIMZI_DEFAULT_KAFKA_EXPORTER_IMAGE
+            value: quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+          - name: STRIMZI_DEFAULT_CRUISE_CONTROL_IMAGE
+            value: quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+          - name: STRIMZI_KAFKA_IMAGES
+            value: |
+              4.0.0=quay.io/strimzi/kafka:0.50.0-kafka-4.0.0
+              4.0.1=quay.io/strimzi/kafka:0.50.0-kafka-4.0.1
+              4.1.0=quay.io/strimzi/kafka:0.50.0-kafka-4.1.0
+              4.1.1=quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+          - name: STRIMZI_KAFKA_CONNECT_IMAGES
+            value: |
+              4.0.0=quay.io/strimzi/kafka:0.50.0-kafka-4.0.0
+              4.0.1=quay.io/strimzi/kafka:0.50.0-kafka-4.0.1
+              4.1.0=quay.io/strimzi/kafka:0.50.0-kafka-4.1.0
+              4.1.1=quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+          - name: STRIMZI_KAFKA_MIRROR_MAKER_2_IMAGES
+            value: |
+              4.0.0=quay.io/strimzi/kafka:0.50.0-kafka-4.0.0
+              4.0.1=quay.io/strimzi/kafka:0.50.0-kafka-4.0.1
+              4.1.0=quay.io/strimzi/kafka:0.50.0-kafka-4.1.0
+              4.1.1=quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+          - name: STRIMZI_DEFAULT_TOPIC_OPERATOR_IMAGE
+            value: quay.io/strimzi/operator:0.50.0
+          - name: STRIMZI_DEFAULT_USER_OPERATOR_IMAGE
+            value: quay.io/strimzi/operator:0.50.0
+          - name: STRIMZI_DEFAULT_KAFKA_INIT_IMAGE
+            value: quay.io/strimzi/operator:0.50.0
+          - name: STRIMZI_DEFAULT_KAFKA_BRIDGE_IMAGE
+            value: quay.io/strimzi/kafka-bridge:0.33.1
+          - name: STRIMZI_DEFAULT_KANIKO_EXECUTOR_IMAGE
+            value: quay.io/strimzi/kaniko-executor:0.50.0
+          - name: STRIMZI_DEFAULT_BUILDAH_IMAGE
+            value: quay.io/strimzi/buildah:0.50.0
+          - name: STRIMZI_DEFAULT_MAVEN_BUILDER
+            value: quay.io/strimzi/maven-builder:0.50.0
+          - name: STRIMZI_OPERATOR_NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+          - name: STRIMZI_FEATURE_GATES
+          - name: STRIMZI_LEADER_ELECTION_ENABLED
+            value: "true"
+          - name: STRIMZI_LEADER_ELECTION_LEASE_NAME
+            value: strimzi-cluster-operator
+          - name: STRIMZI_LEADER_ELECTION_LEASE_NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+          - name: STRIMZI_LEADER_ELECTION_IDENTITY
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.name
+          image: quay.io/strimzi/operator:0.50.0
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthy
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: strimzi-cluster-operator
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /ready
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: "1"
+              memory: 384Mi
+            requests:
+              cpu: 200m
+              memory: 384Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /tmp
+            name: strimzi-tmp
+          - mountPath: /opt/strimzi/custom-config/
+            name: co-config-volume
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: strimzi-cluster-operator
+        serviceAccountName: strimzi-cluster-operator
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir:
+            medium: Memory
+            sizeLimit: 1Mi
+          name: strimzi-tmp
+        - configMap:
+            defaultMode: 420
+            name: strimzi-cluster-operator
+          name: co-config-volume
+  status:
+    observedGeneration: 2
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "4"
+    creationTimestamp: "2026-02-12T14:17:08Z"
+    generation: 2
+    labels:
+      name: strimzi-cluster-operator
+      pod-template-hash: 755ff6c7fc
+      strimzi.io/kind: cluster-operator
+    name: strimzi-cluster-operator-755ff6c7fc
+    namespace: strimzi
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: strimzi-cluster-operator
+      uid: c5c46119-cde9-4a48-9ebb-34a7aa36aefc
+    resourceVersion: "1806789"
+    uid: efb007f2-3205-470f-ae13-7acd1f9e5290
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        name: strimzi-cluster-operator
+        pod-template-hash: 755ff6c7fc
+        strimzi.io/kind: cluster-operator
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-02-12T15:17:08+01:00"
+        labels:
+          name: strimzi-cluster-operator
+          pod-template-hash: 755ff6c7fc
+          strimzi.io/kind: cluster-operator
+      spec:
+        containers:
+        - args:
+          - /opt/strimzi/bin/cluster_operator_run.sh
+          env:
+          - name: STRIMZI_NAMESPACE
+            value: kafka
+          - name: STRIMZI_FULL_RECONCILIATION_INTERVAL_MS
+            value: "120000"
+          - name: STRIMZI_OPERATION_TIMEOUT_MS
+            value: "300000"
+          - name: STRIMZI_DEFAULT_KAFKA_EXPORTER_IMAGE
+            value: quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+          - name: STRIMZI_DEFAULT_CRUISE_CONTROL_IMAGE
+            value: quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+          - name: STRIMZI_KAFKA_IMAGES
+            value: |
+              4.0.0=quay.io/strimzi/kafka:0.50.0-kafka-4.0.0
+              4.0.1=quay.io/strimzi/kafka:0.50.0-kafka-4.0.1
+              4.1.0=quay.io/strimzi/kafka:0.50.0-kafka-4.1.0
+              4.1.1=quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+          - name: STRIMZI_KAFKA_CONNECT_IMAGES
+            value: |
+              4.0.0=quay.io/strimzi/kafka:0.50.0-kafka-4.0.0
+              4.0.1=quay.io/strimzi/kafka:0.50.0-kafka-4.0.1
+              4.1.0=quay.io/strimzi/kafka:0.50.0-kafka-4.1.0
+              4.1.1=quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+          - name: STRIMZI_KAFKA_MIRROR_MAKER_2_IMAGES
+            value: |
+              4.0.0=quay.io/strimzi/kafka:0.50.0-kafka-4.0.0
+              4.0.1=quay.io/strimzi/kafka:0.50.0-kafka-4.0.1
+              4.1.0=quay.io/strimzi/kafka:0.50.0-kafka-4.1.0
+              4.1.1=quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+          - name: STRIMZI_DEFAULT_TOPIC_OPERATOR_IMAGE
+            value: quay.io/strimzi/operator:0.50.0
+          - name: STRIMZI_DEFAULT_USER_OPERATOR_IMAGE
+            value: quay.io/strimzi/operator:0.50.0
+          - name: STRIMZI_DEFAULT_KAFKA_INIT_IMAGE
+            value: quay.io/strimzi/operator:0.50.0
+          - name: STRIMZI_DEFAULT_KAFKA_BRIDGE_IMAGE
+            value: quay.io/strimzi/kafka-bridge:0.33.1
+          - name: STRIMZI_DEFAULT_KANIKO_EXECUTOR_IMAGE
+            value: quay.io/strimzi/kaniko-executor:0.50.0
+          - name: STRIMZI_DEFAULT_BUILDAH_IMAGE
+            value: quay.io/strimzi/buildah:0.50.0
+          - name: STRIMZI_DEFAULT_MAVEN_BUILDER
+            value: quay.io/strimzi/maven-builder:0.50.0
+          - name: STRIMZI_OPERATOR_NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+          - name: STRIMZI_FEATURE_GATES
+          - name: STRIMZI_LEADER_ELECTION_ENABLED
+            value: "true"
+          - name: STRIMZI_LEADER_ELECTION_LEASE_NAME
+            value: strimzi-cluster-operator
+          - name: STRIMZI_LEADER_ELECTION_LEASE_NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+          - name: STRIMZI_LEADER_ELECTION_IDENTITY
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.name
+          image: quay.io/strimzi/operator:0.50.0
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthy
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: strimzi-cluster-operator
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /ready
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: "1"
+              memory: 384Mi
+            requests:
+              cpu: 200m
+              memory: 384Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /tmp
+            name: strimzi-tmp
+          - mountPath: /opt/strimzi/custom-config/
+            name: co-config-volume
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: strimzi-cluster-operator
+        serviceAccountName: strimzi-cluster-operator
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir:
+            medium: Memory
+            sizeLimit: 1Mi
+          name: strimzi-tmp
+        - configMap:
+            defaultMode: 420
+            name: strimzi-cluster-operator
+          name: co-config-volume
+  status:
+    observedGeneration: 2
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      argocd.argoproj.io/tracking-id: strimzi:apps/Deployment:strimzi/strimzi-cluster-operator
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "5"
+    creationTimestamp: "2026-02-12T14:19:35Z"
+    generation: 6
+    labels:
+      name: strimzi-cluster-operator
+      pod-template-hash: 7987cfb695
+      strimzi.io/kind: cluster-operator
+    name: strimzi-cluster-operator-7987cfb695
+    namespace: strimzi
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: strimzi-cluster-operator
+      uid: c5c46119-cde9-4a48-9ebb-34a7aa36aefc
+    resourceVersion: "6186625"
+    uid: ed22b6e6-c28a-465a-8428-681585e61f78
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        name: strimzi-cluster-operator
+        pod-template-hash: 7987cfb695
+        strimzi.io/kind: cluster-operator
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-02-12T15:19:35+01:00"
+        labels:
+          name: strimzi-cluster-operator
+          pod-template-hash: 7987cfb695
+          strimzi.io/kind: cluster-operator
+      spec:
+        containers:
+        - args:
+          - /opt/strimzi/bin/cluster_operator_run.sh
+          env:
+          - name: STRIMZI_NAMESPACE
+            value: kafka
+          - name: STRIMZI_FULL_RECONCILIATION_INTERVAL_MS
+            value: "120000"
+          - name: STRIMZI_OPERATION_TIMEOUT_MS
+            value: "300000"
+          - name: STRIMZI_DEFAULT_KAFKA_EXPORTER_IMAGE
+            value: quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+          - name: STRIMZI_DEFAULT_CRUISE_CONTROL_IMAGE
+            value: quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+          - name: STRIMZI_KAFKA_IMAGES
+            value: |
+              4.0.0=quay.io/strimzi/kafka:0.50.0-kafka-4.0.0
+              4.0.1=quay.io/strimzi/kafka:0.50.0-kafka-4.0.1
+              4.1.0=quay.io/strimzi/kafka:0.50.0-kafka-4.1.0
+              4.1.1=quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+          - name: STRIMZI_KAFKA_CONNECT_IMAGES
+            value: |
+              4.0.0=quay.io/strimzi/kafka:0.50.0-kafka-4.0.0
+              4.0.1=quay.io/strimzi/kafka:0.50.0-kafka-4.0.1
+              4.1.0=quay.io/strimzi/kafka:0.50.0-kafka-4.1.0
+              4.1.1=quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+          - name: STRIMZI_KAFKA_MIRROR_MAKER_2_IMAGES
+            value: |
+              4.0.0=quay.io/strimzi/kafka:0.50.0-kafka-4.0.0
+              4.0.1=quay.io/strimzi/kafka:0.50.0-kafka-4.0.1
+              4.1.0=quay.io/strimzi/kafka:0.50.0-kafka-4.1.0
+              4.1.1=quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+          - name: STRIMZI_DEFAULT_TOPIC_OPERATOR_IMAGE
+            value: quay.io/strimzi/operator:0.50.0
+          - name: STRIMZI_DEFAULT_USER_OPERATOR_IMAGE
+            value: quay.io/strimzi/operator:0.50.0
+          - name: STRIMZI_DEFAULT_KAFKA_INIT_IMAGE
+            value: quay.io/strimzi/operator:0.50.0
+          - name: STRIMZI_DEFAULT_KAFKA_BRIDGE_IMAGE
+            value: quay.io/strimzi/kafka-bridge:0.33.1
+          - name: STRIMZI_DEFAULT_KANIKO_EXECUTOR_IMAGE
+            value: quay.io/strimzi/kaniko-executor:0.50.0
+          - name: STRIMZI_DEFAULT_BUILDAH_IMAGE
+            value: quay.io/strimzi/buildah:0.50.0
+          - name: STRIMZI_DEFAULT_MAVEN_BUILDER
+            value: quay.io/strimzi/maven-builder:0.50.0
+          - name: STRIMZI_OPERATOR_NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+          - name: STRIMZI_FEATURE_GATES
+          - name: STRIMZI_LEADER_ELECTION_ENABLED
+            value: "true"
+          - name: STRIMZI_LEADER_ELECTION_LEASE_NAME
+            value: strimzi-cluster-operator
+          - name: STRIMZI_LEADER_ELECTION_LEASE_NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+          - name: STRIMZI_LEADER_ELECTION_IDENTITY
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.name
+          image: quay.io/strimzi/operator:0.50.0
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthy
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: strimzi-cluster-operator
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /ready
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: "1"
+              memory: 384Mi
+            requests:
+              cpu: 200m
+              memory: 384Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /tmp
+            name: strimzi-tmp
+          - mountPath: /opt/strimzi/custom-config/
+            name: co-config-volume
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: strimzi-cluster-operator
+        serviceAccountName: strimzi-cluster-operator
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir:
+            medium: Memory
+            sizeLimit: 1Mi
+          name: strimzi-tmp
+        - configMap:
+            defaultMode: 420
+            name: strimzi-cluster-operator
+          name: co-config-volume
+  status:
+    availableReplicas: 1
+    fullyLabeledReplicas: 1
+    observedGeneration: 6
+    readyReplicas: 1
+    replicas: 1
+kind: List
+metadata:
+  resourceVersion: ""

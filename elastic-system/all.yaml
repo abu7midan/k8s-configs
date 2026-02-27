@@ -1,0 +1,369 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      checksum/config: 3ce2114e7c940d8ad3a1805eca31272e25f065419c46349bd7fa3f1f2f9e2619
+      cni.projectcalico.org/containerID: db9c103ef4afdb47564eebe4ca60da39473aa2cb426d7bac181913f4f8619ff9
+      cni.projectcalico.org/podIP: 10.233.92.131/32
+      cni.projectcalico.org/podIPs: 10.233.92.131/32
+      co.elastic.logs/raw: '[{"type":"filestream","enabled":true,"id":"eck-container-logs-${data.kubernetes.container.id}","paths":["/var/log/containers/*${data.kubernetes.container.id}.log"],"parsers":[{"container":{}},{"ndjson":{"keys_under_root":true}}],"prospector.scanner.symlinks":true,"processors":[{"convert":{"mode":"rename","ignore_missing":true,"fields":[{"from":"error","to":"_error"}]}},{"convert":{"mode":"rename","ignore_missing":true,"fields":[{"from":"_error","to":"error.message"}]}},{"convert":{"mode":"rename","ignore_missing":true,"fields":[{"from":"source","to":"_source"}]}},{"convert":{"mode":"rename","ignore_missing":true,"fields":[{"from":"_source","to":"event.source"}]}}]}]'
+      kubectl.kubernetes.io/restartedAt: "2026-02-16T22:22:56+01:00"
+    creationTimestamp: "2026-02-24T15:48:46Z"
+    generateName: elastic-operator-
+    generation: 1
+    labels:
+      apps.kubernetes.io/pod-index: "0"
+      control-plane: elastic-operator
+      controller-revision-hash: elastic-operator-55755db6f7
+      statefulset.kubernetes.io/pod-name: elastic-operator-0
+    name: elastic-operator-0
+    namespace: elastic-system
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: StatefulSet
+      name: elastic-operator
+      uid: 5614387c-4794-40d9-96b1-b7b9dea1c19b
+    resourceVersion: "5829624"
+    uid: 13032940-bce7-4474-aea9-11549ee75414
+  spec:
+    automountServiceAccountToken: true
+    containers:
+    - args:
+      - manager
+      - --config=/conf/eck.yaml
+      env:
+      - name: OPERATOR_NAMESPACE
+        valueFrom:
+          fieldRef:
+            apiVersion: v1
+            fieldPath: metadata.namespace
+      - name: POD_IP
+        valueFrom:
+          fieldRef:
+            apiVersion: v1
+            fieldPath: status.podIP
+      - name: WEBHOOK_SECRET
+        value: elastic-webhook-server-cert
+      image: docker.elastic.co/eck/eck-operator:3.3.0
+      imagePullPolicy: IfNotPresent
+      name: manager
+      ports:
+      - containerPort: 9443
+        name: https-webhook
+        protocol: TCP
+      resources:
+        limits:
+          cpu: "1"
+          memory: 1Gi
+        requests:
+          cpu: 100m
+          memory: 150Mi
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /conf
+        name: conf
+        readOnly: true
+      - mountPath: /tmp/k8s-webhook-server/serving-certs
+        name: cert
+        readOnly: true
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-snq6l
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    hostname: elastic-operator-0
+    nodeName: k8s-worker1
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext:
+      runAsNonRoot: true
+    serviceAccount: elastic-operator
+    serviceAccountName: elastic-operator
+    subdomain: elastic-operator
+    terminationGracePeriodSeconds: 10
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - configMap:
+        defaultMode: 420
+        name: elastic-operator
+      name: conf
+    - name: cert
+      secret:
+        defaultMode: 420
+        secretName: elastic-webhook-server-cert
+    - name: kube-api-access-snq6l
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-24T15:48:48Z"
+      observedGeneration: 1
+      status: "True"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-24T15:48:46Z"
+      observedGeneration: 1
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-26T03:29:59Z"
+      observedGeneration: 1
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-26T03:29:59Z"
+      observedGeneration: 1
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-24T15:48:46Z"
+      observedGeneration: 1
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - allocatedResources:
+        cpu: 100m
+        memory: 150Mi
+      containerID: containerd://65f0a530f89740a2496a0a90c73cac440d6f095b6df55784a8d4dd4830bb4b1e
+      image: docker.elastic.co/eck/eck-operator:3.3.0
+      imageID: docker.elastic.co/eck/eck-operator@sha256:8c933444cb78d632d2d15851daf7bcb1fc4ec57689bb4aebf7b3353e6bf395a9
+      lastState:
+        terminated:
+          containerID: containerd://948f4d051f03336ad33fac6061eab87d82779d39bd4e7111f756f5774268f50a
+          exitCode: 0
+          finishedAt: "2026-02-26T03:29:35Z"
+          reason: Completed
+          startedAt: "2026-02-26T03:29:31Z"
+      name: manager
+      ready: true
+      resources:
+        limits:
+          cpu: "1"
+          memory: 1Gi
+        requests:
+          cpu: 100m
+          memory: 150Mi
+      restartCount: 3
+      started: true
+      state:
+        running:
+          startedAt: "2026-02-26T03:29:58Z"
+      user:
+        linux:
+          gid: 65532
+          supplementalGroups:
+          - 65532
+          uid: 65532
+      volumeMounts:
+      - mountPath: /conf
+        name: conf
+        readOnly: true
+        recursiveReadOnly: Disabled
+      - mountPath: /tmp/k8s-webhook-server/serving-certs
+        name: cert
+        readOnly: true
+        recursiveReadOnly: Disabled
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-snq6l
+        readOnly: true
+        recursiveReadOnly: Disabled
+    hostIP: 62.171.177.133
+    hostIPs:
+    - ip: 62.171.177.133
+    observedGeneration: 1
+    phase: Running
+    podIP: 10.233.92.131
+    podIPs:
+    - ip: 10.233.92.131
+    qosClass: Burstable
+    startTime: "2026-02-24T15:48:46Z"
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      argocd.argoproj.io/tracking-id: elastic-system:/Service:elastic-system/elastic-webhook-server
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{"argocd.argoproj.io/tracking-id":"elastic-system:/Service:elastic-system/elastic-webhook-server"},"creationTimestamp":"2026-02-13T19:04:24Z","labels":{"app.kubernetes.io/version":"3.3.0","control-plane":"elastic-operator"},"name":"elastic-webhook-server","namespace":"elastic-system","resourceVersion":"2112482","uid":"b7b0de90-6baa-41b4-a670-b700bdc25632"},"spec":{"clusterIP":"10.104.195.3","clusterIPs":["10.104.195.3"],"internalTrafficPolicy":"Cluster","ipFamilies":["IPv4"],"ipFamilyPolicy":"SingleStack","ports":[{"name":"https","port":443,"protocol":"TCP","targetPort":9443}],"selector":{"control-plane":"elastic-operator"},"sessionAffinity":"None","type":"ClusterIP"},"status":{"loadBalancer":{}}}
+    creationTimestamp: "2026-02-13T19:04:24Z"
+    labels:
+      app.kubernetes.io/version: 3.3.0
+      control-plane: elastic-operator
+    name: elastic-webhook-server
+    namespace: elastic-system
+    resourceVersion: "6186647"
+    uid: b7b0de90-6baa-41b4-a670-b700bdc25632
+  spec:
+    clusterIP: 10.104.195.3
+    clusterIPs:
+    - 10.104.195.3
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: https
+      port: 443
+      protocol: TCP
+      targetPort: 9443
+    selector:
+      control-plane: elastic-operator
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: apps/v1
+  kind: StatefulSet
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"StatefulSet","metadata":{"annotations":{},"labels":{"app.kubernetes.io/version":"3.3.0","control-plane":"elastic-operator"},"name":"elastic-operator","namespace":"elastic-system"},"spec":{"replicas":1,"selector":{"matchLabels":{"control-plane":"elastic-operator"}},"serviceName":"elastic-operator","template":{"metadata":{"annotations":{"checksum/config":"3ce2114e7c940d8ad3a1805eca31272e25f065419c46349bd7fa3f1f2f9e2619","co.elastic.logs/raw":"[{\"type\":\"filestream\",\"enabled\":true,\"id\":\"eck-container-logs-${data.kubernetes.container.id}\",\"paths\":[\"/var/log/containers/*${data.kubernetes.container.id}.log\"],\"parsers\":[{\"container\":{}},{\"ndjson\":{\"keys_under_root\":true}}],\"prospector.scanner.symlinks\":true,\"processors\":[{\"convert\":{\"mode\":\"rename\",\"ignore_missing\":true,\"fields\":[{\"from\":\"error\",\"to\":\"_error\"}]}},{\"convert\":{\"mode\":\"rename\",\"ignore_missing\":true,\"fields\":[{\"from\":\"_error\",\"to\":\"error.message\"}]}},{\"convert\":{\"mode\":\"rename\",\"ignore_missing\":true,\"fields\":[{\"from\":\"source\",\"to\":\"_source\"}]}},{\"convert\":{\"mode\":\"rename\",\"ignore_missing\":true,\"fields\":[{\"from\":\"_source\",\"to\":\"event.source\"}]}}]}]"},"labels":{"control-plane":"elastic-operator"}},"spec":{"automountServiceAccountToken":true,"containers":[{"args":["manager","--config=/conf/eck.yaml"],"env":[{"name":"OPERATOR_NAMESPACE","valueFrom":{"fieldRef":{"fieldPath":"metadata.namespace"}}},{"name":"POD_IP","valueFrom":{"fieldRef":{"fieldPath":"status.podIP"}}},{"name":"WEBHOOK_SECRET","value":"elastic-webhook-server-cert"}],"image":"docker.elastic.co/eck/eck-operator:3.3.0","imagePullPolicy":"IfNotPresent","name":"manager","ports":[{"containerPort":9443,"name":"https-webhook","protocol":"TCP"}],"resources":{"limits":{"cpu":1,"memory":"1Gi"},"requests":{"cpu":"100m","memory":"150Mi"}},"securityContext":{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":true,"runAsNonRoot":true},"volumeMounts":[{"mountPath":"/conf","name":"conf","readOnly":true},{"mountPath":"/tmp/k8s-webhook-server/serving-certs","name":"cert","readOnly":true}]}],"securityContext":{"runAsNonRoot":true},"serviceAccountName":"elastic-operator","terminationGracePeriodSeconds":10,"volumes":[{"configMap":{"name":"elastic-operator"},"name":"conf"},{"name":"cert","secret":{"defaultMode":420,"secretName":"elastic-webhook-server-cert"}}]}}}}
+    creationTimestamp: "2026-02-13T19:04:24Z"
+    generation: 2
+    labels:
+      app.kubernetes.io/version: 3.3.0
+      control-plane: elastic-operator
+    name: elastic-operator
+    namespace: elastic-system
+    resourceVersion: "5829627"
+    uid: 5614387c-4794-40d9-96b1-b7b9dea1c19b
+  spec:
+    persistentVolumeClaimRetentionPolicy:
+      whenDeleted: Retain
+      whenScaled: Retain
+    podManagementPolicy: OrderedReady
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        control-plane: elastic-operator
+    serviceName: elastic-operator
+    template:
+      metadata:
+        annotations:
+          checksum/config: 3ce2114e7c940d8ad3a1805eca31272e25f065419c46349bd7fa3f1f2f9e2619
+          co.elastic.logs/raw: '[{"type":"filestream","enabled":true,"id":"eck-container-logs-${data.kubernetes.container.id}","paths":["/var/log/containers/*${data.kubernetes.container.id}.log"],"parsers":[{"container":{}},{"ndjson":{"keys_under_root":true}}],"prospector.scanner.symlinks":true,"processors":[{"convert":{"mode":"rename","ignore_missing":true,"fields":[{"from":"error","to":"_error"}]}},{"convert":{"mode":"rename","ignore_missing":true,"fields":[{"from":"_error","to":"error.message"}]}},{"convert":{"mode":"rename","ignore_missing":true,"fields":[{"from":"source","to":"_source"}]}},{"convert":{"mode":"rename","ignore_missing":true,"fields":[{"from":"_source","to":"event.source"}]}}]}]'
+          kubectl.kubernetes.io/restartedAt: "2026-02-16T22:22:56+01:00"
+        labels:
+          control-plane: elastic-operator
+      spec:
+        automountServiceAccountToken: true
+        containers:
+        - args:
+          - manager
+          - --config=/conf/eck.yaml
+          env:
+          - name: OPERATOR_NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+          - name: POD_IP
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: status.podIP
+          - name: WEBHOOK_SECRET
+            value: elastic-webhook-server-cert
+          image: docker.elastic.co/eck/eck-operator:3.3.0
+          imagePullPolicy: IfNotPresent
+          name: manager
+          ports:
+          - containerPort: 9443
+            name: https-webhook
+            protocol: TCP
+          resources:
+            limits:
+              cpu: "1"
+              memory: 1Gi
+            requests:
+              cpu: 100m
+              memory: 150Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /conf
+            name: conf
+            readOnly: true
+          - mountPath: /tmp/k8s-webhook-server/serving-certs
+            name: cert
+            readOnly: true
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext:
+          runAsNonRoot: true
+        serviceAccount: elastic-operator
+        serviceAccountName: elastic-operator
+        terminationGracePeriodSeconds: 10
+        volumes:
+        - configMap:
+            defaultMode: 420
+            name: elastic-operator
+          name: conf
+        - name: cert
+          secret:
+            defaultMode: 420
+            secretName: elastic-webhook-server-cert
+    updateStrategy:
+      rollingUpdate:
+        maxUnavailable: 1
+        partition: 0
+      type: RollingUpdate
+  status:
+    availableReplicas: 1
+    collisionCount: 0
+    currentReplicas: 1
+    currentRevision: elastic-operator-55755db6f7
+    observedGeneration: 2
+    readyReplicas: 1
+    replicas: 1
+    updateRevision: elastic-operator-55755db6f7
+    updatedReplicas: 1
+kind: List
+metadata:
+  resourceVersion: ""

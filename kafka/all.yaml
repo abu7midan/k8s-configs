@@ -1,0 +1,2219 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      cni.projectcalico.org/containerID: 9c697316f39529841c8577af187ede4ac15f40685a7bde5ea0c6a024bb44a5e9
+      cni.projectcalico.org/podIP: 10.233.92.157/32
+      cni.projectcalico.org/podIPs: 10.233.92.157/32
+      strimzi.io/clients-ca-cert-generation: "0"
+      strimzi.io/cluster-ca-cert-generation: "0"
+      strimzi.io/cluster-ca-key-generation: "0"
+      strimzi.io/configuration-hash: 9b99fb6a
+      strimzi.io/kafka-version: 4.1.1
+      strimzi.io/revision: 34e7245f
+      strimzi.io/server-cert-hash: 081f223793c5adf74088679fe0cdde59ac56e2ae
+    creationTimestamp: "2026-02-24T15:48:46Z"
+    generation: 1
+    labels:
+      app.kubernetes.io/instance: my-kafka
+      app.kubernetes.io/managed-by: strimzi-cluster-operator
+      app.kubernetes.io/name: kafka
+      app.kubernetes.io/part-of: strimzi-my-kafka
+      strimzi.io/broker-role: "true"
+      strimzi.io/cluster: my-kafka
+      strimzi.io/component-type: kafka
+      strimzi.io/controller: strimzipodset
+      strimzi.io/controller-name: my-kafka-brokers
+      strimzi.io/controller-role: "false"
+      strimzi.io/kind: Kafka
+      strimzi.io/name: my-kafka-kafka
+      strimzi.io/pod-name: my-kafka-brokers-0
+      strimzi.io/pool-name: brokers
+    name: my-kafka-brokers-0
+    namespace: kafka
+    ownerReferences:
+    - apiVersion: core.strimzi.io/v1beta2
+      blockOwnerDeletion: true
+      controller: true
+      kind: StrimziPodSet
+      name: my-kafka-brokers
+      uid: 9453c7b3-8574-44a5-99f1-e9eedb644d56
+    resourceVersion: "5360285"
+    uid: 6a77fab4-46e0-4f00-8339-69a651a1ba47
+  spec:
+    containers:
+    - args:
+      - /opt/kafka/kafka_run.sh
+      env:
+      - name: KAFKA_JMX_EXPORTER_ENABLED
+        value: "false"
+      - name: STRIMZI_KAFKA_GC_LOG_ENABLED
+        value: "false"
+      - name: KAFKA_CLUSTER_NAME
+        value: my-kafka
+      - name: KAFKA_HEAP_OPTS
+        value: -Xms128M
+      image: quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+      imagePullPolicy: IfNotPresent
+      livenessProbe:
+        exec:
+          command:
+          - /opt/kafka/kafka_liveness.sh
+        failureThreshold: 3
+        initialDelaySeconds: 15
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      name: kafka
+      ports:
+      - containerPort: 8443
+        name: tcp-kafkaagent
+        protocol: TCP
+      - containerPort: 9091
+        name: tcp-replication
+        protocol: TCP
+      - containerPort: 9092
+        name: tcp-clients
+        protocol: TCP
+      - containerPort: 9094
+        name: tcp-external
+        protocol: TCP
+      readinessProbe:
+        exec:
+          command:
+          - /opt/kafka/kafka_readiness.sh
+        failureThreshold: 3
+        initialDelaySeconds: 15
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/lib/kafka/data
+        name: data
+      - mountPath: /tmp
+        name: strimzi-tmp
+      - mountPath: /opt/kafka/custom-config/
+        name: kafka-metrics-and-logging
+      - mountPath: /var/opt/kafka
+        name: ready-files
+      - mountPath: /opt/kafka/init
+        name: rack-volume
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-dz8tb
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    hostname: my-kafka-brokers-0
+    initContainers:
+    - args:
+      - /opt/strimzi/bin/kafka_init_run.sh
+      env:
+      - name: NODE_NAME
+        valueFrom:
+          fieldRef:
+            apiVersion: v1
+            fieldPath: spec.nodeName
+      - name: EXTERNAL_ADDRESS
+        value: "TRUE"
+      image: quay.io/strimzi/operator:0.50.0
+      imagePullPolicy: IfNotPresent
+      name: kafka-init
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /opt/kafka/init
+        name: rack-volume
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-dz8tb
+        readOnly: true
+    nodeName: k8s-worker1
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext:
+      fsGroup: 0
+    serviceAccount: my-kafka-kafka
+    serviceAccountName: my-kafka-kafka
+    subdomain: my-kafka-kafka-brokers
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: data
+      persistentVolumeClaim:
+        claimName: data-my-kafka-brokers-0
+    - emptyDir:
+        medium: Memory
+        sizeLimit: 5Mi
+      name: strimzi-tmp
+    - configMap:
+        defaultMode: 420
+        name: my-kafka-brokers-0
+      name: kafka-metrics-and-logging
+    - emptyDir:
+        medium: Memory
+        sizeLimit: 1Ki
+      name: ready-files
+    - emptyDir:
+        medium: Memory
+        sizeLimit: 1Mi
+      name: rack-volume
+    - name: kube-api-access-dz8tb
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-24T15:48:48Z"
+      observedGeneration: 1
+      status: "True"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-24T15:48:54Z"
+      observedGeneration: 1
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-24T15:49:26Z"
+      observedGeneration: 1
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-24T15:49:26Z"
+      observedGeneration: 1
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-24T15:48:46Z"
+      observedGeneration: 1
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: containerd://4fb1b44614abc38649d9f8c0f77ce8b1cae4ada2b5948f36538955c83f18806f
+      image: quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+      imageID: quay.io/strimzi/kafka@sha256:015ca88119b94649725df6d9f233d5815db26f3bee37d17db0f2cbc80f4bd95b
+      lastState: {}
+      name: kafka
+      ready: true
+      resources: {}
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: "2026-02-24T15:48:54Z"
+      user:
+        linux:
+          gid: 0
+          supplementalGroups:
+          - 0
+          uid: 1001
+      volumeMounts:
+      - mountPath: /var/lib/kafka/data
+        name: data
+      - mountPath: /tmp
+        name: strimzi-tmp
+      - mountPath: /opt/kafka/custom-config/
+        name: kafka-metrics-and-logging
+      - mountPath: /var/opt/kafka
+        name: ready-files
+      - mountPath: /opt/kafka/init
+        name: rack-volume
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-dz8tb
+        readOnly: true
+        recursiveReadOnly: Disabled
+    hostIP: 62.171.177.133
+    hostIPs:
+    - ip: 62.171.177.133
+    initContainerStatuses:
+    - containerID: containerd://ff6a3491aa05d853ba73cfa97fe4444affd65818a93f64b200d3a6c38777cd7c
+      image: quay.io/strimzi/operator:0.50.0
+      imageID: quay.io/strimzi/operator@sha256:97289bc755096a98f59d5858c06082d374b9605b846b0a10c0682f404a06f5bc
+      lastState: {}
+      name: kafka-init
+      ready: true
+      resources: {}
+      restartCount: 0
+      started: false
+      state:
+        terminated:
+          containerID: containerd://ff6a3491aa05d853ba73cfa97fe4444affd65818a93f64b200d3a6c38777cd7c
+          exitCode: 0
+          finishedAt: "2026-02-24T15:48:53Z"
+          reason: Completed
+          startedAt: "2026-02-24T15:48:48Z"
+      user:
+        linux:
+          gid: 0
+          supplementalGroups:
+          - 0
+          uid: 1001
+      volumeMounts:
+      - mountPath: /opt/kafka/init
+        name: rack-volume
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-dz8tb
+        readOnly: true
+        recursiveReadOnly: Disabled
+    observedGeneration: 1
+    phase: Running
+    podIP: 10.233.92.157
+    podIPs:
+    - ip: 10.233.92.157
+    qosClass: BestEffort
+    startTime: "2026-02-24T15:48:46Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      cni.projectcalico.org/containerID: eacfbc7720c45a4057a30e7df380f4e477d4715e8747d908ee8e369c56d63ff3
+      cni.projectcalico.org/podIP: 10.233.92.146/32
+      cni.projectcalico.org/podIPs: 10.233.92.146/32
+      strimzi.io/clients-ca-cert-generation: "0"
+      strimzi.io/cluster-ca-cert-generation: "0"
+      strimzi.io/cluster-ca-key-generation: "0"
+      strimzi.io/configuration-hash: 485beda7
+      strimzi.io/kafka-version: 4.1.1
+      strimzi.io/revision: "27002120"
+      strimzi.io/server-cert-hash: 351b41b9c38bcc5ed5ff46ea4393855ca5a7b244
+    creationTimestamp: "2026-02-24T15:48:46Z"
+    generation: 1
+    labels:
+      app.kubernetes.io/instance: my-kafka
+      app.kubernetes.io/managed-by: strimzi-cluster-operator
+      app.kubernetes.io/name: kafka
+      app.kubernetes.io/part-of: strimzi-my-kafka
+      strimzi.io/broker-role: "true"
+      strimzi.io/cluster: my-kafka
+      strimzi.io/component-type: kafka
+      strimzi.io/controller: strimzipodset
+      strimzi.io/controller-name: my-kafka-brokers
+      strimzi.io/controller-role: "false"
+      strimzi.io/kind: Kafka
+      strimzi.io/name: my-kafka-kafka
+      strimzi.io/pod-name: my-kafka-brokers-1
+      strimzi.io/pool-name: brokers
+    name: my-kafka-brokers-1
+    namespace: kafka
+    ownerReferences:
+    - apiVersion: core.strimzi.io/v1beta2
+      blockOwnerDeletion: true
+      controller: true
+      kind: StrimziPodSet
+      name: my-kafka-brokers
+      uid: 9453c7b3-8574-44a5-99f1-e9eedb644d56
+    resourceVersion: "5360295"
+    uid: 8cfac511-04d8-4271-b491-c3ce702443a2
+  spec:
+    containers:
+    - args:
+      - /opt/kafka/kafka_run.sh
+      env:
+      - name: KAFKA_JMX_EXPORTER_ENABLED
+        value: "false"
+      - name: STRIMZI_KAFKA_GC_LOG_ENABLED
+        value: "false"
+      - name: KAFKA_CLUSTER_NAME
+        value: my-kafka
+      - name: KAFKA_HEAP_OPTS
+        value: -Xms128M
+      image: quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+      imagePullPolicy: IfNotPresent
+      livenessProbe:
+        exec:
+          command:
+          - /opt/kafka/kafka_liveness.sh
+        failureThreshold: 3
+        initialDelaySeconds: 15
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      name: kafka
+      ports:
+      - containerPort: 8443
+        name: tcp-kafkaagent
+        protocol: TCP
+      - containerPort: 9091
+        name: tcp-replication
+        protocol: TCP
+      - containerPort: 9092
+        name: tcp-clients
+        protocol: TCP
+      - containerPort: 9094
+        name: tcp-external
+        protocol: TCP
+      readinessProbe:
+        exec:
+          command:
+          - /opt/kafka/kafka_readiness.sh
+        failureThreshold: 3
+        initialDelaySeconds: 15
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/lib/kafka/data
+        name: data
+      - mountPath: /tmp
+        name: strimzi-tmp
+      - mountPath: /opt/kafka/custom-config/
+        name: kafka-metrics-and-logging
+      - mountPath: /var/opt/kafka
+        name: ready-files
+      - mountPath: /opt/kafka/init
+        name: rack-volume
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-xdgnv
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    hostname: my-kafka-brokers-1
+    initContainers:
+    - args:
+      - /opt/strimzi/bin/kafka_init_run.sh
+      env:
+      - name: NODE_NAME
+        valueFrom:
+          fieldRef:
+            apiVersion: v1
+            fieldPath: spec.nodeName
+      - name: EXTERNAL_ADDRESS
+        value: "TRUE"
+      image: quay.io/strimzi/operator:0.50.0
+      imagePullPolicy: IfNotPresent
+      name: kafka-init
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /opt/kafka/init
+        name: rack-volume
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-xdgnv
+        readOnly: true
+    nodeName: k8s-worker1
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext:
+      fsGroup: 0
+    serviceAccount: my-kafka-kafka
+    serviceAccountName: my-kafka-kafka
+    subdomain: my-kafka-kafka-brokers
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: data
+      persistentVolumeClaim:
+        claimName: data-my-kafka-brokers-1
+    - emptyDir:
+        medium: Memory
+        sizeLimit: 5Mi
+      name: strimzi-tmp
+    - configMap:
+        defaultMode: 420
+        name: my-kafka-brokers-1
+      name: kafka-metrics-and-logging
+    - emptyDir:
+        medium: Memory
+        sizeLimit: 1Ki
+      name: ready-files
+    - emptyDir:
+        medium: Memory
+        sizeLimit: 1Mi
+      name: rack-volume
+    - name: kube-api-access-xdgnv
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-24T15:48:49Z"
+      observedGeneration: 1
+      status: "True"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-24T15:48:54Z"
+      observedGeneration: 1
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-24T15:49:26Z"
+      observedGeneration: 1
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-24T15:49:26Z"
+      observedGeneration: 1
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-24T15:48:46Z"
+      observedGeneration: 1
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: containerd://700c840fff99c46523d47901eb28d9cfa074676b61969b517b306954c6b2ab9d
+      image: quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+      imageID: quay.io/strimzi/kafka@sha256:015ca88119b94649725df6d9f233d5815db26f3bee37d17db0f2cbc80f4bd95b
+      lastState: {}
+      name: kafka
+      ready: true
+      resources: {}
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: "2026-02-24T15:48:54Z"
+      user:
+        linux:
+          gid: 0
+          supplementalGroups:
+          - 0
+          uid: 1001
+      volumeMounts:
+      - mountPath: /var/lib/kafka/data
+        name: data
+      - mountPath: /tmp
+        name: strimzi-tmp
+      - mountPath: /opt/kafka/custom-config/
+        name: kafka-metrics-and-logging
+      - mountPath: /var/opt/kafka
+        name: ready-files
+      - mountPath: /opt/kafka/init
+        name: rack-volume
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-xdgnv
+        readOnly: true
+        recursiveReadOnly: Disabled
+    hostIP: 62.171.177.133
+    hostIPs:
+    - ip: 62.171.177.133
+    initContainerStatuses:
+    - containerID: containerd://1425d07222128ea0504edb745ee50e10e41e17eda2e1248f8bfe0e280059bcfe
+      image: quay.io/strimzi/operator:0.50.0
+      imageID: quay.io/strimzi/operator@sha256:97289bc755096a98f59d5858c06082d374b9605b846b0a10c0682f404a06f5bc
+      lastState: {}
+      name: kafka-init
+      ready: true
+      resources: {}
+      restartCount: 0
+      started: false
+      state:
+        terminated:
+          containerID: containerd://1425d07222128ea0504edb745ee50e10e41e17eda2e1248f8bfe0e280059bcfe
+          exitCode: 0
+          finishedAt: "2026-02-24T15:48:53Z"
+          reason: Completed
+          startedAt: "2026-02-24T15:48:48Z"
+      user:
+        linux:
+          gid: 0
+          supplementalGroups:
+          - 0
+          uid: 1001
+      volumeMounts:
+      - mountPath: /opt/kafka/init
+        name: rack-volume
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-xdgnv
+        readOnly: true
+        recursiveReadOnly: Disabled
+    observedGeneration: 1
+    phase: Running
+    podIP: 10.233.92.146
+    podIPs:
+    - ip: 10.233.92.146
+    qosClass: BestEffort
+    startTime: "2026-02-24T15:48:46Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      cni.projectcalico.org/containerID: c41cf86ea6a02733d8005ac6811e4a65569f165668b387a426aebb20fd843936
+      cni.projectcalico.org/podIP: 10.233.118.159/32
+      cni.projectcalico.org/podIPs: 10.233.118.159/32
+      strimzi.io/clients-ca-cert-generation: "0"
+      strimzi.io/cluster-ca-cert-generation: "0"
+      strimzi.io/cluster-ca-key-generation: "0"
+      strimzi.io/configuration-hash: ec70f2c2
+      strimzi.io/kafka-version: 4.1.1
+      strimzi.io/revision: 2a9e7c36
+      strimzi.io/server-cert-hash: 03daf87042903fbb0f289d9c98a3698cff60e1ac
+    creationTimestamp: "2026-02-23T14:40:09Z"
+    generation: 1
+    labels:
+      app.kubernetes.io/instance: my-kafka
+      app.kubernetes.io/managed-by: strimzi-cluster-operator
+      app.kubernetes.io/name: kafka
+      app.kubernetes.io/part-of: strimzi-my-kafka
+      strimzi.io/broker-role: "true"
+      strimzi.io/cluster: my-kafka
+      strimzi.io/component-type: kafka
+      strimzi.io/controller: strimzipodset
+      strimzi.io/controller-name: my-kafka-brokers
+      strimzi.io/controller-role: "false"
+      strimzi.io/kind: Kafka
+      strimzi.io/name: my-kafka-kafka
+      strimzi.io/pod-name: my-kafka-brokers-2
+      strimzi.io/pool-name: brokers
+    name: my-kafka-brokers-2
+    namespace: kafka
+    ownerReferences:
+    - apiVersion: core.strimzi.io/v1beta2
+      blockOwnerDeletion: true
+      controller: true
+      kind: StrimziPodSet
+      name: my-kafka-brokers
+      uid: 9453c7b3-8574-44a5-99f1-e9eedb644d56
+    resourceVersion: "5033410"
+    uid: 46d81187-d206-42e0-947a-843969014481
+  spec:
+    containers:
+    - args:
+      - /opt/kafka/kafka_run.sh
+      env:
+      - name: KAFKA_JMX_EXPORTER_ENABLED
+        value: "false"
+      - name: STRIMZI_KAFKA_GC_LOG_ENABLED
+        value: "false"
+      - name: KAFKA_CLUSTER_NAME
+        value: my-kafka
+      - name: KAFKA_HEAP_OPTS
+        value: -Xms128M
+      image: quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+      imagePullPolicy: IfNotPresent
+      livenessProbe:
+        exec:
+          command:
+          - /opt/kafka/kafka_liveness.sh
+        failureThreshold: 3
+        initialDelaySeconds: 15
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      name: kafka
+      ports:
+      - containerPort: 8443
+        name: tcp-kafkaagent
+        protocol: TCP
+      - containerPort: 9091
+        name: tcp-replication
+        protocol: TCP
+      - containerPort: 9092
+        name: tcp-clients
+        protocol: TCP
+      - containerPort: 9094
+        name: tcp-external
+        protocol: TCP
+      readinessProbe:
+        exec:
+          command:
+          - /opt/kafka/kafka_readiness.sh
+        failureThreshold: 3
+        initialDelaySeconds: 15
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/lib/kafka/data
+        name: data
+      - mountPath: /tmp
+        name: strimzi-tmp
+      - mountPath: /opt/kafka/custom-config/
+        name: kafka-metrics-and-logging
+      - mountPath: /var/opt/kafka
+        name: ready-files
+      - mountPath: /opt/kafka/init
+        name: rack-volume
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-95zfx
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    hostname: my-kafka-brokers-2
+    initContainers:
+    - args:
+      - /opt/strimzi/bin/kafka_init_run.sh
+      env:
+      - name: NODE_NAME
+        valueFrom:
+          fieldRef:
+            apiVersion: v1
+            fieldPath: spec.nodeName
+      - name: EXTERNAL_ADDRESS
+        value: "TRUE"
+      image: quay.io/strimzi/operator:0.50.0
+      imagePullPolicy: IfNotPresent
+      name: kafka-init
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /opt/kafka/init
+        name: rack-volume
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-95zfx
+        readOnly: true
+    nodeName: k8s-worker2
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext:
+      fsGroup: 0
+    serviceAccount: my-kafka-kafka
+    serviceAccountName: my-kafka-kafka
+    subdomain: my-kafka-kafka-brokers
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: data
+      persistentVolumeClaim:
+        claimName: data-my-kafka-brokers-2
+    - emptyDir:
+        medium: Memory
+        sizeLimit: 5Mi
+      name: strimzi-tmp
+    - configMap:
+        defaultMode: 420
+        name: my-kafka-brokers-2
+      name: kafka-metrics-and-logging
+    - emptyDir:
+        medium: Memory
+        sizeLimit: 1Ki
+      name: ready-files
+    - emptyDir:
+        medium: Memory
+        sizeLimit: 1Mi
+      name: rack-volume
+    - name: kube-api-access-95zfx
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-23T14:40:10Z"
+      observedGeneration: 1
+      status: "True"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-23T14:40:14Z"
+      observedGeneration: 1
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-23T14:43:22Z"
+      observedGeneration: 1
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-23T14:43:22Z"
+      observedGeneration: 1
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-23T14:40:09Z"
+      observedGeneration: 1
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: containerd://4ee791c5972b8cc7fa4c2f5a84706749a66e282edd09d396d9b59ed66ae73310
+      image: quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+      imageID: quay.io/strimzi/kafka@sha256:015ca88119b94649725df6d9f233d5815db26f3bee37d17db0f2cbc80f4bd95b
+      lastState: {}
+      name: kafka
+      ready: true
+      resources: {}
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: "2026-02-23T14:40:14Z"
+      user:
+        linux:
+          gid: 0
+          supplementalGroups:
+          - 0
+          uid: 1001
+      volumeMounts:
+      - mountPath: /var/lib/kafka/data
+        name: data
+      - mountPath: /tmp
+        name: strimzi-tmp
+      - mountPath: /opt/kafka/custom-config/
+        name: kafka-metrics-and-logging
+      - mountPath: /var/opt/kafka
+        name: ready-files
+      - mountPath: /opt/kafka/init
+        name: rack-volume
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-95zfx
+        readOnly: true
+        recursiveReadOnly: Disabled
+    hostIP: 95.111.234.12
+    hostIPs:
+    - ip: 95.111.234.12
+    initContainerStatuses:
+    - containerID: containerd://d8065ea70c7072e9287dc9b697da0a8b4fa3da06c658a7c56088115a3e514f3d
+      image: quay.io/strimzi/operator:0.50.0
+      imageID: quay.io/strimzi/operator@sha256:97289bc755096a98f59d5858c06082d374b9605b846b0a10c0682f404a06f5bc
+      lastState: {}
+      name: kafka-init
+      ready: true
+      resources: {}
+      restartCount: 0
+      started: false
+      state:
+        terminated:
+          containerID: containerd://d8065ea70c7072e9287dc9b697da0a8b4fa3da06c658a7c56088115a3e514f3d
+          exitCode: 0
+          finishedAt: "2026-02-23T14:40:13Z"
+          reason: Completed
+          startedAt: "2026-02-23T14:40:10Z"
+      user:
+        linux:
+          gid: 0
+          supplementalGroups:
+          - 0
+          uid: 1001
+      volumeMounts:
+      - mountPath: /opt/kafka/init
+        name: rack-volume
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-95zfx
+        readOnly: true
+        recursiveReadOnly: Disabled
+    observedGeneration: 1
+    phase: Running
+    podIP: 10.233.118.159
+    podIPs:
+    - ip: 10.233.118.159
+    qosClass: BestEffort
+    startTime: "2026-02-23T14:40:09Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      cni.projectcalico.org/containerID: 2d639c40522c82764b03c6922c1dcddfd35deedf7ad0ea3a917b32210df1693c
+      cni.projectcalico.org/podIP: 10.233.118.166/32
+      cni.projectcalico.org/podIPs: 10.233.118.166/32
+      strimzi.io/clients-ca-cert-generation: "0"
+      strimzi.io/cluster-ca-cert-generation: "0"
+      strimzi.io/cluster-ca-key-generation: "0"
+      strimzi.io/configuration-hash: ebfee113
+      strimzi.io/kafka-version: 4.1.1
+      strimzi.io/revision: 94f8ddaa
+      strimzi.io/server-cert-hash: 668f071051ed859946c007fb2d44aad154367e00
+    creationTimestamp: "2026-02-23T14:40:09Z"
+    generation: 1
+    labels:
+      app.kubernetes.io/instance: my-kafka
+      app.kubernetes.io/managed-by: strimzi-cluster-operator
+      app.kubernetes.io/name: kafka
+      app.kubernetes.io/part-of: strimzi-my-kafka
+      strimzi.io/broker-role: "false"
+      strimzi.io/cluster: my-kafka
+      strimzi.io/component-type: kafka
+      strimzi.io/controller: strimzipodset
+      strimzi.io/controller-name: my-kafka-controllers
+      strimzi.io/controller-role: "true"
+      strimzi.io/kind: Kafka
+      strimzi.io/name: my-kafka-kafka
+      strimzi.io/pod-name: my-kafka-controllers-3
+      strimzi.io/pool-name: controllers
+    name: my-kafka-controllers-3
+    namespace: kafka
+    ownerReferences:
+    - apiVersion: core.strimzi.io/v1beta2
+      blockOwnerDeletion: true
+      controller: true
+      kind: StrimziPodSet
+      name: my-kafka-controllers
+      uid: 2d42627e-22a6-4913-b8ac-a58323c74511
+    resourceVersion: "5770337"
+    uid: a8c50943-cf58-4122-93c4-9810cd7b90f5
+  spec:
+    containers:
+    - args:
+      - /opt/kafka/kafka_run.sh
+      env:
+      - name: KAFKA_JMX_EXPORTER_ENABLED
+        value: "false"
+      - name: STRIMZI_KAFKA_GC_LOG_ENABLED
+        value: "false"
+      - name: KAFKA_CLUSTER_NAME
+        value: my-kafka
+      - name: KAFKA_HEAP_OPTS
+        value: -Xms128M
+      image: quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+      imagePullPolicy: IfNotPresent
+      livenessProbe:
+        exec:
+          command:
+          - /opt/kafka/kafka_liveness.sh
+        failureThreshold: 3
+        initialDelaySeconds: 15
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      name: kafka
+      ports:
+      - containerPort: 8443
+        name: tcp-kafkaagent
+        protocol: TCP
+      - containerPort: 9090
+        name: tcp-ctrlplane
+        protocol: TCP
+      readinessProbe:
+        exec:
+          command:
+          - /opt/kafka/kafka_readiness.sh
+        failureThreshold: 3
+        initialDelaySeconds: 15
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/lib/kafka/data
+        name: data
+      - mountPath: /tmp
+        name: strimzi-tmp
+      - mountPath: /opt/kafka/custom-config/
+        name: kafka-metrics-and-logging
+      - mountPath: /var/opt/kafka
+        name: ready-files
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-vzppb
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    hostname: my-kafka-controllers-3
+    nodeName: k8s-worker2
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext:
+      fsGroup: 0
+    serviceAccount: my-kafka-kafka
+    serviceAccountName: my-kafka-kafka
+    subdomain: my-kafka-kafka-brokers
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: data
+      persistentVolumeClaim:
+        claimName: data-my-kafka-controllers-3
+    - emptyDir:
+        medium: Memory
+        sizeLimit: 5Mi
+      name: strimzi-tmp
+    - configMap:
+        defaultMode: 420
+        name: my-kafka-controllers-3
+      name: kafka-metrics-and-logging
+    - emptyDir:
+        medium: Memory
+        sizeLimit: 1Ki
+      name: ready-files
+    - name: kube-api-access-vzppb
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-23T14:40:10Z"
+      observedGeneration: 1
+      status: "True"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-23T14:40:09Z"
+      observedGeneration: 1
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-25T23:43:36Z"
+      observedGeneration: 1
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-25T23:43:36Z"
+      observedGeneration: 1
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-23T14:40:09Z"
+      observedGeneration: 1
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: containerd://8666a910e04ff8ab2d80ec7a05e5c2e0500a2f2d2a9ad7d6d866acb85879f862
+      image: quay.io/strimzi/kafka:0.50.0-kafka-4.1.1
+      imageID: quay.io/strimzi/kafka@sha256:015ca88119b94649725df6d9f233d5815db26f3bee37d17db0f2cbc80f4bd95b
+      lastState:
+        terminated:
+          containerID: containerd://88536b654d794ae395ffc71c02bab0bb73d718ec0d488180175e56430d7f8db9
+          exitCode: 0
+          finishedAt: "2026-02-25T23:42:41Z"
+          reason: Completed
+          startedAt: "2026-02-23T14:40:10Z"
+      name: kafka
+      ready: true
+      resources: {}
+      restartCount: 1
+      started: true
+      state:
+        running:
+          startedAt: "2026-02-25T23:42:43Z"
+      user:
+        linux:
+          gid: 0
+          supplementalGroups:
+          - 0
+          uid: 1001
+      volumeMounts:
+      - mountPath: /var/lib/kafka/data
+        name: data
+      - mountPath: /tmp
+        name: strimzi-tmp
+      - mountPath: /opt/kafka/custom-config/
+        name: kafka-metrics-and-logging
+      - mountPath: /var/opt/kafka
+        name: ready-files
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-vzppb
+        readOnly: true
+        recursiveReadOnly: Disabled
+    hostIP: 95.111.234.12
+    hostIPs:
+    - ip: 95.111.234.12
+    observedGeneration: 1
+    phase: Running
+    podIP: 10.233.118.166
+    podIPs:
+    - ip: 10.233.118.166
+    qosClass: BestEffort
+    startTime: "2026-02-23T14:40:09Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      cni.projectcalico.org/containerID: 092e14793cf80aa9ff923e62970cad425a8a0775ee3a84561e3b9c16ee79309d
+      cni.projectcalico.org/podIP: 10.233.118.146/32
+      cni.projectcalico.org/podIPs: 10.233.118.146/32
+      strimzi.io/cluster-ca-cert-generation: "0"
+      strimzi.io/cluster-ca-key-generation: "0"
+      strimzi.io/server-cert-hash: dfe09bd3ab9ac148
+    creationTimestamp: "2026-02-23T14:43:34Z"
+    generateName: my-kafka-entity-operator-7955df6684-
+    generation: 1
+    labels:
+      app.kubernetes.io/instance: my-kafka
+      app.kubernetes.io/managed-by: strimzi-cluster-operator
+      app.kubernetes.io/name: entity-operator
+      app.kubernetes.io/part-of: strimzi-my-kafka
+      pod-template-hash: 7955df6684
+      strimzi.io/cluster: my-kafka
+      strimzi.io/component-type: entity-operator
+      strimzi.io/kind: Kafka
+      strimzi.io/name: my-kafka-entity-operator
+    name: my-kafka-entity-operator-7955df6684-gpgwm
+    namespace: kafka
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: my-kafka-entity-operator-7955df6684
+      uid: 57ab0fe0-507f-49c9-99d9-3cb43183a923
+    resourceVersion: "5033608"
+    uid: 76460852-b869-498d-8e22-d9e05added67
+  spec:
+    containers:
+    - args:
+      - /opt/strimzi/bin/topic_operator_run.sh
+      env:
+      - name: STRIMZI_RESOURCE_LABELS
+        value: strimzi.io/cluster=my-kafka
+      - name: STRIMZI_KAFKA_BOOTSTRAP_SERVERS
+        value: my-kafka-kafka-bootstrap:9091
+      - name: STRIMZI_NAMESPACE
+        value: kafka
+      - name: STRIMZI_SECURITY_PROTOCOL
+        value: SSL
+      - name: STRIMZI_TLS_ENABLED
+        value: "true"
+      - name: STRIMZI_GC_LOG_ENABLED
+        value: "false"
+      image: quay.io/strimzi/operator:0.50.0
+      imagePullPolicy: IfNotPresent
+      livenessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /healthy
+          port: healthcheck
+          scheme: HTTP
+        initialDelaySeconds: 10
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      name: topic-operator
+      ports:
+      - containerPort: 8080
+        name: healthcheck
+        protocol: TCP
+      readinessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /ready
+          port: healthcheck
+          scheme: HTTP
+        initialDelaySeconds: 10
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      resources: {}
+      startupProbe:
+        failureThreshold: 12
+        httpGet:
+          path: /healthy
+          port: healthcheck
+          scheme: HTTP
+        initialDelaySeconds: 15
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /tmp
+        name: strimzi-to-tmp
+      - mountPath: /opt/topic-operator/custom-config/
+        name: entity-topic-operator-metrics-and-logging
+      - mountPath: /etc/eto-certs/
+        name: eto-certs
+      - mountPath: /etc/cluster-ca-certs/
+        name: cluster-ca-certs
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-9cd2t
+        readOnly: true
+    - args:
+      - /opt/strimzi/bin/user_operator_run.sh
+      env:
+      - name: STRIMZI_KAFKA_BOOTSTRAP_SERVERS
+        value: my-kafka-kafka-bootstrap:9091
+      - name: STRIMZI_NAMESPACE
+        value: kafka
+      - name: STRIMZI_LABELS
+        value: strimzi.io/cluster=my-kafka
+      - name: STRIMZI_CA_KEY_NAME
+        value: my-kafka-clients-ca
+      - name: STRIMZI_CA_CERT_NAME
+        value: my-kafka-clients-ca-cert
+      - name: STRIMZI_CA_NAMESPACE
+        value: kafka
+      - name: STRIMZI_CA_VALIDITY
+        value: "365"
+      - name: STRIMZI_CA_RENEWAL
+        value: "30"
+      - name: STRIMZI_CLUSTER_CA_CERT_SECRET_NAME
+        value: my-kafka-cluster-ca-cert
+      - name: STRIMZI_EO_KEY_SECRET_NAME
+        value: my-kafka-entity-user-operator-certs
+      - name: STRIMZI_GC_LOG_ENABLED
+        value: "false"
+      - name: STRIMZI_SECRET_PREFIX
+      - name: STRIMZI_ACLS_ADMIN_API_SUPPORTED
+        value: "false"
+      image: quay.io/strimzi/operator:0.50.0
+      imagePullPolicy: IfNotPresent
+      livenessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /healthy
+          port: healthcheck
+          scheme: HTTP
+        initialDelaySeconds: 10
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      name: user-operator
+      ports:
+      - containerPort: 8081
+        name: healthcheck
+        protocol: TCP
+      readinessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /ready
+          port: healthcheck
+          scheme: HTTP
+        initialDelaySeconds: 10
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /tmp
+        name: strimzi-uo-tmp
+      - mountPath: /opt/user-operator/custom-config/
+        name: entity-user-operator-metrics-and-logging
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-9cd2t
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: k8s-worker2
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: my-kafka-entity-operator
+    serviceAccountName: my-kafka-entity-operator
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - emptyDir:
+        medium: Memory
+        sizeLimit: 5Mi
+      name: strimzi-to-tmp
+    - configMap:
+        defaultMode: 420
+        name: my-kafka-entity-topic-operator-config
+      name: entity-topic-operator-metrics-and-logging
+    - name: cluster-ca-certs
+      secret:
+        defaultMode: 292
+        secretName: my-kafka-cluster-ca-cert
+    - name: eto-certs
+      secret:
+        defaultMode: 292
+        secretName: my-kafka-entity-topic-operator-certs
+    - configMap:
+        defaultMode: 420
+        name: my-kafka-entity-user-operator-config
+      name: entity-user-operator-metrics-and-logging
+    - emptyDir:
+        medium: Memory
+        sizeLimit: 5Mi
+      name: strimzi-uo-tmp
+    - name: kube-api-access-9cd2t
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-23T14:43:35Z"
+      observedGeneration: 1
+      status: "True"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-23T14:43:34Z"
+      observedGeneration: 1
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-23T14:43:55Z"
+      observedGeneration: 1
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-23T14:43:55Z"
+      observedGeneration: 1
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-23T14:43:34Z"
+      observedGeneration: 1
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: containerd://05dc0675ae046325e4f0720f5161109bcf3c5968e7351e7a7237a72cfed83f90
+      image: quay.io/strimzi/operator:0.50.0
+      imageID: quay.io/strimzi/operator@sha256:97289bc755096a98f59d5858c06082d374b9605b846b0a10c0682f404a06f5bc
+      lastState: {}
+      name: topic-operator
+      ready: true
+      resources: {}
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: "2026-02-23T14:43:35Z"
+      user:
+        linux:
+          gid: 0
+          supplementalGroups:
+          - 0
+          uid: 1001
+      volumeMounts:
+      - mountPath: /tmp
+        name: strimzi-to-tmp
+      - mountPath: /opt/topic-operator/custom-config/
+        name: entity-topic-operator-metrics-and-logging
+      - mountPath: /etc/eto-certs/
+        name: eto-certs
+      - mountPath: /etc/cluster-ca-certs/
+        name: cluster-ca-certs
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-9cd2t
+        readOnly: true
+        recursiveReadOnly: Disabled
+    - containerID: containerd://a3e89820c7b849b03b96d80d529073cc895b50ec19f3fde6cb348f9c8ddbff4b
+      image: quay.io/strimzi/operator:0.50.0
+      imageID: quay.io/strimzi/operator@sha256:97289bc755096a98f59d5858c06082d374b9605b846b0a10c0682f404a06f5bc
+      lastState: {}
+      name: user-operator
+      ready: true
+      resources: {}
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: "2026-02-23T14:43:35Z"
+      user:
+        linux:
+          gid: 0
+          supplementalGroups:
+          - 0
+          uid: 1001
+      volumeMounts:
+      - mountPath: /tmp
+        name: strimzi-uo-tmp
+      - mountPath: /opt/user-operator/custom-config/
+        name: entity-user-operator-metrics-and-logging
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-9cd2t
+        readOnly: true
+        recursiveReadOnly: Disabled
+    hostIP: 95.111.234.12
+    hostIPs:
+    - ip: 95.111.234.12
+    observedGeneration: 1
+    phase: Running
+    podIP: 10.233.118.146
+    podIPs:
+    - ip: 10.233.118.146
+    qosClass: BestEffort
+    startTime: "2026-02-23T14:43:34Z"
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      field.cattle.io/publicEndpoints: '[{"port":32615,"protocol":"TCP","serviceName":"kafka:my-kafka-brokers-0","allNodes":true}]'
+    creationTimestamp: "2026-02-12T14:32:51Z"
+    labels:
+      app.kubernetes.io/instance: my-kafka
+      app.kubernetes.io/managed-by: strimzi-cluster-operator
+      app.kubernetes.io/name: kafka
+      app.kubernetes.io/part-of: strimzi-my-kafka
+      strimzi.io/cluster: my-kafka
+      strimzi.io/component-type: kafka
+      strimzi.io/kind: Kafka
+      strimzi.io/name: my-kafka-kafka
+      strimzi.io/pool-name: brokers
+    name: my-kafka-brokers-0
+    namespace: kafka
+    ownerReferences:
+    - apiVersion: kafka.strimzi.io/v1beta2
+      blockOwnerDeletion: true
+      controller: false
+      kind: KafkaNodePool
+      name: brokers
+      uid: 88381bb1-0e01-4e9a-a44c-5ffedb62239e
+    resourceVersion: "6185688"
+    uid: 88a9947b-4129-4406-b09f-4fc643c279b9
+  spec:
+    clusterIP: 10.106.241.8
+    clusterIPs:
+    - 10.106.241.8
+    externalTrafficPolicy: Cluster
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: tcp-external
+      nodePort: 32615
+      port: 9094
+      protocol: TCP
+      targetPort: tcp-external
+    selector:
+      strimzi.io/cluster: my-kafka
+      strimzi.io/kind: Kafka
+      strimzi.io/name: my-kafka-kafka
+      strimzi.io/pod-name: my-kafka-brokers-0
+      strimzi.io/pool-name: brokers
+    sessionAffinity: None
+    type: NodePort
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      field.cattle.io/publicEndpoints: '[{"port":30539,"protocol":"TCP","serviceName":"kafka:my-kafka-brokers-1","allNodes":true}]'
+    creationTimestamp: "2026-02-12T14:32:51Z"
+    labels:
+      app.kubernetes.io/instance: my-kafka
+      app.kubernetes.io/managed-by: strimzi-cluster-operator
+      app.kubernetes.io/name: kafka
+      app.kubernetes.io/part-of: strimzi-my-kafka
+      strimzi.io/cluster: my-kafka
+      strimzi.io/component-type: kafka
+      strimzi.io/kind: Kafka
+      strimzi.io/name: my-kafka-kafka
+      strimzi.io/pool-name: brokers
+    name: my-kafka-brokers-1
+    namespace: kafka
+    ownerReferences:
+    - apiVersion: kafka.strimzi.io/v1beta2
+      blockOwnerDeletion: true
+      controller: false
+      kind: KafkaNodePool
+      name: brokers
+      uid: 88381bb1-0e01-4e9a-a44c-5ffedb62239e
+    resourceVersion: "6185689"
+    uid: 3976e723-84b3-4dfe-a101-cc402a21a2f9
+  spec:
+    clusterIP: 10.103.33.91
+    clusterIPs:
+    - 10.103.33.91
+    externalTrafficPolicy: Cluster
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: tcp-external
+      nodePort: 30539
+      port: 9094
+      protocol: TCP
+      targetPort: tcp-external
+    selector:
+      strimzi.io/cluster: my-kafka
+      strimzi.io/kind: Kafka
+      strimzi.io/name: my-kafka-kafka
+      strimzi.io/pod-name: my-kafka-brokers-1
+      strimzi.io/pool-name: brokers
+    sessionAffinity: None
+    type: NodePort
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      field.cattle.io/publicEndpoints: '[{"port":31726,"protocol":"TCP","serviceName":"kafka:my-kafka-brokers-2","allNodes":true}]'
+    creationTimestamp: "2026-02-12T14:32:51Z"
+    labels:
+      app.kubernetes.io/instance: my-kafka
+      app.kubernetes.io/managed-by: strimzi-cluster-operator
+      app.kubernetes.io/name: kafka
+      app.kubernetes.io/part-of: strimzi-my-kafka
+      strimzi.io/cluster: my-kafka
+      strimzi.io/component-type: kafka
+      strimzi.io/kind: Kafka
+      strimzi.io/name: my-kafka-kafka
+      strimzi.io/pool-name: brokers
+    name: my-kafka-brokers-2
+    namespace: kafka
+    ownerReferences:
+    - apiVersion: kafka.strimzi.io/v1beta2
+      blockOwnerDeletion: true
+      controller: false
+      kind: KafkaNodePool
+      name: brokers
+      uid: 88381bb1-0e01-4e9a-a44c-5ffedb62239e
+    resourceVersion: "6185691"
+    uid: a30d7bdc-c177-43c8-b578-ea13424af0d1
+  spec:
+    clusterIP: 10.107.65.129
+    clusterIPs:
+    - 10.107.65.129
+    externalTrafficPolicy: Cluster
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: tcp-external
+      nodePort: 31726
+      port: 9094
+      protocol: TCP
+      targetPort: tcp-external
+    selector:
+      strimzi.io/cluster: my-kafka
+      strimzi.io/kind: Kafka
+      strimzi.io/name: my-kafka-kafka
+      strimzi.io/pod-name: my-kafka-brokers-2
+      strimzi.io/pool-name: brokers
+    sessionAffinity: None
+    type: NodePort
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      strimzi.io/discovery: |-
+        [ {
+          "port" : 9092,
+          "tls" : false,
+          "protocol" : "kafka",
+          "auth" : "none"
+        }, {
+          "port" : 9094,
+          "tls" : false,
+          "protocol" : "kafka",
+          "auth" : "none"
+        } ]
+    creationTimestamp: "2026-02-12T14:32:51Z"
+    labels:
+      app.kubernetes.io/instance: my-kafka
+      app.kubernetes.io/managed-by: strimzi-cluster-operator
+      app.kubernetes.io/name: kafka
+      app.kubernetes.io/part-of: strimzi-my-kafka
+      strimzi.io/cluster: my-kafka
+      strimzi.io/component-type: kafka
+      strimzi.io/discovery: "true"
+      strimzi.io/kind: Kafka
+      strimzi.io/name: my-kafka-kafka
+    name: my-kafka-kafka-bootstrap
+    namespace: kafka
+    ownerReferences:
+    - apiVersion: kafka.strimzi.io/v1beta2
+      blockOwnerDeletion: true
+      controller: false
+      kind: Kafka
+      name: my-kafka
+      uid: 2f4ace1b-eded-4ed3-8750-f4a99bb1cbad
+    resourceVersion: "6185684"
+    uid: 64ee6330-a1d2-404f-9b44-ecb3ac084b64
+  spec:
+    clusterIP: 10.97.37.110
+    clusterIPs:
+    - 10.97.37.110
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: tcp-replication
+      port: 9091
+      protocol: TCP
+      targetPort: tcp-replication
+    - name: tcp-clients
+      port: 9092
+      protocol: TCP
+      targetPort: tcp-clients
+    selector:
+      strimzi.io/broker-role: "true"
+      strimzi.io/cluster: my-kafka
+      strimzi.io/kind: Kafka
+      strimzi.io/name: my-kafka-kafka
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: "2026-02-12T14:32:51Z"
+    labels:
+      app.kubernetes.io/instance: my-kafka
+      app.kubernetes.io/managed-by: strimzi-cluster-operator
+      app.kubernetes.io/name: kafka
+      app.kubernetes.io/part-of: strimzi-my-kafka
+      strimzi.io/cluster: my-kafka
+      strimzi.io/component-type: kafka
+      strimzi.io/kind: Kafka
+      strimzi.io/name: my-kafka-kafka
+    name: my-kafka-kafka-brokers
+    namespace: kafka
+    ownerReferences:
+    - apiVersion: kafka.strimzi.io/v1beta2
+      blockOwnerDeletion: true
+      controller: false
+      kind: Kafka
+      name: my-kafka
+      uid: 2f4ace1b-eded-4ed3-8750-f4a99bb1cbad
+    resourceVersion: "6185685"
+    uid: ed15deb7-e3e7-45e8-ba57-ad01bba5340f
+  spec:
+    clusterIP: None
+    clusterIPs:
+    - None
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: tcp-ctrlplane
+      port: 9090
+      protocol: TCP
+      targetPort: tcp-ctrlplane
+    - name: tcp-replication
+      port: 9091
+      protocol: TCP
+      targetPort: tcp-replication
+    - name: tcp-kafkaagent
+      port: 8443
+      protocol: TCP
+      targetPort: tcp-kafkaagent
+    - name: tcp-clients
+      port: 9092
+      protocol: TCP
+      targetPort: tcp-clients
+    publishNotReadyAddresses: true
+    selector:
+      strimzi.io/cluster: my-kafka
+      strimzi.io/kind: Kafka
+      strimzi.io/name: my-kafka-kafka
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      field.cattle.io/publicEndpoints: '[{"port":30234,"protocol":"TCP","serviceName":"kafka:my-kafka-kafka-external-bootstrap","allNodes":true}]'
+    creationTimestamp: "2026-02-12T14:32:51Z"
+    labels:
+      app.kubernetes.io/instance: my-kafka
+      app.kubernetes.io/managed-by: strimzi-cluster-operator
+      app.kubernetes.io/name: kafka
+      app.kubernetes.io/part-of: strimzi-my-kafka
+      strimzi.io/cluster: my-kafka
+      strimzi.io/component-type: kafka
+      strimzi.io/kind: Kafka
+      strimzi.io/name: my-kafka-kafka
+    name: my-kafka-kafka-external-bootstrap
+    namespace: kafka
+    ownerReferences:
+    - apiVersion: kafka.strimzi.io/v1beta2
+      blockOwnerDeletion: true
+      controller: false
+      kind: Kafka
+      name: my-kafka
+      uid: 2f4ace1b-eded-4ed3-8750-f4a99bb1cbad
+    resourceVersion: "6185687"
+    uid: 92c31171-6c54-426b-bf5a-0c32f3b4a42c
+  spec:
+    clusterIP: 10.110.21.151
+    clusterIPs:
+    - 10.110.21.151
+    externalTrafficPolicy: Cluster
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: tcp-external
+      nodePort: 30234
+      port: 9094
+      protocol: TCP
+      targetPort: tcp-external
+    selector:
+      strimzi.io/broker-role: "true"
+      strimzi.io/cluster: my-kafka
+      strimzi.io/kind: Kafka
+      strimzi.io/name: my-kafka-kafka
+    sessionAffinity: None
+    type: NodePort
+  status:
+    loadBalancer: {}
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "1"
+    creationTimestamp: "2026-02-12T14:33:58Z"
+    generation: 5
+    labels:
+      app.kubernetes.io/instance: my-kafka
+      app.kubernetes.io/managed-by: strimzi-cluster-operator
+      app.kubernetes.io/name: entity-operator
+      app.kubernetes.io/part-of: strimzi-my-kafka
+      strimzi.io/cluster: my-kafka
+      strimzi.io/component-type: entity-operator
+      strimzi.io/kind: Kafka
+      strimzi.io/name: my-kafka-entity-operator
+    name: my-kafka-entity-operator
+    namespace: kafka
+    ownerReferences:
+    - apiVersion: kafka.strimzi.io/v1beta2
+      blockOwnerDeletion: true
+      controller: false
+      kind: Kafka
+      name: my-kafka
+      uid: 2f4ace1b-eded-4ed3-8750-f4a99bb1cbad
+    resourceVersion: "6185712"
+    uid: fdaf5c27-5f98-4a44-b7fe-8d4d8477fcbc
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        strimzi.io/cluster: my-kafka
+        strimzi.io/kind: Kafka
+        strimzi.io/name: my-kafka-entity-operator
+    strategy:
+      type: Recreate
+    template:
+      metadata:
+        annotations:
+          strimzi.io/cluster-ca-cert-generation: "0"
+          strimzi.io/cluster-ca-key-generation: "0"
+          strimzi.io/server-cert-hash: dfe09bd3ab9ac148
+        labels:
+          app.kubernetes.io/instance: my-kafka
+          app.kubernetes.io/managed-by: strimzi-cluster-operator
+          app.kubernetes.io/name: entity-operator
+          app.kubernetes.io/part-of: strimzi-my-kafka
+          strimzi.io/cluster: my-kafka
+          strimzi.io/component-type: entity-operator
+          strimzi.io/kind: Kafka
+          strimzi.io/name: my-kafka-entity-operator
+      spec:
+        containers:
+        - args:
+          - /opt/strimzi/bin/topic_operator_run.sh
+          env:
+          - name: STRIMZI_RESOURCE_LABELS
+            value: strimzi.io/cluster=my-kafka
+          - name: STRIMZI_KAFKA_BOOTSTRAP_SERVERS
+            value: my-kafka-kafka-bootstrap:9091
+          - name: STRIMZI_NAMESPACE
+            value: kafka
+          - name: STRIMZI_SECURITY_PROTOCOL
+            value: SSL
+          - name: STRIMZI_TLS_ENABLED
+            value: "true"
+          - name: STRIMZI_GC_LOG_ENABLED
+            value: "false"
+          image: quay.io/strimzi/operator:0.50.0
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthy
+              port: healthcheck
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: topic-operator
+          ports:
+          - containerPort: 8080
+            name: healthcheck
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /ready
+              port: healthcheck
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          resources: {}
+          startupProbe:
+            failureThreshold: 12
+            httpGet:
+              path: /healthy
+              port: healthcheck
+              scheme: HTTP
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /tmp
+            name: strimzi-to-tmp
+          - mountPath: /opt/topic-operator/custom-config/
+            name: entity-topic-operator-metrics-and-logging
+          - mountPath: /etc/eto-certs/
+            name: eto-certs
+          - mountPath: /etc/cluster-ca-certs/
+            name: cluster-ca-certs
+        - args:
+          - /opt/strimzi/bin/user_operator_run.sh
+          env:
+          - name: STRIMZI_KAFKA_BOOTSTRAP_SERVERS
+            value: my-kafka-kafka-bootstrap:9091
+          - name: STRIMZI_NAMESPACE
+            value: kafka
+          - name: STRIMZI_LABELS
+            value: strimzi.io/cluster=my-kafka
+          - name: STRIMZI_CA_KEY_NAME
+            value: my-kafka-clients-ca
+          - name: STRIMZI_CA_CERT_NAME
+            value: my-kafka-clients-ca-cert
+          - name: STRIMZI_CA_NAMESPACE
+            value: kafka
+          - name: STRIMZI_CA_VALIDITY
+            value: "365"
+          - name: STRIMZI_CA_RENEWAL
+            value: "30"
+          - name: STRIMZI_CLUSTER_CA_CERT_SECRET_NAME
+            value: my-kafka-cluster-ca-cert
+          - name: STRIMZI_EO_KEY_SECRET_NAME
+            value: my-kafka-entity-user-operator-certs
+          - name: STRIMZI_GC_LOG_ENABLED
+            value: "false"
+          - name: STRIMZI_SECRET_PREFIX
+          - name: STRIMZI_ACLS_ADMIN_API_SUPPORTED
+            value: "false"
+          image: quay.io/strimzi/operator:0.50.0
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthy
+              port: healthcheck
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: user-operator
+          ports:
+          - containerPort: 8081
+            name: healthcheck
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /ready
+              port: healthcheck
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /tmp
+            name: strimzi-uo-tmp
+          - mountPath: /opt/user-operator/custom-config/
+            name: entity-user-operator-metrics-and-logging
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: my-kafka-entity-operator
+        serviceAccountName: my-kafka-entity-operator
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir:
+            medium: Memory
+            sizeLimit: 5Mi
+          name: strimzi-to-tmp
+        - configMap:
+            defaultMode: 420
+            name: my-kafka-entity-topic-operator-config
+          name: entity-topic-operator-metrics-and-logging
+        - name: cluster-ca-certs
+          secret:
+            defaultMode: 292
+            secretName: my-kafka-cluster-ca-cert
+        - name: eto-certs
+          secret:
+            defaultMode: 292
+            secretName: my-kafka-entity-topic-operator-certs
+        - configMap:
+            defaultMode: 420
+            name: my-kafka-entity-user-operator-config
+          name: entity-user-operator-metrics-and-logging
+        - emptyDir:
+            medium: Memory
+            sizeLimit: 5Mi
+          name: strimzi-uo-tmp
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2026-02-12T14:33:58Z"
+      lastUpdateTime: "2026-02-12T14:34:18Z"
+      message: ReplicaSet "my-kafka-entity-operator-7955df6684" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: "2026-02-23T14:43:55Z"
+      lastUpdateTime: "2026-02-23T14:43:55Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    observedGeneration: 5
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      argocd.argoproj.io/tracking-id: kafka:apps/Deployment:kafka/my-kafka-entity-operator
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "1"
+      deployment.kubernetes.io/revision: "1"
+    creationTimestamp: "2026-02-12T14:33:58Z"
+    generation: 3
+    labels:
+      app.kubernetes.io/instance: my-kafka
+      app.kubernetes.io/managed-by: strimzi-cluster-operator
+      app.kubernetes.io/name: entity-operator
+      app.kubernetes.io/part-of: strimzi-my-kafka
+      pod-template-hash: 7955df6684
+      strimzi.io/cluster: my-kafka
+      strimzi.io/component-type: entity-operator
+      strimzi.io/kind: Kafka
+      strimzi.io/name: my-kafka-entity-operator
+    name: my-kafka-entity-operator-7955df6684
+    namespace: kafka
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: my-kafka-entity-operator
+      uid: fdaf5c27-5f98-4a44-b7fe-8d4d8477fcbc
+    resourceVersion: "6185648"
+    uid: 57ab0fe0-507f-49c9-99d9-3cb43183a923
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        pod-template-hash: 7955df6684
+        strimzi.io/cluster: my-kafka
+        strimzi.io/kind: Kafka
+        strimzi.io/name: my-kafka-entity-operator
+    template:
+      metadata:
+        annotations:
+          strimzi.io/cluster-ca-cert-generation: "0"
+          strimzi.io/cluster-ca-key-generation: "0"
+          strimzi.io/server-cert-hash: dfe09bd3ab9ac148
+        labels:
+          app.kubernetes.io/instance: my-kafka
+          app.kubernetes.io/managed-by: strimzi-cluster-operator
+          app.kubernetes.io/name: entity-operator
+          app.kubernetes.io/part-of: strimzi-my-kafka
+          pod-template-hash: 7955df6684
+          strimzi.io/cluster: my-kafka
+          strimzi.io/component-type: entity-operator
+          strimzi.io/kind: Kafka
+          strimzi.io/name: my-kafka-entity-operator
+      spec:
+        containers:
+        - args:
+          - /opt/strimzi/bin/topic_operator_run.sh
+          env:
+          - name: STRIMZI_RESOURCE_LABELS
+            value: strimzi.io/cluster=my-kafka
+          - name: STRIMZI_KAFKA_BOOTSTRAP_SERVERS
+            value: my-kafka-kafka-bootstrap:9091
+          - name: STRIMZI_NAMESPACE
+            value: kafka
+          - name: STRIMZI_SECURITY_PROTOCOL
+            value: SSL
+          - name: STRIMZI_TLS_ENABLED
+            value: "true"
+          - name: STRIMZI_GC_LOG_ENABLED
+            value: "false"
+          image: quay.io/strimzi/operator:0.50.0
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthy
+              port: healthcheck
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: topic-operator
+          ports:
+          - containerPort: 8080
+            name: healthcheck
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /ready
+              port: healthcheck
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          resources: {}
+          startupProbe:
+            failureThreshold: 12
+            httpGet:
+              path: /healthy
+              port: healthcheck
+              scheme: HTTP
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /tmp
+            name: strimzi-to-tmp
+          - mountPath: /opt/topic-operator/custom-config/
+            name: entity-topic-operator-metrics-and-logging
+          - mountPath: /etc/eto-certs/
+            name: eto-certs
+          - mountPath: /etc/cluster-ca-certs/
+            name: cluster-ca-certs
+        - args:
+          - /opt/strimzi/bin/user_operator_run.sh
+          env:
+          - name: STRIMZI_KAFKA_BOOTSTRAP_SERVERS
+            value: my-kafka-kafka-bootstrap:9091
+          - name: STRIMZI_NAMESPACE
+            value: kafka
+          - name: STRIMZI_LABELS
+            value: strimzi.io/cluster=my-kafka
+          - name: STRIMZI_CA_KEY_NAME
+            value: my-kafka-clients-ca
+          - name: STRIMZI_CA_CERT_NAME
+            value: my-kafka-clients-ca-cert
+          - name: STRIMZI_CA_NAMESPACE
+            value: kafka
+          - name: STRIMZI_CA_VALIDITY
+            value: "365"
+          - name: STRIMZI_CA_RENEWAL
+            value: "30"
+          - name: STRIMZI_CLUSTER_CA_CERT_SECRET_NAME
+            value: my-kafka-cluster-ca-cert
+          - name: STRIMZI_EO_KEY_SECRET_NAME
+            value: my-kafka-entity-user-operator-certs
+          - name: STRIMZI_GC_LOG_ENABLED
+            value: "false"
+          - name: STRIMZI_SECRET_PREFIX
+          - name: STRIMZI_ACLS_ADMIN_API_SUPPORTED
+            value: "false"
+          image: quay.io/strimzi/operator:0.50.0
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthy
+              port: healthcheck
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: user-operator
+          ports:
+          - containerPort: 8081
+            name: healthcheck
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /ready
+              port: healthcheck
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /tmp
+            name: strimzi-uo-tmp
+          - mountPath: /opt/user-operator/custom-config/
+            name: entity-user-operator-metrics-and-logging
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: my-kafka-entity-operator
+        serviceAccountName: my-kafka-entity-operator
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir:
+            medium: Memory
+            sizeLimit: 5Mi
+          name: strimzi-to-tmp
+        - configMap:
+            defaultMode: 420
+            name: my-kafka-entity-topic-operator-config
+          name: entity-topic-operator-metrics-and-logging
+        - name: cluster-ca-certs
+          secret:
+            defaultMode: 292
+            secretName: my-kafka-cluster-ca-cert
+        - name: eto-certs
+          secret:
+            defaultMode: 292
+            secretName: my-kafka-entity-topic-operator-certs
+        - configMap:
+            defaultMode: 420
+            name: my-kafka-entity-user-operator-config
+          name: entity-user-operator-metrics-and-logging
+        - emptyDir:
+            medium: Memory
+            sizeLimit: 5Mi
+          name: strimzi-uo-tmp
+  status:
+    availableReplicas: 1
+    fullyLabeledReplicas: 1
+    observedGeneration: 3
+    readyReplicas: 1
+    replicas: 1
+kind: List
+metadata:
+  resourceVersion: ""

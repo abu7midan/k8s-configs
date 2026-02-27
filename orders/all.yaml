@@ -1,0 +1,718 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      cattle.io/timestamp: "2026-02-15T20:20:13Z"
+      cni.projectcalico.org/containerID: d5feac7839ca2bdc7ef3bb0600063886264589320d6394285a4129bd634e732c
+      cni.projectcalico.org/podIP: 10.233.92.128/32
+      cni.projectcalico.org/podIPs: 10.233.92.128/32
+      kubectl.kubernetes.io/restartedAt: "2026-02-15T21:16:39+01:00"
+      vault.hashicorp.com/agent-inject: "true"
+      vault.hashicorp.com/agent-inject-secret-appsettings.Production.json: kv/data/orders-shipments/spce-orders/production
+      vault.hashicorp.com/agent-inject-secret-appsettings.json: kv/data/orders-shipments/spce-orders/production
+      vault.hashicorp.com/agent-inject-secret-config.env: kv/data/orders-shipments/spce-orders/production
+      vault.hashicorp.com/agent-inject-status: injected
+      vault.hashicorp.com/agent-inject-template-appsettings.Production.json: |-
+        {{- with secret "kv/data/orders-shipments/spce-orders/production" -}}
+        {
+          "Service": { "Name": "{{ .Data.data.Service__Name }}" },
+          "Kafka": {
+            "BootstrapServers": "{{ .Data.data.Kafka__BootstrapServers }}",
+            "ShipmentRequestsTopic": "{{ .Data.data.Kafka__ShipmentRequestsTopic }}"
+          },
+          "Swagger": { "Enabled": {{ .Data.data.Swagger__Enabled }} },
+          "Logging": {
+            "LogLevel": {
+              "Default": "{{ .Data.data.Logging__LogLevel__Default }}",
+              "Microsoft.AspNetCore": "{{ .Data.data.Logging__LogLevel__Microsoft_AspNetCore }}"
+            }
+          }
+        }
+        {{- end }}
+      vault.hashicorp.com/agent-inject-template-appsettings.json: |-
+        {{- with secret "kv/data/orders-shipments/spce-orders/production" -}}
+        {
+          "Service": { "Name": "{{ .Data.data.Service__Name }}" },
+          "Kafka": {
+            "BootstrapServers": "{{ .Data.data.Kafka__BootstrapServers }}",
+            "ShipmentRequestsTopic": "{{ .Data.data.Kafka__ShipmentRequestsTopic }}"
+          },
+          "Swagger": { "Enabled": {{ .Data.data.Swagger__Enabled }} },
+          "Logging": {
+            "LogLevel": {
+              "Default": "{{ .Data.data.Logging__LogLevel__Default }}",
+              "Microsoft.AspNetCore": "{{ .Data.data.Logging__LogLevel__Microsoft_AspNetCore }}"
+            }
+          }
+        }
+        {{- end }}
+      vault.hashicorp.com/agent-inject-template-config.env: |-
+        {{- with secret "kv/data/orders-shipments/spce-orders/production" -}}
+        export Service__Name="{{ .Data.data.Service__Name }}"
+        export Kafka__BootstrapServers="{{ .Data.data.Kafka__BootstrapServers }}"
+        export Kafka__ShipmentRequestsTopic="{{ .Data.data.Kafka__ShipmentRequestsTopic }}"
+        export Swagger__Enabled="{{ .Data.data.Swagger__Enabled }}"
+        export Logging__LogLevel__Default="{{ .Data.data.Logging__LogLevel__Default }}"
+        export Logging__LogLevel__Microsoft_AspNetCore="{{ .Data.data.Logging__LogLevel__Microsoft_AspNetCore }}"
+        {{- end }}
+      vault.hashicorp.com/agent-service-account-token-volume-name: vault-k8s-token
+      vault.hashicorp.com/role: orders-spce-orders-production
+      vault.hashicorp.com/vault-addr: http://vault.vault.svc.cluster.local:8200
+    creationTimestamp: "2026-02-27T08:04:47Z"
+    generateName: spce-orders-bdd7f5b76-
+    generation: 1
+    labels:
+      app: spce-orders
+      pod-template-hash: bdd7f5b76
+    name: spce-orders-bdd7f5b76-lp2wp
+    namespace: orders
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: spce-orders-bdd7f5b76
+      uid: 18ce49e0-9432-4a57-83a7-a08b6feef9f7
+    resourceVersion: "6190818"
+    uid: 01e7662e-3505-4d8a-8ce3-9a0401effef8
+  spec:
+    containers:
+    - args:
+      - cp /vault/secrets/appsettings.json /app/appsettings.json && exec dotnet spce-orders.dll
+      command:
+      - /bin/sh
+      - -lc
+      env:
+      - name: SERVICE_NAME
+        value: spce-orders
+      - name: KAFKA_BOOTSTRAP_SERVERS
+        value: my-kafka-kafka-bootstrap.kafka.svc.cluster.local:9092
+      - name: KAFKA_TOPIC_SHIPMENT_REQUESTS
+        value: shipment-requests
+      image: abu7midan/spce-orders:1.0
+      imagePullPolicy: IfNotPresent
+      name: spce-orders
+      ports:
+      - containerPort: 8080
+        protocol: TCP
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-ptdcb
+        readOnly: true
+      - mountPath: /vault/secrets
+        name: vault-secrets
+    - args:
+      - echo ${VAULT_CONFIG?} | base64 -d > /home/vault/config.json && vault agent
+        -config=/home/vault/config.json
+      command:
+      - /bin/sh
+      - -ec
+      env:
+      - name: NAMESPACE
+        valueFrom:
+          fieldRef:
+            apiVersion: v1
+            fieldPath: metadata.namespace
+      - name: HOST_IP
+        valueFrom:
+          fieldRef:
+            apiVersion: v1
+            fieldPath: status.hostIP
+      - name: POD_IP
+        valueFrom:
+          fieldRef:
+            apiVersion: v1
+            fieldPath: status.podIP
+      - name: VAULT_LOG_LEVEL
+        value: info
+      - name: VAULT_LOG_FORMAT
+        value: standard
+      - name: VAULT_CONFIG
+        value: eyJhdXRvX2F1dGgiOnsibWV0aG9kIjp7InR5cGUiOiJrdWJlcm5ldGVzIiwibW91bnRfcGF0aCI6ImF1dGgva3ViZXJuZXRlcyIsImNvbmZpZyI6eyJyb2xlIjoib3JkZXJzLXNwY2Utb3JkZXJzLXByb2R1Y3Rpb24iLCJ0b2tlbl9wYXRoIjoiL3Zhci9ydW4vc2VjcmV0cy92YXVsdC5oYXNoaWNvcnAuY29tL3NlcnZpY2VhY2NvdW50L3Rva2VuIn19LCJzaW5rIjpbeyJ0eXBlIjoiZmlsZSIsImNvbmZpZyI6eyJwYXRoIjoiL2hvbWUvdmF1bHQvLnZhdWx0LXRva2VuIn19XX0sImV4aXRfYWZ0ZXJfYXV0aCI6ZmFsc2UsInBpZF9maWxlIjoiL2hvbWUvdmF1bHQvLnBpZCIsInZhdWx0Ijp7ImFkZHJlc3MiOiJodHRwOi8vdmF1bHQudmF1bHQuc3ZjOjgyMDAifSwidGVtcGxhdGUiOlt7ImRlc3RpbmF0aW9uIjoiL3ZhdWx0L3NlY3JldHMvYXBwc2V0dGluZ3MuanNvbiIsImNvbnRlbnRzIjoie3stIHdpdGggc2VjcmV0IFwia3YvZGF0YS9vcmRlcnMtc2hpcG1lbnRzL3NwY2Utb3JkZXJzL3Byb2R1Y3Rpb25cIiAtfX1cbntcbiAgXCJTZXJ2aWNlXCI6IHsgXCJOYW1lXCI6IFwie3sgLkRhdGEuZGF0YS5TZXJ2aWNlX19OYW1lIH19XCIgfSxcbiAgXCJLYWZrYVwiOiB7XG4gICAgXCJCb290c3RyYXBTZXJ2ZXJzXCI6IFwie3sgLkRhdGEuZGF0YS5LYWZrYV9fQm9vdHN0cmFwU2VydmVycyB9fVwiLFxuICAgIFwiU2hpcG1lbnRSZXF1ZXN0c1RvcGljXCI6IFwie3sgLkRhdGEuZGF0YS5LYWZrYV9fU2hpcG1lbnRSZXF1ZXN0c1RvcGljIH19XCJcbiAgfSxcbiAgXCJTd2FnZ2VyXCI6IHsgXCJFbmFibGVkXCI6IHt7IC5EYXRhLmRhdGEuU3dhZ2dlcl9fRW5hYmxlZCB9fSB9LFxuICBcIkxvZ2dpbmdcIjoge1xuICAgIFwiTG9nTGV2ZWxcIjoge1xuICAgICAgXCJEZWZhdWx0XCI6IFwie3sgLkRhdGEuZGF0YS5Mb2dnaW5nX19Mb2dMZXZlbF9fRGVmYXVsdCB9fVwiLFxuICAgICAgXCJNaWNyb3NvZnQuQXNwTmV0Q29yZVwiOiBcInt7IC5EYXRhLmRhdGEuTG9nZ2luZ19fTG9nTGV2ZWxfX01pY3Jvc29mdF9Bc3BOZXRDb3JlIH19XCJcbiAgICB9XG4gIH1cbn1cbnt7LSBlbmQgfX0iLCJsZWZ0X2RlbGltaXRlciI6Int7IiwicmlnaHRfZGVsaW1pdGVyIjoifX0ifSx7ImRlc3RpbmF0aW9uIjoiL3ZhdWx0L3NlY3JldHMvY29uZmlnLmVudiIsImNvbnRlbnRzIjoie3stIHdpdGggc2VjcmV0IFwia3YvZGF0YS9vcmRlcnMtc2hpcG1lbnRzL3NwY2Utb3JkZXJzL3Byb2R1Y3Rpb25cIiAtfX1cbmV4cG9ydCBTZXJ2aWNlX19OYW1lPVwie3sgLkRhdGEuZGF0YS5TZXJ2aWNlX19OYW1lIH19XCJcbmV4cG9ydCBLYWZrYV9fQm9vdHN0cmFwU2VydmVycz1cInt7IC5EYXRhLmRhdGEuS2Fma2FfX0Jvb3RzdHJhcFNlcnZlcnMgfX1cIlxuZXhwb3J0IEthZmthX19TaGlwbWVudFJlcXVlc3RzVG9waWM9XCJ7eyAuRGF0YS5kYXRhLkthZmthX19TaGlwbWVudFJlcXVlc3RzVG9waWMgfX1cIlxuZXhwb3J0IFN3YWdnZXJfX0VuYWJsZWQ9XCJ7eyAuRGF0YS5kYXRhLlN3YWdnZXJfX0VuYWJsZWQgfX1cIlxuZXhwb3J0IExvZ2dpbmdfX0xvZ0xldmVsX19EZWZhdWx0PVwie3sgLkRhdGEuZGF0YS5Mb2dnaW5nX19Mb2dMZXZlbF9fRGVmYXVsdCB9fVwiXG5leHBvcnQgTG9nZ2luZ19fTG9nTGV2ZWxfX01pY3Jvc29mdF9Bc3BOZXRDb3JlPVwie3sgLkRhdGEuZGF0YS5Mb2dnaW5nX19Mb2dMZXZlbF9fTWljcm9zb2Z0X0FzcE5ldENvcmUgfX1cIlxue3stIGVuZCB9fSIsImxlZnRfZGVsaW1pdGVyIjoie3siLCJyaWdodF9kZWxpbWl0ZXIiOiJ9fSJ9LHsiZGVzdGluYXRpb24iOiIvdmF1bHQvc2VjcmV0cy9hcHBzZXR0aW5ncy5wcm9kdWN0aW9uLmpzb24iLCJjb250ZW50cyI6Int7LSB3aXRoIHNlY3JldCBcImt2L2RhdGEvb3JkZXJzLXNoaXBtZW50cy9zcGNlLW9yZGVycy9wcm9kdWN0aW9uXCIgLX19XG57XG4gIFwiU2VydmljZVwiOiB7IFwiTmFtZVwiOiBcInt7IC5EYXRhLmRhdGEuU2VydmljZV9fTmFtZSB9fVwiIH0sXG4gIFwiS2Fma2FcIjoge1xuICAgIFwiQm9vdHN0cmFwU2VydmVyc1wiOiBcInt7IC5EYXRhLmRhdGEuS2Fma2FfX0Jvb3RzdHJhcFNlcnZlcnMgfX1cIixcbiAgICBcIlNoaXBtZW50UmVxdWVzdHNUb3BpY1wiOiBcInt7IC5EYXRhLmRhdGEuS2Fma2FfX1NoaXBtZW50UmVxdWVzdHNUb3BpYyB9fVwiXG4gIH0sXG4gIFwiU3dhZ2dlclwiOiB7IFwiRW5hYmxlZFwiOiB7eyAuRGF0YS5kYXRhLlN3YWdnZXJfX0VuYWJsZWQgfX0gfSxcbiAgXCJMb2dnaW5nXCI6IHtcbiAgICBcIkxvZ0xldmVsXCI6IHtcbiAgICAgIFwiRGVmYXVsdFwiOiBcInt7IC5EYXRhLmRhdGEuTG9nZ2luZ19fTG9nTGV2ZWxfX0RlZmF1bHQgfX1cIixcbiAgICAgIFwiTWljcm9zb2Z0LkFzcE5ldENvcmVcIjogXCJ7eyAuRGF0YS5kYXRhLkxvZ2dpbmdfX0xvZ0xldmVsX19NaWNyb3NvZnRfQXNwTmV0Q29yZSB9fVwiXG4gICAgfVxuICB9XG59XG57ey0gZW5kIH19IiwibGVmdF9kZWxpbWl0ZXIiOiJ7eyIsInJpZ2h0X2RlbGltaXRlciI6In19In1dLCJ0ZW1wbGF0ZV9jb25maWciOnsiZXhpdF9vbl9yZXRyeV9mYWlsdXJlIjp0cnVlfX0=
+      image: hashicorp/vault:1.21.2
+      imagePullPolicy: IfNotPresent
+      lifecycle: {}
+      name: vault-agent
+      resources:
+        limits:
+          cpu: 500m
+          memory: 128Mi
+        requests:
+          cpu: 250m
+          memory: 64Mi
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        readOnlyRootFilesystem: true
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 100
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/vault.hashicorp.com/serviceaccount
+        name: vault-k8s-token
+        readOnly: true
+      - mountPath: /home/vault
+        name: home-sidecar
+      - mountPath: /vault/secrets
+        name: vault-secrets
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-ptdcb
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    initContainers:
+    - args:
+      - echo ${VAULT_CONFIG?} | base64 -d > /home/vault/config.json && vault agent
+        -config=/home/vault/config.json
+      command:
+      - /bin/sh
+      - -ec
+      env:
+      - name: NAMESPACE
+        valueFrom:
+          fieldRef:
+            apiVersion: v1
+            fieldPath: metadata.namespace
+      - name: HOST_IP
+        valueFrom:
+          fieldRef:
+            apiVersion: v1
+            fieldPath: status.hostIP
+      - name: POD_IP
+        valueFrom:
+          fieldRef:
+            apiVersion: v1
+            fieldPath: status.podIP
+      - name: VAULT_LOG_LEVEL
+        value: info
+      - name: VAULT_LOG_FORMAT
+        value: standard
+      - name: VAULT_CONFIG
+        value: eyJhdXRvX2F1dGgiOnsibWV0aG9kIjp7InR5cGUiOiJrdWJlcm5ldGVzIiwibW91bnRfcGF0aCI6ImF1dGgva3ViZXJuZXRlcyIsImNvbmZpZyI6eyJyb2xlIjoib3JkZXJzLXNwY2Utb3JkZXJzLXByb2R1Y3Rpb24iLCJ0b2tlbl9wYXRoIjoiL3Zhci9ydW4vc2VjcmV0cy92YXVsdC5oYXNoaWNvcnAuY29tL3NlcnZpY2VhY2NvdW50L3Rva2VuIn19LCJzaW5rIjpbeyJ0eXBlIjoiZmlsZSIsImNvbmZpZyI6eyJwYXRoIjoiL2hvbWUvdmF1bHQvLnZhdWx0LXRva2VuIn19XX0sImV4aXRfYWZ0ZXJfYXV0aCI6dHJ1ZSwicGlkX2ZpbGUiOiIvaG9tZS92YXVsdC8ucGlkIiwidmF1bHQiOnsiYWRkcmVzcyI6Imh0dHA6Ly92YXVsdC52YXVsdC5zdmM6ODIwMCJ9LCJ0ZW1wbGF0ZSI6W3siZGVzdGluYXRpb24iOiIvdmF1bHQvc2VjcmV0cy9hcHBzZXR0aW5ncy5qc29uIiwiY29udGVudHMiOiJ7ey0gd2l0aCBzZWNyZXQgXCJrdi9kYXRhL29yZGVycy1zaGlwbWVudHMvc3BjZS1vcmRlcnMvcHJvZHVjdGlvblwiIC19fVxue1xuICBcIlNlcnZpY2VcIjogeyBcIk5hbWVcIjogXCJ7eyAuRGF0YS5kYXRhLlNlcnZpY2VfX05hbWUgfX1cIiB9LFxuICBcIkthZmthXCI6IHtcbiAgICBcIkJvb3RzdHJhcFNlcnZlcnNcIjogXCJ7eyAuRGF0YS5kYXRhLkthZmthX19Cb290c3RyYXBTZXJ2ZXJzIH19XCIsXG4gICAgXCJTaGlwbWVudFJlcXVlc3RzVG9waWNcIjogXCJ7eyAuRGF0YS5kYXRhLkthZmthX19TaGlwbWVudFJlcXVlc3RzVG9waWMgfX1cIlxuICB9LFxuICBcIlN3YWdnZXJcIjogeyBcIkVuYWJsZWRcIjoge3sgLkRhdGEuZGF0YS5Td2FnZ2VyX19FbmFibGVkIH19IH0sXG4gIFwiTG9nZ2luZ1wiOiB7XG4gICAgXCJMb2dMZXZlbFwiOiB7XG4gICAgICBcIkRlZmF1bHRcIjogXCJ7eyAuRGF0YS5kYXRhLkxvZ2dpbmdfX0xvZ0xldmVsX19EZWZhdWx0IH19XCIsXG4gICAgICBcIk1pY3Jvc29mdC5Bc3BOZXRDb3JlXCI6IFwie3sgLkRhdGEuZGF0YS5Mb2dnaW5nX19Mb2dMZXZlbF9fTWljcm9zb2Z0X0FzcE5ldENvcmUgfX1cIlxuICAgIH1cbiAgfVxufVxue3stIGVuZCB9fSIsImxlZnRfZGVsaW1pdGVyIjoie3siLCJyaWdodF9kZWxpbWl0ZXIiOiJ9fSJ9LHsiZGVzdGluYXRpb24iOiIvdmF1bHQvc2VjcmV0cy9jb25maWcuZW52IiwiY29udGVudHMiOiJ7ey0gd2l0aCBzZWNyZXQgXCJrdi9kYXRhL29yZGVycy1zaGlwbWVudHMvc3BjZS1vcmRlcnMvcHJvZHVjdGlvblwiIC19fVxuZXhwb3J0IFNlcnZpY2VfX05hbWU9XCJ7eyAuRGF0YS5kYXRhLlNlcnZpY2VfX05hbWUgfX1cIlxuZXhwb3J0IEthZmthX19Cb290c3RyYXBTZXJ2ZXJzPVwie3sgLkRhdGEuZGF0YS5LYWZrYV9fQm9vdHN0cmFwU2VydmVycyB9fVwiXG5leHBvcnQgS2Fma2FfX1NoaXBtZW50UmVxdWVzdHNUb3BpYz1cInt7IC5EYXRhLmRhdGEuS2Fma2FfX1NoaXBtZW50UmVxdWVzdHNUb3BpYyB9fVwiXG5leHBvcnQgU3dhZ2dlcl9fRW5hYmxlZD1cInt7IC5EYXRhLmRhdGEuU3dhZ2dlcl9fRW5hYmxlZCB9fVwiXG5leHBvcnQgTG9nZ2luZ19fTG9nTGV2ZWxfX0RlZmF1bHQ9XCJ7eyAuRGF0YS5kYXRhLkxvZ2dpbmdfX0xvZ0xldmVsX19EZWZhdWx0IH19XCJcbmV4cG9ydCBMb2dnaW5nX19Mb2dMZXZlbF9fTWljcm9zb2Z0X0FzcE5ldENvcmU9XCJ7eyAuRGF0YS5kYXRhLkxvZ2dpbmdfX0xvZ0xldmVsX19NaWNyb3NvZnRfQXNwTmV0Q29yZSB9fVwiXG57ey0gZW5kIH19IiwibGVmdF9kZWxpbWl0ZXIiOiJ7eyIsInJpZ2h0X2RlbGltaXRlciI6In19In0seyJkZXN0aW5hdGlvbiI6Ii92YXVsdC9zZWNyZXRzL2FwcHNldHRpbmdzLnByb2R1Y3Rpb24uanNvbiIsImNvbnRlbnRzIjoie3stIHdpdGggc2VjcmV0IFwia3YvZGF0YS9vcmRlcnMtc2hpcG1lbnRzL3NwY2Utb3JkZXJzL3Byb2R1Y3Rpb25cIiAtfX1cbntcbiAgXCJTZXJ2aWNlXCI6IHsgXCJOYW1lXCI6IFwie3sgLkRhdGEuZGF0YS5TZXJ2aWNlX19OYW1lIH19XCIgfSxcbiAgXCJLYWZrYVwiOiB7XG4gICAgXCJCb290c3RyYXBTZXJ2ZXJzXCI6IFwie3sgLkRhdGEuZGF0YS5LYWZrYV9fQm9vdHN0cmFwU2VydmVycyB9fVwiLFxuICAgIFwiU2hpcG1lbnRSZXF1ZXN0c1RvcGljXCI6IFwie3sgLkRhdGEuZGF0YS5LYWZrYV9fU2hpcG1lbnRSZXF1ZXN0c1RvcGljIH19XCJcbiAgfSxcbiAgXCJTd2FnZ2VyXCI6IHsgXCJFbmFibGVkXCI6IHt7IC5EYXRhLmRhdGEuU3dhZ2dlcl9fRW5hYmxlZCB9fSB9LFxuICBcIkxvZ2dpbmdcIjoge1xuICAgIFwiTG9nTGV2ZWxcIjoge1xuICAgICAgXCJEZWZhdWx0XCI6IFwie3sgLkRhdGEuZGF0YS5Mb2dnaW5nX19Mb2dMZXZlbF9fRGVmYXVsdCB9fVwiLFxuICAgICAgXCJNaWNyb3NvZnQuQXNwTmV0Q29yZVwiOiBcInt7IC5EYXRhLmRhdGEuTG9nZ2luZ19fTG9nTGV2ZWxfX01pY3Jvc29mdF9Bc3BOZXRDb3JlIH19XCJcbiAgICB9XG4gIH1cbn1cbnt7LSBlbmQgfX0iLCJsZWZ0X2RlbGltaXRlciI6Int7IiwicmlnaHRfZGVsaW1pdGVyIjoifX0ifV0sInRlbXBsYXRlX2NvbmZpZyI6eyJleGl0X29uX3JldHJ5X2ZhaWx1cmUiOnRydWV9fQ==
+      image: hashicorp/vault:1.21.2
+      imagePullPolicy: IfNotPresent
+      name: vault-agent-init
+      resources:
+        limits:
+          cpu: 500m
+          memory: 128Mi
+        requests:
+          cpu: 250m
+          memory: 64Mi
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        readOnlyRootFilesystem: true
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 100
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /home/vault
+        name: home-init
+      - mountPath: /var/run/secrets/vault.hashicorp.com/serviceaccount
+        name: vault-k8s-token
+        readOnly: true
+      - mountPath: /vault/secrets
+        name: vault-secrets
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-ptdcb
+        readOnly: true
+    nodeName: k8s-worker1
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: spce-orders
+    serviceAccountName: spce-orders
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: vault-k8s-token
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            audience: vault
+            expirationSeconds: 3600
+            path: token
+    - name: kube-api-access-ptdcb
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+    - emptyDir:
+        medium: Memory
+      name: home-init
+    - emptyDir:
+        medium: Memory
+      name: home-sidecar
+    - emptyDir:
+        medium: Memory
+      name: vault-secrets
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-27T08:04:49Z"
+      observedGeneration: 1
+      status: "True"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-27T08:04:48Z"
+      message: 'containers with incomplete status: [vault-agent-init]'
+      observedGeneration: 1
+      reason: ContainersNotInitialized
+      status: "False"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-27T08:04:48Z"
+      message: 'containers with unready status: [spce-orders vault-agent]'
+      observedGeneration: 1
+      reason: ContainersNotReady
+      status: "False"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-27T08:04:48Z"
+      message: 'containers with unready status: [spce-orders vault-agent]'
+      observedGeneration: 1
+      reason: ContainersNotReady
+      status: "False"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2026-02-27T08:04:48Z"
+      observedGeneration: 1
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - image: abu7midan/spce-orders:1.0
+      imageID: ""
+      lastState: {}
+      name: spce-orders
+      ready: false
+      restartCount: 0
+      started: false
+      state:
+        waiting:
+          reason: PodInitializing
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-ptdcb
+        readOnly: true
+        recursiveReadOnly: Disabled
+      - mountPath: /vault/secrets
+        name: vault-secrets
+    - image: hashicorp/vault:1.21.2
+      imageID: ""
+      lastState: {}
+      name: vault-agent
+      ready: false
+      restartCount: 0
+      started: false
+      state:
+        waiting:
+          reason: PodInitializing
+      volumeMounts:
+      - mountPath: /var/run/secrets/vault.hashicorp.com/serviceaccount
+        name: vault-k8s-token
+        readOnly: true
+        recursiveReadOnly: Disabled
+      - mountPath: /home/vault
+        name: home-sidecar
+      - mountPath: /vault/secrets
+        name: vault-secrets
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-ptdcb
+        readOnly: true
+        recursiveReadOnly: Disabled
+    hostIP: 62.171.177.133
+    hostIPs:
+    - ip: 62.171.177.133
+    initContainerStatuses:
+    - allocatedResources:
+        cpu: 250m
+        memory: 64Mi
+      containerID: containerd://6f21fdaef725b40d28d155d8e129c3eb0fd64ea08dcd338d62cc94ab22ab184d
+      image: docker.io/hashicorp/vault:1.21.2
+      imageID: docker.io/hashicorp/vault@sha256:eb0ba6836e8d4699b7a1e8ca70d8433f7b87dcd067e6d82dff237d3ed2600ea0
+      lastState: {}
+      name: vault-agent-init
+      ready: false
+      resources:
+        limits:
+          cpu: 500m
+          memory: 128Mi
+        requests:
+          cpu: 250m
+          memory: 64Mi
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: "2026-02-27T08:04:49Z"
+      user:
+        linux:
+          gid: 1000
+          supplementalGroups:
+          - 1000
+          uid: 100
+      volumeMounts:
+      - mountPath: /home/vault
+        name: home-init
+      - mountPath: /var/run/secrets/vault.hashicorp.com/serviceaccount
+        name: vault-k8s-token
+        readOnly: true
+        recursiveReadOnly: Disabled
+      - mountPath: /vault/secrets
+        name: vault-secrets
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-ptdcb
+        readOnly: true
+        recursiveReadOnly: Disabled
+    observedGeneration: 1
+    phase: Pending
+    podIP: 10.233.92.128
+    podIPs:
+    - ip: 10.233.92.128
+    qosClass: Burstable
+    startTime: "2026-02-27T08:04:48Z"
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      argocd.argoproj.io/tracking-id: orders:/Service:orders/spce-orders
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{"argocd.argoproj.io/tracking-id":"orders:/Service:orders/spce-orders"},"creationTimestamp":"2026-02-13T13:19:58Z","name":"spce-orders","namespace":"orders","resourceVersion":"2044699","uid":"6be7f377-afbd-4a64-a33d-bb36bdf1008c"},"spec":{"clusterIP":"10.106.158.112","clusterIPs":["10.106.158.112"],"internalTrafficPolicy":"Cluster","ipFamilies":["IPv4"],"ipFamilyPolicy":"SingleStack","ports":[{"name":"http","port":80,"protocol":"TCP","targetPort":8080}],"selector":{"app":"spce-orders"},"sessionAffinity":"None","type":"ClusterIP"},"status":{"loadBalancer":{}}}
+    creationTimestamp: "2026-02-27T08:04:47Z"
+    name: spce-orders
+    namespace: orders
+    resourceVersion: "6190752"
+    uid: 8009693e-7b58-49d7-b93c-13e1a8f5708f
+  spec:
+    clusterIP: 10.106.158.112
+    clusterIPs:
+    - 10.106.158.112
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      app: spce-orders
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      argocd.argoproj.io/tracking-id: orders:apps/Deployment:orders/spce-orders
+      deployment.kubernetes.io/revision: "1"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{"argocd.argoproj.io/tracking-id":"orders:apps/Deployment:orders/spce-orders","deployment.kubernetes.io/revision":"24"},"creationTimestamp":"2026-02-13T13:19:58Z","generation":26,"name":"spce-orders","namespace":"orders","resourceVersion":"5827821","uid":"3d14f01b-7aeb-48eb-a3ec-e57487a98ade"},"spec":{"progressDeadlineSeconds":600,"replicas":1,"revisionHistoryLimit":10,"selector":{"matchLabels":{"app":"spce-orders"}},"strategy":{"rollingUpdate":{"maxSurge":"25%","maxUnavailable":"25%"},"type":"RollingUpdate"},"template":{"metadata":{"annotations":{"cattle.io/timestamp":"2026-02-15T20:20:13Z","kubectl.kubernetes.io/restartedAt":"2026-02-15T21:16:39+01:00","vault.hashicorp.com/agent-inject":"true","vault.hashicorp.com/agent-inject-secret-appsettings.Production.json":"kv/data/orders-shipments/spce-orders/production","vault.hashicorp.com/agent-inject-secret-appsettings.json":"kv/data/orders-shipments/spce-orders/production","vault.hashicorp.com/agent-inject-secret-config.env":"kv/data/orders-shipments/spce-orders/production","vault.hashicorp.com/agent-inject-template-appsettings.Production.json":"{{- with secret \"kv/data/orders-shipments/spce-orders/production\" -}}\n{\n  \"Service\": { \"Name\": \"{{ .Data.data.Service__Name }}\" },\n  \"Kafka\": {\n    \"BootstrapServers\": \"{{ .Data.data.Kafka__BootstrapServers }}\",\n    \"ShipmentRequestsTopic\": \"{{ .Data.data.Kafka__ShipmentRequestsTopic }}\"\n  },\n  \"Swagger\": { \"Enabled\": {{ .Data.data.Swagger__Enabled }} },\n  \"Logging\": {\n    \"LogLevel\": {\n      \"Default\": \"{{ .Data.data.Logging__LogLevel__Default }}\",\n      \"Microsoft.AspNetCore\": \"{{ .Data.data.Logging__LogLevel__Microsoft_AspNetCore }}\"\n    }\n  }\n}\n{{- end }}","vault.hashicorp.com/agent-inject-template-appsettings.json":"{{- with secret \"kv/data/orders-shipments/spce-orders/production\" -}}\n{\n  \"Service\": { \"Name\": \"{{ .Data.data.Service__Name }}\" },\n  \"Kafka\": {\n    \"BootstrapServers\": \"{{ .Data.data.Kafka__BootstrapServers }}\",\n    \"ShipmentRequestsTopic\": \"{{ .Data.data.Kafka__ShipmentRequestsTopic }}\"\n  },\n  \"Swagger\": { \"Enabled\": {{ .Data.data.Swagger__Enabled }} },\n  \"Logging\": {\n    \"LogLevel\": {\n      \"Default\": \"{{ .Data.data.Logging__LogLevel__Default }}\",\n      \"Microsoft.AspNetCore\": \"{{ .Data.data.Logging__LogLevel__Microsoft_AspNetCore }}\"\n    }\n  }\n}\n{{- end }}","vault.hashicorp.com/agent-inject-template-config.env":"{{- with secret \"kv/data/orders-shipments/spce-orders/production\" -}}\nexport Service__Name=\"{{ .Data.data.Service__Name }}\"\nexport Kafka__BootstrapServers=\"{{ .Data.data.Kafka__BootstrapServers }}\"\nexport Kafka__ShipmentRequestsTopic=\"{{ .Data.data.Kafka__ShipmentRequestsTopic }}\"\nexport Swagger__Enabled=\"{{ .Data.data.Swagger__Enabled }}\"\nexport Logging__LogLevel__Default=\"{{ .Data.data.Logging__LogLevel__Default }}\"\nexport Logging__LogLevel__Microsoft_AspNetCore=\"{{ .Data.data.Logging__LogLevel__Microsoft_AspNetCore }}\"\n{{- end }}","vault.hashicorp.com/agent-service-account-token-volume-name":"vault-k8s-token","vault.hashicorp.com/role":"orders-spce-orders-production","vault.hashicorp.com/vault-addr":"http://vault.vault.svc.cluster.local:8200"},"labels":{"app":"spce-orders"}},"spec":{"containers":[{"args":["cp /vault/secrets/appsettings.json /app/appsettings.json \u0026\u0026 exec dotnet spce-orders.dll"],"command":["/bin/sh","-lc"],"env":[{"name":"SERVICE_NAME","value":"spce-orders"},{"name":"KAFKA_BOOTSTRAP_SERVERS","value":"my-kafka-kafka-bootstrap.kafka.svc.cluster.local:9092"},{"name":"KAFKA_TOPIC_SHIPMENT_REQUESTS","value":"shipment-requests"}],"image":"abu7midan/spce-orders:1.0","imagePullPolicy":"IfNotPresent","name":"spce-orders","ports":[{"containerPort":8080,"protocol":"TCP"}],"resources":{},"terminationMessagePath":"/dev/termination-log","terminationMessagePolicy":"File"}],"dnsPolicy":"ClusterFirst","restartPolicy":"Always","schedulerName":"default-scheduler","securityContext":{},"serviceAccount":"spce-orders","serviceAccountName":"spce-orders","terminationGracePeriodSeconds":30,"volumes":[{"name":"vault-k8s-token","projected":{"defaultMode":420,"sources":[{"serviceAccountToken":{"audience":"vault","expirationSeconds":3600,"path":"token"}}]}}]}}},"status":{"conditions":[{"lastTransitionTime":"2026-02-15T19:51:50Z","lastUpdateTime":"2026-02-15T20:20:29Z","message":"ReplicaSet \"spce-orders-6c9df9fd99\" has successfully progressed.","reason":"NewReplicaSetAvailable","status":"True","type":"Progressing"},{"lastTransitionTime":"2026-02-26T00:34:15Z","lastUpdateTime":"2026-02-26T00:34:15Z","message":"Deployment does not have minimum availability.","reason":"MinimumReplicasUnavailable","status":"False","type":"Available"}],"observedGeneration":26,"replicas":1,"unavailableReplicas":1,"updatedReplicas":1}}
+    creationTimestamp: "2026-02-27T08:04:47Z"
+    generation: 1
+    name: spce-orders
+    namespace: orders
+    resourceVersion: "6192766"
+    uid: bb6a89e0-1262-4cc8-a6b8-14e2a3e8a48a
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: spce-orders
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        annotations:
+          cattle.io/timestamp: "2026-02-15T20:20:13Z"
+          kubectl.kubernetes.io/restartedAt: "2026-02-15T21:16:39+01:00"
+          vault.hashicorp.com/agent-inject: "true"
+          vault.hashicorp.com/agent-inject-secret-appsettings.Production.json: kv/data/orders-shipments/spce-orders/production
+          vault.hashicorp.com/agent-inject-secret-appsettings.json: kv/data/orders-shipments/spce-orders/production
+          vault.hashicorp.com/agent-inject-secret-config.env: kv/data/orders-shipments/spce-orders/production
+          vault.hashicorp.com/agent-inject-template-appsettings.Production.json: |-
+            {{- with secret "kv/data/orders-shipments/spce-orders/production" -}}
+            {
+              "Service": { "Name": "{{ .Data.data.Service__Name }}" },
+              "Kafka": {
+                "BootstrapServers": "{{ .Data.data.Kafka__BootstrapServers }}",
+                "ShipmentRequestsTopic": "{{ .Data.data.Kafka__ShipmentRequestsTopic }}"
+              },
+              "Swagger": { "Enabled": {{ .Data.data.Swagger__Enabled }} },
+              "Logging": {
+                "LogLevel": {
+                  "Default": "{{ .Data.data.Logging__LogLevel__Default }}",
+                  "Microsoft.AspNetCore": "{{ .Data.data.Logging__LogLevel__Microsoft_AspNetCore }}"
+                }
+              }
+            }
+            {{- end }}
+          vault.hashicorp.com/agent-inject-template-appsettings.json: |-
+            {{- with secret "kv/data/orders-shipments/spce-orders/production" -}}
+            {
+              "Service": { "Name": "{{ .Data.data.Service__Name }}" },
+              "Kafka": {
+                "BootstrapServers": "{{ .Data.data.Kafka__BootstrapServers }}",
+                "ShipmentRequestsTopic": "{{ .Data.data.Kafka__ShipmentRequestsTopic }}"
+              },
+              "Swagger": { "Enabled": {{ .Data.data.Swagger__Enabled }} },
+              "Logging": {
+                "LogLevel": {
+                  "Default": "{{ .Data.data.Logging__LogLevel__Default }}",
+                  "Microsoft.AspNetCore": "{{ .Data.data.Logging__LogLevel__Microsoft_AspNetCore }}"
+                }
+              }
+            }
+            {{- end }}
+          vault.hashicorp.com/agent-inject-template-config.env: |-
+            {{- with secret "kv/data/orders-shipments/spce-orders/production" -}}
+            export Service__Name="{{ .Data.data.Service__Name }}"
+            export Kafka__BootstrapServers="{{ .Data.data.Kafka__BootstrapServers }}"
+            export Kafka__ShipmentRequestsTopic="{{ .Data.data.Kafka__ShipmentRequestsTopic }}"
+            export Swagger__Enabled="{{ .Data.data.Swagger__Enabled }}"
+            export Logging__LogLevel__Default="{{ .Data.data.Logging__LogLevel__Default }}"
+            export Logging__LogLevel__Microsoft_AspNetCore="{{ .Data.data.Logging__LogLevel__Microsoft_AspNetCore }}"
+            {{- end }}
+          vault.hashicorp.com/agent-service-account-token-volume-name: vault-k8s-token
+          vault.hashicorp.com/role: orders-spce-orders-production
+          vault.hashicorp.com/vault-addr: http://vault.vault.svc.cluster.local:8200
+        labels:
+          app: spce-orders
+      spec:
+        containers:
+        - args:
+          - cp /vault/secrets/appsettings.json /app/appsettings.json && exec dotnet
+            spce-orders.dll
+          command:
+          - /bin/sh
+          - -lc
+          env:
+          - name: SERVICE_NAME
+            value: spce-orders
+          - name: KAFKA_BOOTSTRAP_SERVERS
+            value: my-kafka-kafka-bootstrap.kafka.svc.cluster.local:9092
+          - name: KAFKA_TOPIC_SHIPMENT_REQUESTS
+            value: shipment-requests
+          image: abu7midan/spce-orders:1.0
+          imagePullPolicy: IfNotPresent
+          name: spce-orders
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: spce-orders
+        serviceAccountName: spce-orders
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: vault-k8s-token
+          projected:
+            defaultMode: 420
+            sources:
+            - serviceAccountToken:
+                audience: vault
+                expirationSeconds: 3600
+                path: token
+  status:
+    conditions:
+    - lastTransitionTime: "2026-02-27T08:04:47Z"
+      lastUpdateTime: "2026-02-27T08:04:47Z"
+      message: Deployment does not have minimum availability.
+      reason: MinimumReplicasUnavailable
+      status: "False"
+      type: Available
+    - lastTransitionTime: "2026-02-27T08:14:48Z"
+      lastUpdateTime: "2026-02-27T08:14:48Z"
+      message: ReplicaSet "spce-orders-bdd7f5b76" has timed out progressing.
+      reason: ProgressDeadlineExceeded
+      status: "False"
+      type: Progressing
+    observedGeneration: 1
+    replicas: 1
+    unavailableReplicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      argocd.argoproj.io/tracking-id: orders:apps/Deployment:orders/spce-orders
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "1"
+    creationTimestamp: "2026-02-27T08:04:47Z"
+    generation: 1
+    labels:
+      app: spce-orders
+      pod-template-hash: bdd7f5b76
+    name: spce-orders-bdd7f5b76
+    namespace: orders
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: spce-orders
+      uid: bb6a89e0-1262-4cc8-a6b8-14e2a3e8a48a
+    resourceVersion: "6190787"
+    uid: 18ce49e0-9432-4a57-83a7-a08b6feef9f7
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: spce-orders
+        pod-template-hash: bdd7f5b76
+    template:
+      metadata:
+        annotations:
+          cattle.io/timestamp: "2026-02-15T20:20:13Z"
+          kubectl.kubernetes.io/restartedAt: "2026-02-15T21:16:39+01:00"
+          vault.hashicorp.com/agent-inject: "true"
+          vault.hashicorp.com/agent-inject-secret-appsettings.Production.json: kv/data/orders-shipments/spce-orders/production
+          vault.hashicorp.com/agent-inject-secret-appsettings.json: kv/data/orders-shipments/spce-orders/production
+          vault.hashicorp.com/agent-inject-secret-config.env: kv/data/orders-shipments/spce-orders/production
+          vault.hashicorp.com/agent-inject-template-appsettings.Production.json: |-
+            {{- with secret "kv/data/orders-shipments/spce-orders/production" -}}
+            {
+              "Service": { "Name": "{{ .Data.data.Service__Name }}" },
+              "Kafka": {
+                "BootstrapServers": "{{ .Data.data.Kafka__BootstrapServers }}",
+                "ShipmentRequestsTopic": "{{ .Data.data.Kafka__ShipmentRequestsTopic }}"
+              },
+              "Swagger": { "Enabled": {{ .Data.data.Swagger__Enabled }} },
+              "Logging": {
+                "LogLevel": {
+                  "Default": "{{ .Data.data.Logging__LogLevel__Default }}",
+                  "Microsoft.AspNetCore": "{{ .Data.data.Logging__LogLevel__Microsoft_AspNetCore }}"
+                }
+              }
+            }
+            {{- end }}
+          vault.hashicorp.com/agent-inject-template-appsettings.json: |-
+            {{- with secret "kv/data/orders-shipments/spce-orders/production" -}}
+            {
+              "Service": { "Name": "{{ .Data.data.Service__Name }}" },
+              "Kafka": {
+                "BootstrapServers": "{{ .Data.data.Kafka__BootstrapServers }}",
+                "ShipmentRequestsTopic": "{{ .Data.data.Kafka__ShipmentRequestsTopic }}"
+              },
+              "Swagger": { "Enabled": {{ .Data.data.Swagger__Enabled }} },
+              "Logging": {
+                "LogLevel": {
+                  "Default": "{{ .Data.data.Logging__LogLevel__Default }}",
+                  "Microsoft.AspNetCore": "{{ .Data.data.Logging__LogLevel__Microsoft_AspNetCore }}"
+                }
+              }
+            }
+            {{- end }}
+          vault.hashicorp.com/agent-inject-template-config.env: |-
+            {{- with secret "kv/data/orders-shipments/spce-orders/production" -}}
+            export Service__Name="{{ .Data.data.Service__Name }}"
+            export Kafka__BootstrapServers="{{ .Data.data.Kafka__BootstrapServers }}"
+            export Kafka__ShipmentRequestsTopic="{{ .Data.data.Kafka__ShipmentRequestsTopic }}"
+            export Swagger__Enabled="{{ .Data.data.Swagger__Enabled }}"
+            export Logging__LogLevel__Default="{{ .Data.data.Logging__LogLevel__Default }}"
+            export Logging__LogLevel__Microsoft_AspNetCore="{{ .Data.data.Logging__LogLevel__Microsoft_AspNetCore }}"
+            {{- end }}
+          vault.hashicorp.com/agent-service-account-token-volume-name: vault-k8s-token
+          vault.hashicorp.com/role: orders-spce-orders-production
+          vault.hashicorp.com/vault-addr: http://vault.vault.svc.cluster.local:8200
+        labels:
+          app: spce-orders
+          pod-template-hash: bdd7f5b76
+      spec:
+        containers:
+        - args:
+          - cp /vault/secrets/appsettings.json /app/appsettings.json && exec dotnet
+            spce-orders.dll
+          command:
+          - /bin/sh
+          - -lc
+          env:
+          - name: SERVICE_NAME
+            value: spce-orders
+          - name: KAFKA_BOOTSTRAP_SERVERS
+            value: my-kafka-kafka-bootstrap.kafka.svc.cluster.local:9092
+          - name: KAFKA_TOPIC_SHIPMENT_REQUESTS
+            value: shipment-requests
+          image: abu7midan/spce-orders:1.0
+          imagePullPolicy: IfNotPresent
+          name: spce-orders
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: spce-orders
+        serviceAccountName: spce-orders
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: vault-k8s-token
+          projected:
+            defaultMode: 420
+            sources:
+            - serviceAccountToken:
+                audience: vault
+                expirationSeconds: 3600
+                path: token
+  status:
+    fullyLabeledReplicas: 1
+    observedGeneration: 1
+    replicas: 1
+kind: List
+metadata:
+  resourceVersion: ""

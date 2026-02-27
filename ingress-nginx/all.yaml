@@ -8,15 +8,19 @@ items:
       cni.projectcalico.org/podIP: 10.233.118.171/32
       cni.projectcalico.org/podIPs: 10.233.118.171/32
     creationTimestamp: "2026-02-26T04:21:16Z"
+    generateName: guestbook-ui-84774bdc6f-
     generation: 1
     labels:
+      app: guestbook-ui
       pod-template-hash: 84774bdc6f
+    name: guestbook-ui-84774bdc6f-6n9fg
     namespace: ingress-nginx
     ownerReferences:
     - apiVersion: apps/v1
       blockOwnerDeletion: true
       controller: true
       kind: ReplicaSet
+      name: guestbook-ui-84774bdc6f
       uid: 39d6ea3f-20e3-48fb-b147-861b458186bc
     resourceVersion: "5841963"
     uid: 8de4446b-73bf-4746-9395-54f18535042a
@@ -24,6 +28,7 @@ items:
     containers:
     - image: gcr.io/google-samples/gb-frontend:v5
       imagePullPolicy: IfNotPresent
+      name: guestbook-ui
       ports:
       - containerPort: 80
         protocol: TCP
@@ -82,6 +87,7 @@ items:
       image: gcr.io/google-samples/gb-frontend:v5
       imageID: gcr.io/google-samples/gb-frontend@sha256:a908df8486ff66f2c4daa0d3d8a2fa09846a1fc8efd65649c0109695c7c5cbff
       lastState: {}
+      name: guestbook-ui
       ready: true
       resources: {}
       restartCount: 0
@@ -341,8 +347,11 @@ items:
   kind: Service
   metadata:
     annotations:
+      argocd.argoproj.io/tracking-id: ingress-nginx:/Service:ingress-nginx/guestbook-ui
       kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{"argocd.argoproj.io/tracking-id":"ingress-nginx:/Service:ingress-nginx/guestbook-ui"},"creationTimestamp":"2026-02-26T04:21:16Z","name":"guestbook-ui","namespace":"ingress-nginx","resourceVersion":"5841714","uid":"970d65e5-7ef6-4bdb-85d4-e7a6dbde3bcc"},"spec":{"clusterIP":"10.111.25.26","clusterIPs":["10.111.25.26"],"internalTrafficPolicy":"Cluster","ipFamilies":["IPv4"],"ipFamilyPolicy":"SingleStack","ports":[{"port":80,"protocol":"TCP","targetPort":80}],"selector":{"app":"guestbook-ui"},"sessionAffinity":"None","type":"ClusterIP"},"status":{"loadBalancer":{}}}
     creationTimestamp: "2026-02-26T04:21:16Z"
+    name: guestbook-ui
     namespace: ingress-nginx
     resourceVersion: "6187564"
     uid: 970d65e5-7ef6-4bdb-85d4-e7a6dbde3bcc
@@ -359,6 +368,7 @@ items:
       protocol: TCP
       targetPort: 80
     selector:
+      app: guestbook-ui
     sessionAffinity: None
     type: ClusterIP
   status:
@@ -456,10 +466,13 @@ items:
   kind: Deployment
   metadata:
     annotations:
+      argocd.argoproj.io/tracking-id: ingress-nginx:apps/Deployment:ingress-nginx/guestbook-ui
       deployment.kubernetes.io/revision: "1"
       kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{"argocd.argoproj.io/tracking-id":"ingress-nginx:apps/Deployment:ingress-nginx/guestbook-ui","deployment.kubernetes.io/revision":"1"},"creationTimestamp":"2026-02-26T04:21:16Z","generation":1,"name":"guestbook-ui","namespace":"ingress-nginx","resourceVersion":"5841967","uid":"a267596d-0fd6-4cdc-b4e4-d0c20abc534a"},"spec":{"progressDeadlineSeconds":600,"replicas":1,"revisionHistoryLimit":3,"selector":{"matchLabels":{"app":"guestbook-ui"}},"strategy":{"rollingUpdate":{"maxSurge":"25%","maxUnavailable":"25%"},"type":"RollingUpdate"},"template":{"metadata":{"labels":{"app":"guestbook-ui"}},"spec":{"containers":[{"image":"gcr.io/google-samples/gb-frontend:v5","imagePullPolicy":"IfNotPresent","name":"guestbook-ui","ports":[{"containerPort":80,"protocol":"TCP"}],"resources":{},"terminationMessagePath":"/dev/termination-log","terminationMessagePolicy":"File"}],"dnsPolicy":"ClusterFirst","restartPolicy":"Always","schedulerName":"default-scheduler","securityContext":{},"terminationGracePeriodSeconds":30}}},"status":{"availableReplicas":1,"conditions":[{"lastTransitionTime":"2026-02-26T04:21:19Z","lastUpdateTime":"2026-02-26T04:21:19Z","message":"Deployment has minimum availability.","reason":"MinimumReplicasAvailable","status":"True","type":"Available"},{"lastTransitionTime":"2026-02-26T04:21:16Z","lastUpdateTime":"2026-02-26T04:21:19Z","message":"ReplicaSet \"guestbook-ui-84774bdc6f\" has successfully progressed.","reason":"NewReplicaSetAvailable","status":"True","type":"Progressing"}],"observedGeneration":1,"readyReplicas":1,"replicas":1,"updatedReplicas":1}}
     creationTimestamp: "2026-02-26T04:21:16Z"
     generation: 2
+    name: guestbook-ui
     namespace: ingress-nginx
     resourceVersion: "6187587"
     uid: a267596d-0fd6-4cdc-b4e4-d0c20abc534a
@@ -469,6 +482,7 @@ items:
     revisionHistoryLimit: 3
     selector:
       matchLabels:
+        app: guestbook-ui
     strategy:
       rollingUpdate:
         maxSurge: 25%
@@ -477,10 +491,12 @@ items:
     template:
       metadata:
         labels:
+          app: guestbook-ui
       spec:
         containers:
         - image: gcr.io/google-samples/gb-frontend:v5
           imagePullPolicy: IfNotPresent
+          name: guestbook-ui
           ports:
           - containerPort: 80
             protocol: TCP
@@ -503,6 +519,7 @@ items:
       type: Available
     - lastTransitionTime: "2026-02-26T04:21:16Z"
       lastUpdateTime: "2026-02-26T04:21:19Z"
+      message: ReplicaSet "guestbook-ui-84774bdc6f" has successfully progressed.
       reason: NewReplicaSetAvailable
       status: "True"
       type: Progressing
@@ -675,19 +692,23 @@ items:
   kind: ReplicaSet
   metadata:
     annotations:
+      argocd.argoproj.io/tracking-id: ingress-nginx:apps/Deployment:ingress-nginx/guestbook-ui
       deployment.kubernetes.io/desired-replicas: "1"
       deployment.kubernetes.io/max-replicas: "2"
       deployment.kubernetes.io/revision: "1"
     creationTimestamp: "2026-02-26T04:21:16Z"
     generation: 1
     labels:
+      app: guestbook-ui
       pod-template-hash: 84774bdc6f
+    name: guestbook-ui-84774bdc6f
     namespace: ingress-nginx
     ownerReferences:
     - apiVersion: apps/v1
       blockOwnerDeletion: true
       controller: true
       kind: Deployment
+      name: guestbook-ui
       uid: a267596d-0fd6-4cdc-b4e4-d0c20abc534a
     resourceVersion: "5841965"
     uid: 39d6ea3f-20e3-48fb-b147-861b458186bc
@@ -695,15 +716,18 @@ items:
     replicas: 1
     selector:
       matchLabels:
+        app: guestbook-ui
         pod-template-hash: 84774bdc6f
     template:
       metadata:
         labels:
+          app: guestbook-ui
           pod-template-hash: 84774bdc6f
       spec:
         containers:
         - image: gcr.io/google-samples/gb-frontend:v5
           imagePullPolicy: IfNotPresent
+          name: guestbook-ui
           ports:
           - containerPort: 80
             protocol: TCP
