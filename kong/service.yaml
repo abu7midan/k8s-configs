@@ -1,0 +1,370 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      argocd.argoproj.io/tracking-id: kong:/Service:kong/guestbook-ui
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{"argocd.argoproj.io/tracking-id":"kong:/Service:kong/guestbook-ui"},"name":"guestbook-ui","namespace":"kong"},"spec":{"ports":[{"port":80,"targetPort":80}],"selector":{"app":"guestbook-ui"}}}
+    creationTimestamp: "2026-02-26T04:21:16Z"
+    name: guestbook-ui
+    namespace: kong
+    resourceVersion: "5841761"
+    uid: 36dd83ee-5b20-489e-b30d-f5bbc14415cb
+  spec:
+    clusterIP: 10.105.251.101
+    clusterIPs:
+    - 10.105.251.101
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 80
+    selector:
+      app: guestbook-ui
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      field.cattle.io/publicEndpoints: '[{"port":31073,"protocol":"TCP","serviceName":"kong:kong-gateway-kong-admin","allNodes":true},{"port":31012,"protocol":"TCP","serviceName":"kong:kong-gateway-kong-admin","allNodes":true}]'
+      meta.helm.sh/release-name: kong-gateway
+      meta.helm.sh/release-namespace: kong
+    creationTimestamp: "2026-02-11T17:52:43Z"
+    labels:
+      app.kubernetes.io/instance: kong-gateway
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/name: kong
+      app.kubernetes.io/version: "3.9"
+      helm.sh/chart: kong-3.0.2
+    name: kong-gateway-kong-admin
+    namespace: kong
+    resourceVersion: "5792840"
+    uid: 0824283f-a940-4b76-bb26-656168dd8d26
+  spec:
+    clusterIP: 10.107.91.35
+    clusterIPs:
+    - 10.107.91.35
+    externalTrafficPolicy: Cluster
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: kong-admin
+      nodePort: 31073
+      port: 8001
+      protocol: TCP
+      targetPort: 8001
+    - name: kong-admin-tls
+      nodePort: 31012
+      port: 8444
+      protocol: TCP
+      targetPort: 8444
+    selector:
+      app: kong-gateway-kong
+    sessionAffinity: None
+    type: NodePort
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      field.cattle.io/publicEndpoints: '[{"port":30398,"protocol":"TCP","serviceName":"kong:kong-gateway-kong-manager","allNodes":true},{"port":30784,"protocol":"TCP","serviceName":"kong:kong-gateway-kong-manager","allNodes":true}]'
+      meta.helm.sh/release-name: kong-gateway
+      meta.helm.sh/release-namespace: kong
+    creationTimestamp: "2026-02-11T10:55:12Z"
+    labels:
+      app.kubernetes.io/instance: kong-gateway
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/name: kong
+      app.kubernetes.io/version: "3.9"
+      helm.sh/chart: kong-3.0.2
+    name: kong-gateway-kong-manager
+    namespace: kong
+    resourceVersion: "4181030"
+    uid: ab81703f-8e85-4a71-aa1f-b16882fa6de4
+  spec:
+    clusterIP: 10.107.35.141
+    clusterIPs:
+    - 10.107.35.141
+    externalTrafficPolicy: Cluster
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: kong-manager
+      nodePort: 30398
+      port: 8002
+      protocol: TCP
+      targetPort: 8002
+    - name: kong-manager-tls
+      nodePort: 30784
+      port: 8445
+      protocol: TCP
+      targetPort: 8445
+    selector:
+      app.kubernetes.io/component: app
+      app.kubernetes.io/instance: kong-gateway
+      app.kubernetes.io/name: kong
+    sessionAffinity: None
+    type: NodePort
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: kong-gateway
+      meta.helm.sh/release-namespace: kong
+    creationTimestamp: "2026-02-11T14:03:11Z"
+    labels:
+      app.kubernetes.io/instance: kong-gateway
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/name: kong
+      app.kubernetes.io/version: "3.9"
+      helm.sh/chart: kong-3.0.2
+    name: kong-gateway-kong-metrics
+    namespace: kong
+    resourceVersion: "1597076"
+    uid: f2c006ca-b77d-4552-abd4-a8838d329401
+  spec:
+    clusterIP: 10.101.246.243
+    clusterIPs:
+    - 10.101.246.243
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: cmetrics
+      port: 10255
+      protocol: TCP
+      targetPort: cmetrics
+    - name: status
+      port: 10254
+      protocol: TCP
+      targetPort: cstatus
+    selector:
+      app.kubernetes.io/component: app
+      app.kubernetes.io/instance: kong-gateway
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/name: kong
+      app.kubernetes.io/version: "3.9"
+      helm.sh/chart: kong-3.0.2
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: kong-gateway
+      meta.helm.sh/release-namespace: kong
+    creationTimestamp: "2026-02-11T10:55:12Z"
+    labels:
+      app.kubernetes.io/instance: kong-gateway
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/name: kong
+      app.kubernetes.io/version: "3.9"
+      enable-metrics: "true"
+      helm.sh/chart: kong-3.0.2
+    name: kong-gateway-kong-proxy
+    namespace: kong
+    resourceVersion: "5793122"
+    uid: b856a2a0-ac8c-45bc-886f-780d6e0417e8
+  spec:
+    allocateLoadBalancerNodePorts: true
+    clusterIP: 10.98.84.203
+    clusterIPs:
+    - 10.98.84.203
+    externalTrafficPolicy: Cluster
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: kong-proxy
+      nodePort: 31456
+      port: 80
+      protocol: TCP
+      targetPort: 8000
+    - name: kong-proxy-tls
+      nodePort: 30873
+      port: 443
+      protocol: TCP
+      targetPort: 8443
+    selector:
+      app: kong-gateway-kong
+    sessionAffinity: None
+    type: LoadBalancer
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: kong-gateway
+      meta.helm.sh/release-namespace: kong
+    creationTimestamp: "2026-02-11T14:03:11Z"
+    labels:
+      app.kubernetes.io/instance: kong-gateway
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/name: kong
+      app.kubernetes.io/version: "3.9"
+      helm.sh/chart: kong-3.0.2
+    name: kong-gateway-kong-validation-webhook
+    namespace: kong
+    resourceVersion: "1597071"
+    uid: 7aad4713-20ba-4efa-be64-177f1169e73b
+  spec:
+    clusterIP: 10.106.2.201
+    clusterIPs:
+    - 10.106.2.201
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: webhook
+      port: 443
+      protocol: TCP
+      targetPort: webhook
+    selector:
+      app.kubernetes.io/component: app
+      app.kubernetes.io/instance: kong-gateway
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/name: kong
+      app.kubernetes.io/version: "3.9"
+      helm.sh/chart: kong-3.0.2
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: kong-postgresql
+      meta.helm.sh/release-namespace: kong
+    creationTimestamp: "2026-02-11T10:08:20Z"
+    labels:
+      app.kubernetes.io/component: primary
+      app.kubernetes.io/instance: kong-postgresql
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/name: postgresql
+      app.kubernetes.io/version: 18.1.0
+      helm.sh/chart: postgresql-18.2.6
+    name: kong-postgresql
+    namespace: kong
+    resourceVersion: "1561391"
+    uid: 471703dd-d2f2-4bea-a692-b409643bac2c
+  spec:
+    clusterIP: 10.99.216.118
+    clusterIPs:
+    - 10.99.216.118
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: tcp-postgresql
+      port: 5432
+      protocol: TCP
+      targetPort: tcp-postgresql
+    selector:
+      app.kubernetes.io/component: primary
+      app.kubernetes.io/instance: kong-postgresql
+      app.kubernetes.io/name: postgresql
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: kong-postgresql
+      meta.helm.sh/release-namespace: kong
+    creationTimestamp: "2026-02-11T10:08:20Z"
+    labels:
+      app.kubernetes.io/component: primary
+      app.kubernetes.io/instance: kong-postgresql
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/name: postgresql
+      app.kubernetes.io/version: 18.1.0
+      helm.sh/chart: postgresql-18.2.6
+    name: kong-postgresql-hl
+    namespace: kong
+    resourceVersion: "1561389"
+    uid: 42086c77-8337-47a0-8bdc-067bbd105af3
+  spec:
+    clusterIP: None
+    clusterIPs:
+    - None
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: tcp-postgresql
+      port: 5432
+      protocol: TCP
+      targetPort: tcp-postgresql
+    publishNotReadyAddresses: true
+    selector:
+      app.kubernetes.io/component: primary
+      app.kubernetes.io/instance: kong-postgresql
+      app.kubernetes.io/name: postgresql
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      field.cattle.io/publicEndpoints: '[{"port":30400,"protocol":"TCP","serviceName":"kong:konga","allNodes":true}]'
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"labels":{"app":"konga"},"name":"konga","namespace":"kong"},"spec":{"ports":[{"name":"http","nodePort":30400,"port":1337,"targetPort":1337}],"selector":{"app":"konga"},"type":"NodePort"}}
+    creationTimestamp: "2026-02-26T00:46:01Z"
+    labels:
+      app: konga
+    name: konga
+    namespace: kong
+    resourceVersion: "5787293"
+    uid: be45e301-7915-400a-b273-f71937494db7
+  spec:
+    clusterIP: 10.98.139.95
+    clusterIPs:
+    - 10.98.139.95
+    externalTrafficPolicy: Cluster
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: http
+      nodePort: 30400
+      port: 1337
+      protocol: TCP
+      targetPort: 1337
+    selector:
+      app: konga
+    sessionAffinity: None
+    type: NodePort
+  status:
+    loadBalancer: {}
+kind: List
+metadata:
+  resourceVersion: ""
