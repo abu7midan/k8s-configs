@@ -1,0 +1,316 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: kong
+      meta.helm.sh/release-namespace: kong
+    creationTimestamp: "2026-03-03T03:29:00Z"
+    labels:
+      app.kubernetes.io/instance: kong
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/name: kong
+      app.kubernetes.io/version: "3.13"
+      helm.sh/chart: kong-3.0.2
+    name: kong-kong-admin
+    namespace: kong
+    resourceVersion: "7190586"
+    uid: 8de3a91b-924b-4784-ad62-8503e9880654
+  spec:
+    clusterIP: 10.99.56.29
+    clusterIPs:
+    - 10.99.56.29
+    externalTrafficPolicy: Cluster
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: kong-admin
+      nodePort: 31073
+      port: 8001
+      protocol: TCP
+      targetPort: 8001
+    - name: kong-admin-tls
+      nodePort: 30517
+      port: 8444
+      protocol: TCP
+      targetPort: 8444
+    selector:
+      app.kubernetes.io/component: app
+      app.kubernetes.io/instance: kong
+      app.kubernetes.io/name: kong
+    sessionAffinity: None
+    type: NodePort
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: kong
+      meta.helm.sh/release-namespace: kong
+    creationTimestamp: "2026-03-03T03:29:00Z"
+    labels:
+      app.kubernetes.io/instance: kong
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/name: kong
+      app.kubernetes.io/version: "3.13"
+      helm.sh/chart: kong-3.0.2
+    name: kong-kong-manager
+    namespace: kong
+    resourceVersion: "7190592"
+    uid: fd825d35-3b28-42c6-b99c-f1030e9435eb
+  spec:
+    clusterIP: 10.108.6.42
+    clusterIPs:
+    - 10.108.6.42
+    externalTrafficPolicy: Cluster
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: kong-manager
+      nodePort: 31082
+      port: 8002
+      protocol: TCP
+      targetPort: 8002
+    - name: kong-manager-tls
+      nodePort: 31771
+      port: 8445
+      protocol: TCP
+      targetPort: 8445
+    selector:
+      app.kubernetes.io/component: app
+      app.kubernetes.io/instance: kong
+      app.kubernetes.io/name: kong
+    sessionAffinity: None
+    type: NodePort
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: kong
+      meta.helm.sh/release-namespace: kong
+    creationTimestamp: "2026-03-03T03:29:00Z"
+    labels:
+      app.kubernetes.io/instance: kong
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/name: kong
+      app.kubernetes.io/version: "3.13"
+      helm.sh/chart: kong-3.0.2
+    name: kong-kong-metrics
+    namespace: kong
+    resourceVersion: "7190580"
+    uid: a561ff8c-c193-46a0-828a-24c7fac2c018
+  spec:
+    clusterIP: 10.97.198.244
+    clusterIPs:
+    - 10.97.198.244
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: cmetrics
+      port: 10255
+      protocol: TCP
+      targetPort: cmetrics
+    - name: status
+      port: 10254
+      protocol: TCP
+      targetPort: cstatus
+    selector:
+      app.kubernetes.io/component: app
+      app.kubernetes.io/instance: kong
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/name: kong
+      app.kubernetes.io/version: "3.13"
+      helm.sh/chart: kong-3.0.2
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: kong
+      meta.helm.sh/release-namespace: kong
+    creationTimestamp: "2026-03-03T03:29:00Z"
+    labels:
+      app.kubernetes.io/instance: kong
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/name: kong
+      app.kubernetes.io/version: "3.13"
+      enable-metrics: "true"
+      helm.sh/chart: kong-3.0.2
+    name: kong-kong-proxy
+    namespace: kong
+    resourceVersion: "7190598"
+    uid: dbe47c30-f882-4df5-bd93-c40132886ae6
+  spec:
+    clusterIP: 10.105.153.74
+    clusterIPs:
+    - 10.105.153.74
+    externalTrafficPolicy: Cluster
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: kong-proxy
+      nodePort: 30400
+      port: 80
+      protocol: TCP
+      targetPort: 8000
+    - name: kong-proxy-tls
+      nodePort: 32411
+      port: 443
+      protocol: TCP
+      targetPort: 8443
+    selector:
+      app.kubernetes.io/component: app
+      app.kubernetes.io/instance: kong
+      app.kubernetes.io/name: kong
+    sessionAffinity: None
+    type: NodePort
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: kong
+      meta.helm.sh/release-namespace: kong
+    creationTimestamp: "2026-03-03T03:29:00Z"
+    labels:
+      app.kubernetes.io/instance: kong
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/name: kong
+      app.kubernetes.io/version: "3.13"
+      helm.sh/chart: kong-3.0.2
+    name: kong-kong-validation-webhook
+    namespace: kong
+    resourceVersion: "7190576"
+    uid: 0e4d6b8e-e0f5-479a-bd2b-e3430f750e11
+  spec:
+    clusterIP: 10.108.112.66
+    clusterIPs:
+    - 10.108.112.66
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: webhook
+      port: 443
+      protocol: TCP
+      targetPort: webhook
+    selector:
+      app.kubernetes.io/component: app
+      app.kubernetes.io/instance: kong
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/name: kong
+      app.kubernetes.io/version: "3.13"
+      helm.sh/chart: kong-3.0.2
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"kong-postgresql","namespace":"kong"},"spec":{"clusterIP":"None","ports":[{"port":5432,"targetPort":5432}],"selector":{"app":"kong-postgresql"}}}
+    creationTimestamp: "2026-03-03T03:24:06Z"
+    name: kong-postgresql
+    namespace: kong
+    resourceVersion: "7189594"
+    uid: 3935b6d2-600a-4340-b4b5-98595a96833f
+  spec:
+    clusterIP: None
+    clusterIPs:
+    - None
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - port: 5432
+      protocol: TCP
+      targetPort: 5432
+    selector:
+      app: kong-postgresql
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"konga","namespace":"kong"},"spec":{"ports":[{"nodePort":30882,"port":1337,"targetPort":1337}],"selector":{"app":"konga"},"type":"NodePort"}}
+    creationTimestamp: "2026-03-03T03:33:07Z"
+    name: konga
+    namespace: kong
+    resourceVersion: "7191548"
+    uid: 492ddd01-39e9-4f4f-be4a-a68bf53cfd35
+  spec:
+    clusterIP: 10.109.197.235
+    clusterIPs:
+    - 10.109.197.235
+    externalTrafficPolicy: Cluster
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - nodePort: 30882
+      port: 1337
+      protocol: TCP
+      targetPort: 1337
+    selector:
+      app: konga
+    sessionAffinity: None
+    type: NodePort
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"konga-mongodb","namespace":"kong"},"spec":{"ports":[{"port":27017,"targetPort":27017}],"selector":{"app":"konga-mongodb"}}}
+    creationTimestamp: "2026-03-03T03:32:58Z"
+    name: konga-mongodb
+    namespace: kong
+    resourceVersion: "7191462"
+    uid: c391e1b8-e5ad-4e55-97e8-3c03075c5775
+  spec:
+    clusterIP: 10.103.51.17
+    clusterIPs:
+    - 10.103.51.17
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - port: 27017
+      protocol: TCP
+      targetPort: 27017
+    selector:
+      app: konga-mongodb
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+kind: List
+metadata:
+  resourceVersion: ""

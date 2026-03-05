@@ -1,0 +1,18 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - namespace.yaml
+  - deployment.yaml
+  - services.yaml
+  - configmaps.yaml
+  - secrets.yaml
+  - ingressclass.yaml
+
+commonLabels:
+  app.kubernetes.io/name: kong
+  app.kubernetes.io/instance: kong
+  app.kubernetes.io/managed-by: argocd
+  app.kubernetes.io/part-of: kong-gateway
+
+namespace: kong
