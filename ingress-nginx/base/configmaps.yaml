@@ -2,20 +2,24 @@ apiVersion: v1
 items:
 - apiVersion: v1
   data:
-    init.sql: |
-      CREATE DATABASE konga;
-      GRANT ALL PRIVILEGES ON DATABASE konga TO kong;
+    allow-snippet-annotations: "false"
   kind: ConfigMap
   metadata:
     annotations:
-      argocd.argoproj.io/tracking-id: kong:/ConfigMap:kong/kong-postgresql-initdb
+      argocd.argoproj.io/tracking-id: ingress-nginx:/ConfigMap:ingress-nginx/ingress-nginx-controller
       kubectl.kubernetes.io/last-applied-configuration: |
-        {"apiVersion":"v1","data":{"init.sql":"CREATE DATABASE konga;\nGRANT ALL PRIVILEGES ON DATABASE konga TO kong;\n"},"kind":"ConfigMap","metadata":{"annotations":{"argocd.argoproj.io/tracking-id":"kong:/ConfigMap:kong/kong-postgresql-initdb"},"creationTimestamp":"2026-03-03T03:24:06Z","name":"kong-postgresql-initdb","namespace":"kong","resourceVersion":"7189593","uid":"fd1e16be-93f8-4914-8873-2e4afa6e83c5"}}
-    creationTimestamp: "2026-03-14T13:23:58Z"
-    name: kong-postgresql-initdb
-    namespace: kong
-    resourceVersion: "10273046"
-    uid: fa4442a7-7083-470b-931c-bcd66ff0cce7
+        {"apiVersion":"v1","data":{"allow-snippet-annotations":"false"},"kind":"ConfigMap","metadata":{"annotations":{"argocd.argoproj.io/tracking-id":"ingress-nginx:/ConfigMap:ingress-nginx/ingress-nginx-controller"},"creationTimestamp":"2026-02-09T12:56:56Z","labels":{"app.kubernetes.io/component":"controller","app.kubernetes.io/instance":"ingress-nginx","app.kubernetes.io/name":"ingress-nginx","app.kubernetes.io/part-of":"ingress-nginx","app.kubernetes.io/version":"1.11.3"},"name":"ingress-nginx-controller","namespace":"ingress-nginx","resourceVersion":"1354036","uid":"db61ba3b-7cbc-4b1a-8307-881a3a5cec26"}}
+    creationTimestamp: "2026-02-09T12:56:56Z"
+    labels:
+      app.kubernetes.io/component: controller
+      app.kubernetes.io/instance: ingress-nginx
+      app.kubernetes.io/name: ingress-nginx
+      app.kubernetes.io/part-of: ingress-nginx
+      app.kubernetes.io/version: 1.11.3
+    name: ingress-nginx-controller
+    namespace: ingress-nginx
+    resourceVersion: "6890275"
+    uid: db61ba3b-7cbc-4b1a-8307-881a3a5cec26
 - apiVersion: v1
   data:
     ca.crt: |
@@ -45,11 +49,11 @@ items:
         kube-apiserver when using internal endpoints such as the internal service
         IP or kubernetes.default.svc. No other usage is guaranteed across distributions
         of Kubernetes clusters.
-    creationTimestamp: "2026-03-14T13:23:57Z"
+    creationTimestamp: "2026-02-27T09:08:31Z"
     name: kube-root-ca.crt
-    namespace: kong
-    resourceVersion: "10273041"
-    uid: 43a6ab09-cee8-4184-8921-e2ae47b607e3
+    namespace: ingress-nginx
+    resourceVersion: "6204083"
+    uid: e992f9ba-9a0a-44e3-a0f1-f7fa00887e41
 kind: List
 metadata:
   resourceVersion: ""

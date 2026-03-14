@@ -1,0 +1,257 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    annotations:
+      pv.kubernetes.io/bind-completed: "yes"
+      pv.kubernetes.io/bound-by-controller: "yes"
+      strimzi.io/delete-claim: "false"
+      volume.beta.kubernetes.io/storage-provisioner: rancher.io/local-path
+      volume.kubernetes.io/selected-node: k8s-worker1
+      volume.kubernetes.io/storage-provisioner: rancher.io/local-path
+    creationTimestamp: "2026-02-12T14:32:50Z"
+    finalizers:
+    - kubernetes.io/pvc-protection
+    labels:
+      app.kubernetes.io/instance: my-kafka
+      app.kubernetes.io/managed-by: strimzi-cluster-operator
+      app.kubernetes.io/name: kafka
+      app.kubernetes.io/part-of: strimzi-my-kafka
+      strimzi.io/cluster: my-kafka
+      strimzi.io/component-type: kafka
+      strimzi.io/kind: Kafka
+      strimzi.io/name: my-kafka-kafka
+      strimzi.io/pool-name: brokers
+    name: data-my-kafka-brokers-0
+    namespace: kafka
+    resourceVersion: "1809182"
+    uid: 42faf2e3-76d1-4827-b8ee-7b620798c633
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 20Gi
+    storageClassName: local-path
+    volumeMode: Filesystem
+    volumeName: pvc-42faf2e3-76d1-4827-b8ee-7b620798c633
+  status:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 20Gi
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    annotations:
+      pv.kubernetes.io/bind-completed: "yes"
+      pv.kubernetes.io/bound-by-controller: "yes"
+      strimzi.io/delete-claim: "false"
+      volume.beta.kubernetes.io/storage-provisioner: rancher.io/local-path
+      volume.kubernetes.io/selected-node: k8s-worker1
+      volume.kubernetes.io/storage-provisioner: rancher.io/local-path
+    creationTimestamp: "2026-02-12T14:32:50Z"
+    finalizers:
+    - kubernetes.io/pvc-protection
+    labels:
+      app.kubernetes.io/instance: my-kafka
+      app.kubernetes.io/managed-by: strimzi-cluster-operator
+      app.kubernetes.io/name: kafka
+      app.kubernetes.io/part-of: strimzi-my-kafka
+      strimzi.io/cluster: my-kafka
+      strimzi.io/component-type: kafka
+      strimzi.io/kind: Kafka
+      strimzi.io/name: my-kafka-kafka
+      strimzi.io/pool-name: brokers
+    name: data-my-kafka-brokers-1
+    namespace: kafka
+    resourceVersion: "1809223"
+    uid: 76f17758-0b67-47a3-8e61-7597542186f8
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 20Gi
+    storageClassName: local-path
+    volumeMode: Filesystem
+    volumeName: pvc-76f17758-0b67-47a3-8e61-7597542186f8
+  status:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 20Gi
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    annotations:
+      pv.kubernetes.io/bind-completed: "yes"
+      pv.kubernetes.io/bound-by-controller: "yes"
+      strimzi.io/delete-claim: "false"
+      volume.beta.kubernetes.io/storage-provisioner: rancher.io/local-path
+      volume.kubernetes.io/selected-node: k8s-worker2
+      volume.kubernetes.io/storage-provisioner: rancher.io/local-path
+    creationTimestamp: "2026-02-12T14:32:50Z"
+    finalizers:
+    - kubernetes.io/pvc-protection
+    labels:
+      app.kubernetes.io/instance: my-kafka
+      app.kubernetes.io/managed-by: strimzi-cluster-operator
+      app.kubernetes.io/name: kafka
+      app.kubernetes.io/part-of: strimzi-my-kafka
+      strimzi.io/cluster: my-kafka
+      strimzi.io/component-type: kafka
+      strimzi.io/kind: Kafka
+      strimzi.io/name: my-kafka-kafka
+      strimzi.io/pool-name: brokers
+    name: data-my-kafka-brokers-2
+    namespace: kafka
+    resourceVersion: "1809230"
+    uid: 4a1ab9e7-3ac9-462a-9642-33c5501bc8b8
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 20Gi
+    storageClassName: local-path
+    volumeMode: Filesystem
+    volumeName: pvc-4a1ab9e7-3ac9-462a-9642-33c5501bc8b8
+  status:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 20Gi
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    annotations:
+      pv.kubernetes.io/bind-completed: "yes"
+      pv.kubernetes.io/bound-by-controller: "yes"
+      strimzi.io/delete-claim: "false"
+      volume.beta.kubernetes.io/storage-provisioner: rancher.io/local-path
+      volume.kubernetes.io/selected-node: k8s-worker2
+      volume.kubernetes.io/storage-provisioner: rancher.io/local-path
+    creationTimestamp: "2026-02-12T14:32:50Z"
+    finalizers:
+    - kubernetes.io/pvc-protection
+    labels:
+      app.kubernetes.io/instance: my-kafka
+      app.kubernetes.io/managed-by: strimzi-cluster-operator
+      app.kubernetes.io/name: kafka
+      app.kubernetes.io/part-of: strimzi-my-kafka
+      strimzi.io/cluster: my-kafka
+      strimzi.io/component-type: kafka
+      strimzi.io/kind: Kafka
+      strimzi.io/name: my-kafka-kafka
+      strimzi.io/pool-name: controllers
+    name: data-my-kafka-controllers-3
+    namespace: kafka
+    resourceVersion: "1809248"
+    uid: c8bd93ce-42db-419b-bed0-f2bb8b9b5da3
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 5Gi
+    storageClassName: local-path
+    volumeMode: Filesystem
+    volumeName: pvc-c8bd93ce-42db-419b-bed0-f2bb8b9b5da3
+  status:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 5Gi
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    annotations:
+      pv.kubernetes.io/bind-completed: "yes"
+      pv.kubernetes.io/bound-by-controller: "yes"
+      strimzi.io/delete-claim: "false"
+      volume.beta.kubernetes.io/storage-provisioner: rancher.io/local-path
+      volume.kubernetes.io/selected-node: k8s-worker2
+      volume.kubernetes.io/storage-provisioner: rancher.io/local-path
+    creationTimestamp: "2026-02-12T14:32:50Z"
+    finalizers:
+    - kubernetes.io/pvc-protection
+    labels:
+      app.kubernetes.io/instance: my-kafka
+      app.kubernetes.io/managed-by: strimzi-cluster-operator
+      app.kubernetes.io/name: kafka
+      app.kubernetes.io/part-of: strimzi-my-kafka
+      strimzi.io/cluster: my-kafka
+      strimzi.io/component-type: kafka
+      strimzi.io/kind: Kafka
+      strimzi.io/name: my-kafka-kafka
+      strimzi.io/pool-name: controllers
+    name: data-my-kafka-controllers-4
+    namespace: kafka
+    resourceVersion: "1809296"
+    uid: 709460d1-52b2-48ad-a44f-1fbe6b2551a4
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 5Gi
+    storageClassName: local-path
+    volumeMode: Filesystem
+    volumeName: pvc-709460d1-52b2-48ad-a44f-1fbe6b2551a4
+  status:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 5Gi
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    annotations:
+      pv.kubernetes.io/bind-completed: "yes"
+      pv.kubernetes.io/bound-by-controller: "yes"
+      strimzi.io/delete-claim: "false"
+      volume.beta.kubernetes.io/storage-provisioner: rancher.io/local-path
+      volume.kubernetes.io/selected-node: k8s-worker1
+      volume.kubernetes.io/storage-provisioner: rancher.io/local-path
+    creationTimestamp: "2026-02-12T14:32:50Z"
+    finalizers:
+    - kubernetes.io/pvc-protection
+    labels:
+      app.kubernetes.io/instance: my-kafka
+      app.kubernetes.io/managed-by: strimzi-cluster-operator
+      app.kubernetes.io/name: kafka
+      app.kubernetes.io/part-of: strimzi-my-kafka
+      strimzi.io/cluster: my-kafka
+      strimzi.io/component-type: kafka
+      strimzi.io/kind: Kafka
+      strimzi.io/name: my-kafka-kafka
+      strimzi.io/pool-name: controllers
+    name: data-my-kafka-controllers-5
+    namespace: kafka
+    resourceVersion: "1809309"
+    uid: 85e27ca3-9fea-4a25-9237-f1bb00f8d5b7
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 5Gi
+    storageClassName: local-path
+    volumeMode: Filesystem
+    volumeName: pvc-85e27ca3-9fea-4a25-9237-f1bb00f8d5b7
+  status:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 5Gi
+    phase: Bound
+kind: List
+metadata:
+  resourceVersion: ""

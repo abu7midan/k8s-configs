@@ -2,22 +2,6 @@ apiVersion: v1
 items:
 - apiVersion: v1
   data:
-    init.sql: |
-      CREATE DATABASE konga;
-      GRANT ALL PRIVILEGES ON DATABASE konga TO kong;
-  kind: ConfigMap
-  metadata:
-    annotations:
-      argocd.argoproj.io/tracking-id: kong:/ConfigMap:kong/kong-postgresql-initdb
-      kubectl.kubernetes.io/last-applied-configuration: |
-        {"apiVersion":"v1","data":{"init.sql":"CREATE DATABASE konga;\nGRANT ALL PRIVILEGES ON DATABASE konga TO kong;\n"},"kind":"ConfigMap","metadata":{"annotations":{"argocd.argoproj.io/tracking-id":"kong:/ConfigMap:kong/kong-postgresql-initdb"},"creationTimestamp":"2026-03-03T03:24:06Z","name":"kong-postgresql-initdb","namespace":"kong","resourceVersion":"7189593","uid":"fd1e16be-93f8-4914-8873-2e4afa6e83c5"}}
-    creationTimestamp: "2026-03-14T13:23:58Z"
-    name: kong-postgresql-initdb
-    namespace: kong
-    resourceVersion: "10273046"
-    uid: fa4442a7-7083-470b-931c-bcd66ff0cce7
-- apiVersion: v1
-  data:
     ca.crt: |
       -----BEGIN CERTIFICATE-----
       MIIDBTCCAe2gAwIBAgIIDqtKmA2hLZYwDQYJKoZIhvcNAQELBQAwFTETMBEGA1UE
@@ -45,11 +29,11 @@ items:
         kube-apiserver when using internal endpoints such as the internal service
         IP or kubernetes.default.svc. No other usage is guaranteed across distributions
         of Kubernetes clusters.
-    creationTimestamp: "2026-03-14T13:23:57Z"
+    creationTimestamp: "2026-03-01T23:59:40Z"
     name: kube-root-ca.crt
-    namespace: kong
-    resourceVersion: "10273041"
-    uid: 43a6ab09-cee8-4184-8921-e2ae47b607e3
+    namespace: cert-manager
+    resourceVersion: "6887205"
+    uid: 6eae273b-c1d9-49b3-8d7f-76ae1d171011
 kind: List
 metadata:
   resourceVersion: ""

@@ -8,11 +8,10 @@ resources:
 - networkpolicies.yaml
 - pvc.yaml
 - secret-NAME.yaml
-- secret-kong-kong-validation-webhook-ca-keypair.yaml
-- secret-kong-kong-validation-webhook-keypair.yaml
-- secret-kong-postgresql.yaml
-- secret-konga-mongodb.yaml
+- secret-sh.helm.release.v1.vault.v1.yaml
+- secret-vault-abu7midan-tls.yaml
+- secret-vault-auth-token.yaml
 - serviceaccounts.yaml
 - services.yaml
 
-namespace: kong
+namespace: vault

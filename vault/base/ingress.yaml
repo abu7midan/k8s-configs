@@ -1,0 +1,40 @@
+apiVersion: v1
+items:
+- apiVersion: networking.k8s.io/v1
+  kind: Ingress
+  metadata:
+    annotations:
+      field.cattle.io/publicEndpoints: '[{"addresses":["95.111.234.12"],"port":443,"protocol":"HTTPS","serviceName":"vault:vault-ui","ingressName":"vault:vault-ui","hostname":"vault.abu7midan.com","path":"/","allNodes":false}]'
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"Ingress","metadata":{"annotations":{"nginx.ingress.kubernetes.io/backend-protocol":"HTTP"},"name":"vault-ui","namespace":"vault"},"spec":{"ingressClassName":"nginx","rules":[{"host":"vault.abu7midan.com","http":{"paths":[{"backend":{"service":{"name":"vault-ui","port":{"number":8200}}},"path":"/","pathType":"Prefix"}]}}],"tls":[{"hosts":["vault.abu7midan.com"],"secretName":"vault-abu7midan-tls"}]}}
+      nginx.ingress.kubernetes.io/backend-protocol: HTTP
+    creationTimestamp: "2026-02-20T21:29:34Z"
+    generation: 1
+    name: vault-ui
+    namespace: vault
+    resourceVersion: "5033552"
+    uid: 7a15f4f1-4c98-4d55-a96d-c0729ba95011
+  spec:
+    ingressClassName: nginx
+    rules:
+    - host: vault.abu7midan.com
+      http:
+        paths:
+        - backend:
+            service:
+              name: vault-ui
+              port:
+                number: 8200
+          path: /
+          pathType: Prefix
+    tls:
+    - hosts:
+      - vault.abu7midan.com
+      secretName: vault-abu7midan-tls
+  status:
+    loadBalancer:
+      ingress:
+      - ip: 95.111.234.12
+kind: List
+metadata:
+  resourceVersion: ""

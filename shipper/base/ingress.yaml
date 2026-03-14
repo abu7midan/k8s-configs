@@ -1,0 +1,35 @@
+apiVersion: v1
+items:
+- apiVersion: networking.k8s.io/v1
+  kind: Ingress
+  metadata:
+    annotations:
+      konghq.com/strip-path: "true"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"Ingress","metadata":{"annotations":{"konghq.com/strip-path":"true"},"name":"spce-shipper","namespace":"shipper"},"spec":{"ingressClassName":"kong","rules":[{"host":"api-kong.abu7midan.com","http":{"paths":[{"backend":{"service":{"name":"spce-shipper","port":{"number":80}}},"path":"/shipper","pathType":"Prefix"}]}}]}}
+    creationTimestamp: "2026-02-14T09:15:44Z"
+    generation: 1
+    name: spce-shipper
+    namespace: shipper
+    resourceVersion: "7687078"
+    uid: 4c2f0d7a-6f40-48f8-9927-7017b3771859
+  spec:
+    ingressClassName: kong
+    rules:
+    - host: api-kong.abu7midan.com
+      http:
+        paths:
+        - backend:
+            service:
+              name: spce-shipper
+              port:
+                number: 80
+          path: /shipper
+          pathType: Prefix
+  status:
+    loadBalancer:
+      ingress:
+      - ip: 10.105.153.74
+kind: List
+metadata:
+  resourceVersion: ""

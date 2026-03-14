@@ -1,0 +1,33 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- configmaps.yaml
+- deployment.yaml
+- ingress.yaml
+- networkpolicies.yaml
+- pvc.yaml
+- secret-NAME.yaml
+- secret-kibana-kb-config.yaml
+- secret-kibana-kb-es-ca.yaml
+- secret-kibana-kb-http-ca-internal.yaml
+- secret-kibana-kb-http-certs-internal.yaml
+- secret-kibana-kb-http-certs-public.yaml
+- secret-kibana-kibana-user.yaml
+- secret-logging-es-default-es-config.yaml
+- secret-logging-es-default-es-transport-certs.yaml
+- secret-logging-es-elastic-user.yaml
+- secret-logging-es-file-settings.yaml
+- secret-logging-es-http-ca-internal.yaml
+- secret-logging-es-http-certs-internal.yaml
+- secret-logging-es-http-certs-public.yaml
+- secret-logging-es-internal-users.yaml
+- secret-logging-es-remote-ca.yaml
+- secret-logging-es-transport-ca-internal.yaml
+- secret-logging-es-transport-certs-public.yaml
+- secret-logging-es-xpack-file-realm.yaml
+- secret-observability-kibana-kibana-user.yaml
+- serviceaccounts.yaml
+- services.yaml
+
+namespace: observability

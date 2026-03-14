@@ -1,0 +1,128 @@
+apiVersion: v1
+items:
+- apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    creationTimestamp: "2026-02-12T14:33:57Z"
+    generation: 1
+    labels:
+      app.kubernetes.io/instance: my-kafka
+      app.kubernetes.io/managed-by: strimzi-cluster-operator
+      app.kubernetes.io/name: entity-operator
+      app.kubernetes.io/part-of: strimzi-my-kafka
+      strimzi.io/cluster: my-kafka
+      strimzi.io/component-type: entity-operator
+      strimzi.io/kind: Kafka
+      strimzi.io/name: my-kafka-entity-operator
+    name: my-kafka-entity-operator
+    namespace: kafka
+    ownerReferences:
+    - apiVersion: kafka.strimzi.io/v1beta2
+      blockOwnerDeletion: true
+      controller: false
+      kind: Kafka
+      name: my-kafka
+      uid: 2f4ace1b-eded-4ed3-8750-f4a99bb1cbad
+    resourceVersion: "1809551"
+    uid: 345177db-4b25-4bec-8e54-ba12eaa22849
+  spec:
+    ingress:
+    - ports:
+      - port: 8080
+        protocol: TCP
+    - ports:
+      - port: 8081
+        protocol: TCP
+    podSelector:
+      matchLabels:
+        strimzi.io/cluster: my-kafka
+        strimzi.io/kind: Kafka
+        strimzi.io/name: my-kafka-entity-operator
+    policyTypes:
+    - Ingress
+- apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    creationTimestamp: "2026-02-12T14:32:50Z"
+    generation: 1
+    labels:
+      app.kubernetes.io/instance: my-kafka
+      app.kubernetes.io/managed-by: strimzi-cluster-operator
+      app.kubernetes.io/name: kafka
+      app.kubernetes.io/part-of: strimzi-my-kafka
+      strimzi.io/cluster: my-kafka
+      strimzi.io/component-type: kafka
+      strimzi.io/kind: Kafka
+      strimzi.io/name: my-kafka-kafka
+    name: my-kafka-network-policy-kafka
+    namespace: kafka
+    ownerReferences:
+    - apiVersion: kafka.strimzi.io/v1beta2
+      blockOwnerDeletion: true
+      controller: false
+      kind: Kafka
+      name: my-kafka
+      uid: 2f4ace1b-eded-4ed3-8750-f4a99bb1cbad
+    resourceVersion: "1809008"
+    uid: e1291301-21dc-41df-94e1-1b194e7155fe
+  spec:
+    ingress:
+    - from:
+      - podSelector:
+          matchLabels:
+            strimzi.io/cluster: my-kafka
+            strimzi.io/kind: Kafka
+            strimzi.io/name: my-kafka-kafka
+      - namespaceSelector: {}
+        podSelector:
+          matchLabels:
+            strimzi.io/kind: cluster-operator
+      ports:
+      - port: 9090
+        protocol: TCP
+    - from:
+      - namespaceSelector: {}
+        podSelector:
+          matchLabels:
+            strimzi.io/kind: cluster-operator
+      - podSelector:
+          matchLabels:
+            strimzi.io/cluster: my-kafka
+            strimzi.io/kind: Kafka
+            strimzi.io/name: my-kafka-kafka
+      - podSelector:
+          matchLabels:
+            strimzi.io/name: my-kafka-entity-operator
+      - podSelector:
+          matchLabels:
+            strimzi.io/name: my-kafka-kafka-exporter
+      - podSelector:
+          matchLabels:
+            strimzi.io/name: my-kafka-cruise-control
+      ports:
+      - port: 9091
+        protocol: TCP
+    - from:
+      - namespaceSelector: {}
+        podSelector:
+          matchLabels:
+            strimzi.io/kind: cluster-operator
+      ports:
+      - port: 8443
+        protocol: TCP
+    - ports:
+      - port: 9092
+        protocol: TCP
+    - ports:
+      - port: 9094
+        protocol: TCP
+    podSelector:
+      matchLabels:
+        strimzi.io/cluster: my-kafka
+        strimzi.io/kind: Kafka
+        strimzi.io/name: my-kafka-kafka
+    policyTypes:
+    - Ingress
+kind: List
+metadata:
+  resourceVersion: ""

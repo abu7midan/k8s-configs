@@ -1,0 +1,45 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    annotations:
+      pv.kubernetes.io/bind-completed: "yes"
+      pv.kubernetes.io/bound-by-controller: "yes"
+      volume.beta.kubernetes.io/storage-provisioner: rancher.io/local-path
+      volume.kubernetes.io/selected-node: k8s-worker1
+      volume.kubernetes.io/storage-provisioner: rancher.io/local-path
+    creationTimestamp: "2026-02-13T19:05:29Z"
+    finalizers:
+    - kubernetes.io/pvc-protection
+    labels:
+      common.k8s.elastic.co/type: elasticsearch
+      elasticsearch.k8s.elastic.co/cluster-name: logging
+      elasticsearch.k8s.elastic.co/statefulset-name: logging-es-default
+    name: elasticsearch-data-logging-es-default-0
+    namespace: observability
+    ownerReferences:
+    - apiVersion: elasticsearch.k8s.elastic.co/v1
+      kind: Elasticsearch
+      name: logging
+      uid: 1c4aeb4c-afb2-4714-b3b0-d1d756f53bdc
+    resourceVersion: "2112895"
+    uid: 8df01399-ab20-4873-94f8-6ff8dba43de3
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 30Gi
+    storageClassName: local-path
+    volumeMode: Filesystem
+    volumeName: pvc-8df01399-ab20-4873-94f8-6ff8dba43de3
+  status:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 30Gi
+    phase: Bound
+kind: List
+metadata:
+  resourceVersion: ""

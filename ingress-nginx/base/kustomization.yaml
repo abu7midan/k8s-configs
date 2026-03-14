@@ -8,11 +8,8 @@ resources:
 - networkpolicies.yaml
 - pvc.yaml
 - secret-NAME.yaml
-- secret-kong-kong-validation-webhook-ca-keypair.yaml
-- secret-kong-kong-validation-webhook-keypair.yaml
-- secret-kong-postgresql.yaml
-- secret-konga-mongodb.yaml
+- secret-ingress-nginx-admission.yaml
 - serviceaccounts.yaml
 - services.yaml
 
-namespace: kong
+namespace: ingress-nginx

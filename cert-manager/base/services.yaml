@@ -1,0 +1,44 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      argocd.argoproj.io/tracking-id: cert-manager:/Service:cert-manager/cert-manager-webhook
+    creationTimestamp: "2026-03-01T23:59:51Z"
+    labels:
+      app: webhook
+      app.kubernetes.io/component: webhook
+      app.kubernetes.io/instance: cert-manager
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/name: webhook
+      app.kubernetes.io/version: v1.19.3
+      helm.sh/chart: cert-manager-v1.19.3
+    name: cert-manager-webhook
+    namespace: cert-manager
+    resourceVersion: "6887332"
+    uid: 9338d6f5-3abc-49c6-818b-11745cb37ae0
+  spec:
+    clusterIP: 10.108.97.90
+    clusterIPs:
+    - 10.108.97.90
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: https
+      port: 443
+      protocol: TCP
+      targetPort: https
+    selector:
+      app.kubernetes.io/component: webhook
+      app.kubernetes.io/instance: cert-manager
+      app.kubernetes.io/name: webhook
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+kind: List
+metadata:
+  resourceVersion: ""

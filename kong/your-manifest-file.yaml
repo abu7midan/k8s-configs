@@ -1,3 +1,0 @@
-git add kong/
-git commit -m "Update Kong manifests"
-git push origin main

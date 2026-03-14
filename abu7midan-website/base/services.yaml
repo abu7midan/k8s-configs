@@ -1,0 +1,77 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      argocd.argoproj.io/tracking-id: portfolio-website:/Service:abu7midan-website/portfolio
+      field.cattle.io/publicEndpoints: '[{"port":30154,"protocol":"TCP","serviceName":"abu7midan-website:portfolio","allNodes":true}]'
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{"argocd.argoproj.io/tracking-id":"portfolio-website:/Service:abu7midan-website/portfolio","field.cattle.io/publicEndpoints":"[{\"port\":30154,\"protocol\":\"TCP\",\"serviceName\":\"abu7midan-website:portfolio\",\"allNodes\":true}]"},"creationTimestamp":"2026-02-26T00:25:05Z","labels":{"app":"portfolio"},"name":"portfolio","namespace":"abu7midan-website","resourceVersion":"6185658","uid":"da370f3a-1432-460b-8380-d0805e77a731"},"spec":{"clusterIP":"10.96.31.64","clusterIPs":["10.96.31.64"],"externalTrafficPolicy":"Cluster","internalTrafficPolicy":"Cluster","ipFamilies":["IPv4"],"ipFamilyPolicy":"SingleStack","ports":[{"name":"http","nodePort":30154,"port":80,"protocol":"TCP","targetPort":80}],"selector":{"app":"portfolio"},"sessionAffinity":"None","type":"NodePort"},"status":{"loadBalancer":{}}}
+    creationTimestamp: "2026-03-14T00:45:47Z"
+    labels:
+      app: portfolio
+    name: portfolio
+    namespace: abu7midan-website
+    resourceVersion: "10154660"
+    uid: b13f0504-6afe-41cb-ab2e-8eb30a8039aa
+  spec:
+    clusterIP: 10.96.31.64
+    clusterIPs:
+    - 10.96.31.64
+    externalTrafficPolicy: Cluster
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: http
+      nodePort: 30154
+      port: 80
+      protocol: TCP
+      targetPort: 80
+    selector:
+      app: portfolio
+    sessionAffinity: None
+    type: NodePort
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      argocd.argoproj.io/tracking-id: portfolio-website:/Service:abu7midan-website/portfolio-service
+      field.cattle.io/publicEndpoints: '[{"port":31722,"protocol":"TCP","serviceName":"abu7midan-website:portfolio-service","allNodes":true}]'
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{"argocd.argoproj.io/tracking-id":"portfolio-website:/Service:abu7midan-website/portfolio-service","field.cattle.io/publicEndpoints":"[{\"port\":31722,\"protocol\":\"TCP\",\"serviceName\":\"abu7midan-website:portfolio-service\",\"allNodes\":true}]"},"creationTimestamp":"2026-02-08T13:15:05Z","labels":{"app":"portfolio","version":"1.0"},"name":"portfolio-service","namespace":"abu7midan-website","resourceVersion":"6185659","uid":"b54e55dc-5f80-4651-a975-53a61737052a"},"spec":{"clusterIP":"10.99.145.105","clusterIPs":["10.99.145.105"],"externalTrafficPolicy":"Cluster","internalTrafficPolicy":"Cluster","ipFamilies":["IPv4"],"ipFamilyPolicy":"SingleStack","ports":[{"nodePort":31722,"port":80,"protocol":"TCP","targetPort":80}],"selector":{"app":"portfolio"},"sessionAffinity":"None","type":"NodePort"},"status":{"loadBalancer":{}}}
+    creationTimestamp: "2026-03-14T00:45:47Z"
+    labels:
+      app: portfolio
+      version: "1.0"
+    name: portfolio-service
+    namespace: abu7midan-website
+    resourceVersion: "10154659"
+    uid: 652e1ace-fdb5-4aba-8225-b76849babbd9
+  spec:
+    clusterIP: 10.99.145.105
+    clusterIPs:
+    - 10.99.145.105
+    externalTrafficPolicy: Cluster
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - nodePort: 31722
+      port: 80
+      protocol: TCP
+      targetPort: 80
+    selector:
+      app: portfolio
+    sessionAffinity: None
+    type: NodePort
+  status:
+    loadBalancer: {}
+kind: List
+metadata:
+  resourceVersion: ""

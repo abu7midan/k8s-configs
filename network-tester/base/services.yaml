@@ -1,0 +1,38 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      argocd.argoproj.io/tracking-id: network-tester:/Service:network-tester/network-tester
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{"argocd.argoproj.io/tracking-id":"network-tester:/Service:network-tester/network-tester"},"labels":{"app":"network-tester"},"name":"network-tester","namespace":"network-tester"},"spec":{"ports":[{"name":"http","port":80,"targetPort":8080}],"selector":{"app":"network-tester"},"type":"ClusterIP"}}
+    creationTimestamp: "2026-03-13T23:45:46Z"
+    labels:
+      app: network-tester
+    name: network-tester
+    namespace: network-tester
+    resourceVersion: "10152183"
+    uid: 4ab913b1-6e7c-4251-a7f7-ec5621d9873e
+  spec:
+    clusterIP: 10.103.45.138
+    clusterIPs:
+    - 10.103.45.138
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      app: network-tester
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+kind: List
+metadata:
+  resourceVersion: ""
