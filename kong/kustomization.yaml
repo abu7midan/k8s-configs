@@ -11,3 +11,4 @@ resources:
 - base/services.yaml
 
 namespace: kong
+- base/serviceaccount.yaml
