@@ -14,8 +14,6 @@ resources:
 - secret-kibana-kb-http-certs-internal.yaml
 - secret-kibana-kb-http-certs-public.yaml
 - secret-kibana-kibana-user.yaml
-- secret-logging-es-default-es-config.yaml
-- secret-logging-es-default-es-transport-certs.yaml
 - secret-logging-es-elastic-user.yaml
 - secret-logging-es-file-settings.yaml
 - secret-logging-es-http-ca-internal.yaml
@@ -27,7 +25,6 @@ resources:
 - secret-logging-es-transport-certs-public.yaml
 - secret-logging-es-xpack-file-realm.yaml
 - secret-observability-kibana-kibana-user.yaml
-- serviceaccounts.yaml
 - services.yaml
 
 namespace: observability

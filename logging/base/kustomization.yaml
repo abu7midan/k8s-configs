@@ -7,7 +7,6 @@ resources:
 - ingress.yaml
 - networkpolicies.yaml
 - pvc.yaml
-- serviceaccounts.yaml
 - services.yaml
 
 namespace: logging

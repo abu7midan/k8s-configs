@@ -19,7 +19,6 @@ resources:
 - secret-my-kafka-controllers-3.yaml
 - secret-my-kafka-entity-topic-operator-certs.yaml
 - secret-my-kafka-entity-user-operator-certs.yaml
-- serviceaccounts.yaml
 - services.yaml
 
 namespace: kafka

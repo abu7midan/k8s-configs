@@ -9,7 +9,6 @@ resources:
 - pvc.yaml
 - secret-NAME.yaml
 - secret-network-tester-secrets.yaml
-- serviceaccounts.yaml
 - services.yaml
 
 namespace: network-tester

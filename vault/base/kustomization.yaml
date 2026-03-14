@@ -11,7 +11,6 @@ resources:
 - secret-sh.helm.release.v1.vault.v1.yaml
 - secret-vault-abu7midan-tls.yaml
 - secret-vault-auth-token.yaml
-- serviceaccounts.yaml
 - services.yaml
 
 namespace: vault

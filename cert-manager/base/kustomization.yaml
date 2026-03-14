@@ -9,7 +9,6 @@ resources:
 - pvc.yaml
 - secret-NAME.yaml
 - secret-cert-manager-webhook-ca.yaml
-- serviceaccounts.yaml
 - services.yaml
 
 namespace: cert-manager

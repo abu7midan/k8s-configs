@@ -12,7 +12,6 @@ resources:
 - secret-kong-kong-validation-webhook-keypair.yaml
 - secret-kong-postgresql.yaml
 - secret-konga-mongodb.yaml
-- serviceaccounts.yaml
 - services.yaml
 
 namespace: kong
