@@ -10,3 +10,4 @@ resources:
 - services.yaml
 
 namespace: orders
+- serviceaccount.yaml
