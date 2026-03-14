@@ -6,7 +6,6 @@ resources:
 - base/deployment.yaml
 - base/ingressclass.yaml
 - base/konga-ingress-current.yaml
-- base/kustomization.yaml
 - base/namespace.yaml
 - base/secrets.yaml
 - base/services.yaml
